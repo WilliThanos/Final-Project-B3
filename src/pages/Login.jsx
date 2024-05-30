@@ -36,8 +36,8 @@ export default function Login() {
           className="absolute inset-0 opacity-80 md:opacity-0"
           style={{ backgroundImage: `url(${bgresp})` }}
         ></div>
+        <NavbarLogoBiru />
         <main className="flex-1 flex items-center justify-center p-6 relative z-10">
-          <NavbarLogoBiru />
           <div className="max-w-md w-full bg-white shadow-lg rounded-xl p-10">
             <div className="text-center">
               <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">

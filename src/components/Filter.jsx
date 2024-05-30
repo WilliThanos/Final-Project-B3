@@ -4,19 +4,14 @@ import { GiAirplaneDeparture, GiAirplaneArrival } from "react-icons/gi";
 import { SlCalender } from "react-icons/sl";
 
 export default function Filter() {
-  const [departureDate, setDepartureDate] = useState(new Date());
-  const [returnDate, setReturnDate] = useState(new Date());
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const departureDateRef = useRef(null);
-  const returnDateRef = useRef(null);
-
   return (
-    <div className="max-w-64 mx-auto bg-white rounded-xl shadow-lg p-4">
+    <div className="w-64 mx-auto bg-white rounded-xl shadow-lg p-4">
       <div className="space-y-2 ">
         <div className="font-medium">Filter</div>
         <details className="group overflow-hidden rounded border-b border-gray-300 [&_summary::-webkit-details-marker]:hidden">
