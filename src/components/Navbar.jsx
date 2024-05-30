@@ -12,7 +12,7 @@ function NavbarLogoPutih() {
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between max-w-screen-2xl">
           <div className="md:flex md:items-center md:gap-12">
-            <a className="block " href="#">
+            <a className="flex w-4/6 md:w-4/5 lg:w-full " href="#">
               <span className="sr-only">Home</span>
               <svg
                 width="246"

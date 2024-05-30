@@ -5,3 +5,18 @@
 body {
   background-color: #f5f5f5;
 }
+
+.arrow-border {
+  position: relative;
+}
+
+.arrow-border::after {
+  content: "";
+  position: absolute;
+  right: -5px; /* Adjust this to control the arrow position */
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 6px solid black; /* Match the border color */
+}
