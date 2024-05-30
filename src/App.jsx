@@ -8,6 +8,8 @@ import ReactDOM from "react-dom/client";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Search from "./pages/Search.jsx";
+import Profile from "./pages/Profile.jsx";
+import History from "./pages/History.jsx";
 
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useSelector } from "react-redux";
@@ -25,6 +27,14 @@ export default function App() {
     {
       path: "/search",
       element: <Search />,
+    },
+    {
+      path: "/profile",
+      element: <Profile />,
+    },
+    {
+      path: "/history",
+      element: <History />,
     },
   ]);
 
