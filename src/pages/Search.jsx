@@ -6,6 +6,7 @@ import Filter from "../components/Filter";
 import { useSelector } from "react-redux";
 import { GiAirplaneDeparture, GiAirplaneArrival } from "react-icons/gi";
 import { HiArrowSmRight } from "react-icons/hi";
+import { LiaCircleSolid } from "react-icons/lia";
 
 export default function Search() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -53,24 +54,24 @@ export default function Search() {
                 <div className="flex pt-6 w-3/4">
                   <div className="flex flex-col text-center">
                     <div className="flex items-center gap-1">
-                      <div>
-                        <GiAirplaneDeparture />
-                      </div>
                       <div className="font-bold text-base">Jakarta (CGK)</div>
                     </div>
                     <div>19.00</div>
                   </div>
                   <div className="flex flex-col justify-center w-2/4">
                     <p className="text-center text-gray-400 text-sm">4h 0m</p>
-                    <div className="flex items-center">
-                      <div className="border-t-2 w-full border-gray-400 mx-4"></div>
+                    <div className="flex items-center mx-3">
+                      <div className="mb-3">
+                        <GiAirplaneDeparture />
+                      </div>
+                      <div className="border-t-2 w-full border-gray-400 mx-2 "></div>
+                      <div className="mb-3">
+                        <GiAirplaneArrival />
+                      </div>
                     </div>
                   </div>
                   <div className="flex flex-col text-center">
                     <div className="flex items-center gap-1">
-                      <div>
-                        <GiAirplaneArrival />
-                      </div>
                       <div className="font-bold text-base">Medan (KLM)</div>
                     </div>
                     <div>23.00</div>
@@ -80,50 +81,44 @@ export default function Search() {
                   Rp 2.300.000
                 </div>
               </div>
-
-              {isDropdownOpen && (
-                <div className="border-t mt-4 border-gray-700">
-                  <div className="flex justify-between items-center cursor-pointer mt-2">
-                    <div className="font-bold ">Detail Tiket</div>
+              {/* DROPDOWN DETAILS */}
+              <div
+                className={`dropdown-content ${isDropdownOpen ? "open" : ""}`}
+              >
+                <div className="flex justify-between items-center cursor-pointer mt-4">
+                  <div className="font-bold ">Detail Tiket</div>
+                </div>
+                <div className="flex justify-between items-center ">
+                  <div className="flex pt-6 w-3/4">
+                    <div className="flex  gap-3 ">
+                      <div className="flex flex-col justify-center ">
+                        <div className="text-center text-gray-500 text-sm ">
+                          4j 0m
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <LiaCircleSolid size={20} />
+                        <div className="border-r  border-gray-500  h-52 "></div>
+                        <LiaCircleSolid size={20} />
+                      </div>
+                    </div>
+                    <div className="flex flex-col justify-between text-center ml-3 ">
+                      <div className="flex items-center gap-2 ">
+                        <div className="font-bold text-lg">19.00</div>
+                        <div className="font-semibold text-base">Jakarta</div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="font-bold text-lg">23.00</div>
+                        <div className="font-semibold text-base">Medan</div>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex justify-between items-center ">
-                    <div className="flex pt-6 w-3/4">
-                      <div className="border-r-2  border-gray-400 ">TES</div>
-                      <div className="flex flex-col text-center">
-                        <div className="flex items-center gap-1">
-                          <div>
-                            <GiAirplaneDeparture />
-                          </div>
-                          <div className="font-bold text-base">
-                            Jakarta (CGK)
-                          </div>
-                        </div>
-                        <div>19.00</div>
-                      </div>
-                      <div className="flex flex-col justify-center w-2/4">
-                        <p className="text-center text-gray-400 text-sm">
-                          4h 0m
-                        </p>
-                        <div className="flex items-center">
-                          <div className="border-t-2 w-full border-gray-400 mx-4"></div>
-                        </div>
-                      </div>
-                      <div className="flex flex-col text-center">
-                        <div className="flex items-center gap-1">
-                          <div>
-                            <GiAirplaneArrival />
-                          </div>
-                          <div className="font-bold text-base">Medan (KLM)</div>
-                        </div>
-                        <div>23.00</div>
-                      </div>
-                    </div>
-                    <div className="font-bold text-xl text-[#2A91E5]">
-                      Rp 2.300.000
-                    </div>
+                  <div className="font-bold text-xl text-[#2A91E5]">
+                    Rp 2.300.000
                   </div>
                 </div>
-              )}
+              </div>
+              {/* END DROPDOWN DETAILS */}
             </div>
             <div className="bg-[#2A91E5] hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer">
               Pilih Tiket
