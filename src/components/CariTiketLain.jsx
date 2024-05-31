@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { GiAirplaneDeparture, GiAirplaneArrival } from "react-icons/gi";
@@ -10,6 +10,9 @@ import {
   setReturnDate,
   setClass,
   setPenumpang,
+  setJumlahDewasa,
+  setJumlahAnak,
+  setJumlahBayi,
 } from "../redux/reducers/dataReducer";
 
 export default function CariTiketLain() {
@@ -17,10 +20,45 @@ export default function CariTiketLain() {
   const departureDate = useSelector((state) => state.data.departureDate);
   const returnDate = useSelector((state) => state.data.returnDate);
   const seatClass = useSelector((state) => state?.data?.class);
+  const jumlahDewasa = useSelector((state) => state?.data?.jumlahDewasa);
+  const jumlahAnak = useSelector((state) => state?.data?.jumlahAnak);
+  const jumlahBayi = useSelector((state) => state?.data?.jumlahBayi);
+  const totalPenumpang = jumlahAnak + jumlahDewasa + jumlahBayi;
 
   // const [departureDate, setDepartureDate] = useState(new Date());
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);
+  const [isDropdownOpen3, setIsDropdownOpen3] = useState(false);
+
+  const kurangJumlahDewasa = () => {
+    if (jumlahDewasa > 0) {
+      dispatch(setJumlahDewasa(jumlahDewasa - 1));
+    }
+  };
+
+  const tambahJumlahDewasa = () => {
+    dispatch(setJumlahDewasa(jumlahDewasa + 1));
+  };
+
+  const kurangJumlahAnak = () => {
+    if (jumlahAnak > 0) {
+      dispatch(setJumlahAnak(jumlahAnak - 1));
+    }
+  };
+
+  const tambahJumlahAnak = () => {
+    dispatch(setJumlahAnak(jumlahAnak + 1));
+  };
+
+  const kurangJumlahBayi = () => {
+    if (jumlahBayi > 0) {
+      dispatch(setJumlahBayi(jumlahBayi - 1));
+    }
+  };
+
+  const tambahJumlahBayi = () => {
+    dispatch(setJumlahBayi(jumlahBayi + 1));
+  };
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -30,11 +68,23 @@ export default function CariTiketLain() {
     setIsDropdownOpen2(!isDropdownOpen2);
   };
 
+  const handleDropdownToggle3 = () => {
+    setIsDropdownOpen3(!isDropdownOpen3);
+  };
+
   const departureDateRef = useRef(null);
   const returnDateRef = useRef(null);
 
+  const updatePenumpang = () => {
+    dispatch(setPenumpang(totalPenumpang));
+  };
+
+  useEffect(() => {
+    updatePenumpang();
+  }, [totalPenumpang]);
+
   return (
-    <div className="mx-auto max-w-screen-2xl flex justify-between items-center bg-white rounded-xl shadow-lg">
+    <div className="mx-auto max-w-screen-2xl flex justify-between items-center bg-white rounded-xl shadow-sm">
       <div className="flex items-center p-8">
         <div className="block sm:hidden pr-5 absolute sm:justify-start">
           <button
@@ -57,7 +107,7 @@ export default function CariTiketLain() {
             </svg>
           </button>
           {isDropdownOpen && (
-            <div className="absolute  mt-2 w-64 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+            <div className="absolute  mt-2 w-72 bg-white border border-gray-200 rounded-md shadow-lg z-10">
               <a
                 href="#"
                 className="block rounded-md  px-4 py-2 text-gray-800/60  hover:text-gray-800 font-semibold"
@@ -128,14 +178,143 @@ export default function CariTiketLain() {
               >
                 <div className="flex items-center gap-x-2 px-">
                   <div>
-                    <input
-                      type="number"
-                      id="JumlahPenumpang"
-                      placeholder="n/a"
-                      className="w-7 rounded-md py-1  border-gray-200 shadow-sm"
-                      onChange={(e) => dispatch(setPenumpang(e.target.value))}
-                    />
-                    <span>Penumpang</span>
+                    <div
+                      className="flex items-center gap-2 cursor-pointer"
+                      onClick={handleDropdownToggle3}
+                    >
+                      <div>{totalPenumpang}</div>
+
+                      <div>Penumpang</div>
+                      <span
+                        className={`transition ${
+                          isDropdownOpen3 ? "rotate-180" : ""
+                        }`}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          strokeWidth="1.5"
+                          stroke="currentColor"
+                          className="h-4 w-4"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                          />
+                        </svg>
+                      </span>
+                    </div>
+                    {isDropdownOpen3 && (
+                      <div className="absolute mt- w-44  bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                        <a
+                          href="#"
+                          className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
+                        >
+                          <div className="flex items-center gap-x-2">
+                            <div className="">Dewasa</div>
+                            <div class="flex items-center rounded border border-gray-200 ">
+                              <button
+                                type="button"
+                                onClick={kurangJumlahDewasa}
+                                class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                              >
+                                -
+                              </button>
+
+                              <input
+                                type="number"
+                                id="Quantity"
+                                value={jumlahDewasa}
+                                onChange={(e) =>
+                                  dispatch(setJumlahDewasa(jumlahDewasa))
+                                }
+                                class="h-6 w-8 border-transparent text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                              />
+
+                              <button
+                                type="button"
+                                onClick={tambahJumlahDewasa}
+                                class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                        </a>
+                        <a
+                          href="#"
+                          className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
+                        >
+                          <div className="flex items-center gap-x-[27px]">
+                            <div className="font-">Anak</div>
+                            <div class="flex items-center rounded border border-gray-200  ">
+                              <button
+                                type="button"
+                                onClick={kurangJumlahAnak}
+                                class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                              >
+                                -
+                              </button>
+
+                              <input
+                                type="number"
+                                id="Quantity"
+                                value={jumlahAnak}
+                                onChange={(e) =>
+                                  dispatch(setJumlahAnak(jumlahAnak))
+                                }
+                                class="h-6 w-8 border-transparent text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                              />
+
+                              <button
+                                type="button"
+                                onClick={tambahJumlahAnak}
+                                class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                        </a>
+                        <a
+                          href="#"
+                          className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
+                        >
+                          <div className="flex items-center gap-x-[18px]">
+                            <div className="font-">Bayi</div>
+                            <div class="flex items-center rounded border border-gray-200 ml-4">
+                              <button
+                                type="button"
+                                onClick={kurangJumlahBayi}
+                                class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                              >
+                                -
+                              </button>
+
+                              <input
+                                type="number"
+                                id="Quantity"
+                                value={jumlahBayi}
+                                onChange={(e) =>
+                                  dispatch(setJumlahBayi(jumlahBayi))
+                                }
+                                class="h-6 w-8 border-transparent text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                              />
+
+                              <button
+                                type="button"
+                                onClick={tambahJumlahBayi}
+                                class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                              >
+                                +
+                              </button>
+                            </div>
+                          </div>
+                        </a>
+                      </div>
+                    )}
                   </div>
                   <div className=""> |</div>
                   <div
@@ -225,16 +404,137 @@ export default function CariTiketLain() {
             </div>
           </div>
           <div className="flex items-center gap-x-2 ">
-            <div>
-              <input
-                type="number"
-                id="JumlahPenumpang"
-                placeholder="n/a"
-                className="w-7 rounded-md py-1  border-gray-200 shadow-sm"
-                onChange={(e) => dispatch(setPenumpang(e.target.value))}
-              />
-              <span>Penumpang</span>
+            <div
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={handleDropdownToggle3}
+            >
+              <div>{totalPenumpang}</div>
+
+              <div>Penumpang</div>
+              <span
+                className={`transition ${isDropdownOpen3 ? "rotate-180" : ""}`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="h-4 w-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                  />
+                </svg>
+              </span>
             </div>
+            {isDropdownOpen3 && (
+              <div className="absolute mt-40 w-44 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                <a
+                  href="#"
+                  className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
+                >
+                  <div className="flex items-center gap-x-2">
+                    <div className="">Dewasa</div>
+                    <div class="flex items-center rounded border border-gray-200 ">
+                      <button
+                        type="button"
+                        onClick={kurangJumlahDewasa}
+                        class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                      >
+                        -
+                      </button>
+
+                      <input
+                        type="number"
+                        id="Quantity"
+                        value={jumlahDewasa}
+                        onChange={(e) =>
+                          dispatch(setJumlahDewasa(jumlahDewasa))
+                        }
+                        class="h-6 w-8 border-transparent text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                      />
+
+                      <button
+                        type="button"
+                        onClick={tambahJumlahDewasa}
+                        class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </a>
+                <a
+                  href="#"
+                  className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
+                >
+                  <div className="flex items-center gap-x-[27px]">
+                    <div className="font-">Anak</div>
+                    <div class="flex items-center rounded border border-gray-200  ">
+                      <button
+                        type="button"
+                        onClick={kurangJumlahAnak}
+                        class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                      >
+                        -
+                      </button>
+
+                      <input
+                        type="number"
+                        id="Quantity"
+                        value={jumlahAnak}
+                        onChange={(e) => dispatch(setJumlahAnak(jumlahAnak))}
+                        class="h-6 w-8 border-transparent text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                      />
+
+                      <button
+                        type="button"
+                        onClick={tambahJumlahAnak}
+                        class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </a>
+                <a
+                  href="#"
+                  className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
+                >
+                  <div className="flex items-center gap-x-[18px]">
+                    <div className="font-">Bayi</div>
+                    <div class="flex items-center rounded border border-gray-200 ml-4">
+                      <button
+                        type="button"
+                        onClick={kurangJumlahBayi}
+                        class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                      >
+                        -
+                      </button>
+
+                      <input
+                        type="number"
+                        id="Quantity"
+                        value={jumlahBayi}
+                        onChange={(e) => dispatch(setJumlahBayi(jumlahBayi))}
+                        class="h-6 w-8 border-transparent text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                      />
+
+                      <button
+                        type="button"
+                        onClick={tambahJumlahBayi}
+                        class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            )}
             <div>|</div>
             <div
               className="flex items-center gap-2 cursor-pointer"
@@ -261,7 +561,7 @@ export default function CariTiketLain() {
               </span>
             </div>
             {isDropdownOpen2 && (
-              <div className="absolute mt-36 ml-28 w-28 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+              <div className="absolute mt-40 ml-28 w-28 bg-white border border-gray-200 rounded-md shadow-lg z-10">
                 <a
                   href="#"
                   className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"

@@ -11,7 +11,7 @@ export default function Filter() {
   };
 
   return (
-    <div className="w-64 mx-auto bg-white rounded-xl shadow-lg p-4">
+    <div className="w-64 mx-auto bg-white rounded-xl shadow-sm p-4">
       <div className="space-y-2 ">
         <div className="font-medium">Filter</div>
         <details className="group overflow-hidden rounded border-b border-gray-300 [&_summary::-webkit-details-marker]:hidden">

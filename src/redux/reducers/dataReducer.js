@@ -8,6 +8,9 @@ const initialState = {
   penumpang: null,
   class: "",
   type: null,
+  jumlahDewasa: null,
+  jumlahAnak: null,
+  jumlahBayi: null,
 };
 
 const dataSlicer = createSlice({
@@ -36,6 +39,15 @@ const dataSlicer = createSlice({
     setType: (state, action) => {
       state.type = action.payload;
     },
+    setJumlahDewasa: (state, action) => {
+      state.jumlahDewasa = action.payload;
+    },
+    setJumlahAnak: (state, action) => {
+      state.jumlahAnak = action.payload;
+    },
+    setJumlahBayi: (state, action) => {
+      state.jumlahBayi = action.payload;
+    },
   },
 });
 
@@ -47,6 +59,9 @@ export const {
   setPenumpang,
   setClass,
   setType,
+  setJumlahDewasa,
+  setJumlahAnak,
+  setJumlahBayi,
 } = dataSlicer.actions;
 
 export default dataSlicer.reducer;
