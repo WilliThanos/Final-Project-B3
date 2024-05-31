@@ -86,9 +86,9 @@ export default function CariTiketLain() {
   }, [totalPenumpang]);
 
   return (
-    <div className="mx-auto max-w-screen-2xl flex justify-between items-center bg-white rounded-xl shadow-sm">
+    <div className="mx-auto fixed left-0 right-0 max-w-screen-2xl flex justify-between items-center bg-white rounded-xl shadow-sm">
       <div className="flex items-center p-8">
-        <div className="block sm:hidden pr-5 absolute sm:justify-start">
+        <div className="block sm:hidden pr-5 absolute ">
           <button
             onClick={handleDropdownToggle}
             className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75"

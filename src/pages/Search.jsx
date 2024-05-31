@@ -30,7 +30,7 @@ export default function Search() {
       <div className="mt-24">
         <CariTiketLain />
       </div>
-      <div className="flex mt-8 justify-between">
+      <div className="flex pt-32 justify-between">
         <div className="  ">
           <Filter />
         </div>
@@ -194,12 +194,12 @@ export default function Search() {
                   </h2>
                 </div>
 
-                <div className="absolute p-2 opacity-0 transition-opacity group-hover:relative group-hover:opacity-100 sm:p-2 lg:p-8">
-                  <h3 className="mt-4 text-lg font-medium ">
+                <div className="absolute p-4 opacity-0 transition-opacity group-hover:relative group-hover:opacity-100 sm:p-5  lg:p-8">
+                  <h3 className="mt-4 text-base sm:text-lg font-medium ">
                     Go around the world
                   </h3>
 
-                  <p className="mt-4 text-base">
+                  <p className="mt-4 text-sm sm:text-base">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Cupiditate, praesentium voluptatem omnis atque culpa
                     repellendus.
