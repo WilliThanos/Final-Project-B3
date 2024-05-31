@@ -5,12 +5,12 @@ const initialState = {
   arrivalAirport: null,
   departureDate: null,
   returnDate: null,
-  penumpang: null,
+  penumpang: 0,
   class: "",
   type: null,
-  jumlahDewasa: null,
-  jumlahAnak: null,
-  jumlahBayi: null,
+  jumlahDewasa: 0,
+  jumlahAnak: 0,
+  jumlahBayi: 0,
 };
 
 const dataSlicer = createSlice({
