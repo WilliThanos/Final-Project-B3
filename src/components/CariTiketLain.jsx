@@ -402,7 +402,7 @@ export default function CariTiketLain() {
             <div> - </div>
             <div className="flex items-center gap-2">
               <GiAirplaneArrival />
-              <div>Medan (KLM)</div>
+              <div>Medan (KNO)</div>
             </div>
           </div>
           <div className="flex items-center gap-x-2 ">

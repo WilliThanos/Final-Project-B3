@@ -39,7 +39,7 @@ export default function Search() {
             Tiket Keberangkatan
           </div>
           <div className="bg-[#2A91E5] font-medium text-white p-1 rounded-lg px-64 mt-2 text-center">
-            Jakarta (CGK) - Medan (KLM) pada {`${formattedDate}`}
+            Jakarta (CGK) - Medan (KNO) pada {`${formattedDate}`}
           </div>
           <div>
             <div
@@ -72,7 +72,7 @@ export default function Search() {
                   </div>
                   <div className="flex flex-col text-center">
                     <div className="flex items-center gap-1">
-                      <div className="font-bold text-base">Medan (KLM)</div>
+                      <div className="font-bold text-base">Medan (KNO)</div>
                     </div>
                     <div>23.00</div>
                   </div>
@@ -83,10 +83,10 @@ export default function Search() {
               </div>
               {/* DROPDOWN DETAILS */}
               <div
-                className={`dropdown-content ${isDropdownOpen ? "open" : ""}`}
+                className={` dropdown-content ${isDropdownOpen ? "open" : ""}`}
               >
-                <div className="flex justify-between items-center cursor-pointer mt-4">
-                  <div className="font-bold ">Detail Tiket</div>
+                <div className="flex n items-center cursor-pointer border-t border-gray-400  mt-4 ">
+                  <div className="font-bold mt-4 ">Detail Tiket</div>
                 </div>
                 <div className="flex justify-between items-center ">
                   <div className="flex pt-6 w-3/4">
@@ -98,23 +98,65 @@ export default function Search() {
                       </div>
                       <div className="flex flex-col items-center">
                         <LiaCircleSolid size={20} />
-                        <div className="border-r  border-gray-500  h-52 "></div>
+                        <div className="border-r  border-gray-500 h-64 "></div>
                         <LiaCircleSolid size={20} />
                       </div>
                     </div>
-                    <div className="flex flex-col justify-between text-center ml-3 ">
-                      <div className="flex items-center gap-2 ">
-                        <div className="font-bold text-lg">19.00</div>
-                        <div className="font-semibold text-base">Jakarta</div>
+                    <div className="flex flex-col justify-between  pr-32 pl-3 ">
+                      <div className="flex flex-col ">
+                        <div className="flex items-center gap-2">
+                          <div className="font-bold text-lg">19.00</div>
+                          <div className="font-semibold text-base">Jakarta</div>
+                        </div>
+                        <div className="font-semibold text-base">
+                          {`${formattedDate}`}
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <div className="font-bold text-lg">23.00</div>
-                        <div className="font-semibold text-base">Medan</div>
+                      <div className="flex flex-col gap- text-gray-500 text-sm">
+                        <div className="">Maskapai : </div>
+                        <div className="">Kelas :</div>
+                        <div className="">Nomor Penerbangan :</div>
+                        <div className="">Tipe Pesawat :</div>
+                        <div className="mt-2">Bagasi :</div>
+                        <div className="">Bagasi Kabin :</div>
+                      </div>
+                      <div className="flex flex-col ">
+                        <div className="flex items-center gap-2">
+                          <div className="font-bold text-lg">23.00</div>
+                          <div className="font-semibold text-base">Medan</div>
+                        </div>
+                        <div className="font-semibold text-base">
+                          {`${formattedDate}`}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="font-bold text-xl text-[#2A91E5]">
-                    Rp 2.300.000
+                    <div className="flex flex-col justify-between  ">
+                      <div className="flex flex-col">
+                        <div className="font-bold text-lg">
+                          Bandara Soekarno-Hatta
+                        </div>
+                        <div className="font-semibold text-base">
+                          Terminal 1
+                        </div>
+                      </div>
+                      <div className="flex flex-col gap- text-gray-500 text-sm">
+                        <div className="">Air Asia</div>
+                        <div className="">Ekonomi</div>
+                        <div className="">QZ 7924</div>
+                        <div className="">Airbus A320 - 300</div>
+                        <div className="mt-2">20 kg</div>
+                        <div className="">7 kg</div>
+                      </div>
+
+                      <div className="flex flex-col">
+                        <div className="font-bold text-lg">
+                          Bandara Kualanamu
+                        </div>
+                        <div className="font-semibold text-base">
+                          Terminal Domestik
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
