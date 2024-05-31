@@ -66,10 +66,12 @@ export default function CariTiketLain() {
 
   const handleDropdownToggle2 = () => {
     setIsDropdownOpen2(!isDropdownOpen2);
+    setIsDropdownOpen3(false);
   };
 
   const handleDropdownToggle3 = () => {
     setIsDropdownOpen3(!isDropdownOpen3);
+    setIsDropdownOpen2(false);
   };
 
   const departureDateRef = useRef(null);
@@ -787,7 +789,7 @@ export default function CariTiketLain() {
             </div>
           )}
         </div>
-        <button className="rounded-xl bg-[#2A91E5] px-5 py-2.5 font-medium text-white hover:bg-sky-700 hover:shadow">
+        <button className="rounded-xl bg-[#2A91E5] px-5 py-2.5 font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow">
           Cari Tiket Lainnya
         </button>
       </div>

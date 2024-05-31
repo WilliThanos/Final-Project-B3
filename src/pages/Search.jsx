@@ -1,5 +1,6 @@
 import { useState } from "react";
 import NavbarLogoBiru from "../components/Navbar2";
+import NavbarLogoPutih from "../components/Navbar";
 import CariTiketLain from "../components/CariTiketLain";
 import Filter from "../components/Filter";
 import { useSelector } from "react-redux";
@@ -7,6 +8,7 @@ import { GiAirplaneDeparture, GiAirplaneArrival } from "react-icons/gi";
 import { HiArrowSmRight } from "react-icons/hi";
 
 export default function Search() {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const departureDate = useSelector((state) => state.data.departureDate);
 
   const formattedDate = new Intl.DateTimeFormat("id-ID", {
@@ -16,9 +18,14 @@ export default function Search() {
     day: "numeric",
   }).format(new Date(departureDate));
 
+  const handleDropdownToggle = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
   return (
     <div className="max-w-screen-2xl mx-auto ">
       <NavbarLogoBiru />
+
       <div className="mt-24">
         <CariTiketLain />
       </div>
@@ -34,131 +41,91 @@ export default function Search() {
             Jakarta (CGK) - Medan (KLM) pada {`${formattedDate}`}
           </div>
           <div>
-            <div className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg  mt-2">
-              <div className="flex justify-between ">
-                <div className="">AirAsia - Economy </div>
-                <div className="text-orange-500">2 kursi tersisa </div>
+            <div
+              onClick={handleDropdownToggle}
+              className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg mt-2 cursor-pointer"
+            >
+              <div className="flex justify-between items-center cursor-pointer">
+                <div>AirAsia - Ekonomi</div>
+                <div className="text-orange-500">2 kursi tersisa</div>
               </div>
               <div className="flex justify-between items-center">
-                <div className="flex  pt-6 w-3/4">
+                <div className="flex pt-6 w-3/4">
                   <div className="flex flex-col text-center">
-                    <div className="flex items-center gap-1 ">
-                      <div className="">
+                    <div className="flex items-center gap-1">
+                      <div>
                         <GiAirplaneDeparture />
                       </div>
                       <div className="font-bold text-base">Jakarta (CGK)</div>
                     </div>
-                    <div className="">19.00</div>
+                    <div>19.00</div>
                   </div>
                   <div className="flex flex-col justify-center w-2/4">
                     <p className="text-center text-gray-400 text-sm">4h 0m</p>
                     <div className="flex items-center">
-                      <div className="border-t-2 w-full border-gray-400 mx-4 "></div>
+                      <div className="border-t-2 w-full border-gray-400 mx-4"></div>
                     </div>
                   </div>
-
                   <div className="flex flex-col text-center">
-                    <div className="flex items-center gap-1 ">
-                      <div className="">
+                    <div className="flex items-center gap-1">
+                      <div>
                         <GiAirplaneArrival />
                       </div>
                       <div className="font-bold text-base">Medan (KLM)</div>
                     </div>
-                    <div className="">23.00</div>
+                    <div>23.00</div>
                   </div>
                 </div>
                 <div className="font-bold text-xl text-[#2A91E5]">
                   Rp 2.300.000
                 </div>
               </div>
-            </div>
-            <div className="bg-[#2A91E5] border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer">
-              Pilih Tiket
-            </div>
-          </div>
-          <div>
-            <div className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg  mt-2">
-              <div className="flex justify-between ">
-                <div className="">AirAsia - Economy </div>
-                <div className="text-orange-500">2 kursi tersisa </div>
-              </div>
-              <div className="flex justify-between items-center">
-                <div className="flex  pt-6 w-3/4">
-                  <div className="flex flex-col text-center">
-                    <div className="flex items-center gap-1 ">
-                      <div className="">
-                        <GiAirplaneDeparture />
-                      </div>
-                      <div className="font-bold text-base">Jakarta (CGK)</div>
-                    </div>
-                    <div className="">19.00</div>
-                  </div>
-                  <div className="flex flex-col justify-center w-2/4">
-                    <p className="text-center text-gray-400 text-sm">4h 0m</p>
-                    <div className="flex items-center">
-                      <div className="border-t-2 w-full border-gray-400 mx-4 "></div>
-                    </div>
-                  </div>
 
-                  <div className="flex flex-col text-center">
-                    <div className="flex items-center gap-1 ">
-                      <div className="">
-                        <GiAirplaneArrival />
+              {isDropdownOpen && (
+                <div className="border-t mt-4 border-gray-700">
+                  <div className="flex justify-between items-center cursor-pointer mt-2">
+                    <div className="font-bold ">Detail Tiket</div>
+                  </div>
+                  <div className="flex justify-between items-center ">
+                    <div className="flex pt-6 w-3/4">
+                      <div className="border-r-2  border-gray-400 ">TES</div>
+                      <div className="flex flex-col text-center">
+                        <div className="flex items-center gap-1">
+                          <div>
+                            <GiAirplaneDeparture />
+                          </div>
+                          <div className="font-bold text-base">
+                            Jakarta (CGK)
+                          </div>
+                        </div>
+                        <div>19.00</div>
                       </div>
-                      <div className="font-bold text-base">Medan (KLM)</div>
-                    </div>
-                    <div className="">23.00</div>
-                  </div>
-                </div>
-                <div className="font-bold text-xl text-[#2A91E5]">
-                  Rp 2.300.000
-                </div>
-              </div>
-            </div>
-            <div className="bg-[#2A91E5] border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer">
-              Pilih Tiket
-            </div>
-          </div>
-          <div>
-            <div className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg  mt-2">
-              <div className="flex justify-between ">
-                <div className="">AirAsia - Economy </div>
-                <div className="text-orange-500">2 kursi tersisa </div>
-              </div>
-              <div className="flex justify-between items-center">
-                <div className="flex  pt-6 w-3/4">
-                  <div className="flex flex-col text-center">
-                    <div className="flex items-center gap-1 ">
-                      <div className="">
-                        <GiAirplaneDeparture />
+                      <div className="flex flex-col justify-center w-2/4">
+                        <p className="text-center text-gray-400 text-sm">
+                          4h 0m
+                        </p>
+                        <div className="flex items-center">
+                          <div className="border-t-2 w-full border-gray-400 mx-4"></div>
+                        </div>
                       </div>
-                      <div className="font-bold text-base">Jakarta (CGK)</div>
-                    </div>
-                    <div className="">19.00</div>
-                  </div>
-                  <div className="flex flex-col justify-center w-2/4">
-                    <p className="text-center text-gray-400 text-sm">4h 0m</p>
-                    <div className="flex items-center">
-                      <div className="border-t-2 w-full border-gray-400 mx-4 "></div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col text-center">
-                    <div className="flex items-center gap-1 ">
-                      <div className="">
-                        <GiAirplaneArrival />
+                      <div className="flex flex-col text-center">
+                        <div className="flex items-center gap-1">
+                          <div>
+                            <GiAirplaneArrival />
+                          </div>
+                          <div className="font-bold text-base">Medan (KLM)</div>
+                        </div>
+                        <div>23.00</div>
                       </div>
-                      <div className="font-bold text-base">Medan (KLM)</div>
                     </div>
-                    <div className="">23.00</div>
+                    <div className="font-bold text-xl text-[#2A91E5]">
+                      Rp 2.300.000
+                    </div>
                   </div>
                 </div>
-                <div className="font-bold text-xl text-[#2A91E5]">
-                  Rp 2.300.000
-                </div>
-              </div>
+              )}
             </div>
-            <div className="bg-[#2A91E5] border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer">
+            <div className="bg-[#2A91E5] hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer">
               Pilih Tiket
             </div>
           </div>

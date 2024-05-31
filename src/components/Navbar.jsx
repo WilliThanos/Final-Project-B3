@@ -90,17 +90,17 @@ function NavbarLogoPutih() {
               <ul className="flex items-center gap-10 text-base ">
                 <li>
                   <a
-                    className="text-white/60 transition hover:text-white font-semibold"
+                    className="text-white/60 transition hover:text-white font-semibold hover:shadow rounded-xl hover:bg-gray-400 p-3"
                     href="/search"
                   >
                     {" "}
-                    Home{" "}
+                    Beranda{" "}
                   </a>
                 </li>
 
                 <li>
                   <a
-                    className="text-white/60 transition hover:text-white font-semibold"
+                    className="text-white/60 transition hover:text-white font-semibold hover:shadow rounded-xl hover:bg-gray-400 p-3"
                     href="#"
                   >
                     {" "}
@@ -110,7 +110,7 @@ function NavbarLogoPutih() {
 
                 <li>
                   <a
-                    className="text-white/60 transition hover:text-white font-semibold"
+                    className="text-white/60 transition hover:text-white font-semibold hover:shadow rounded-xl hover:bg-gray-400 p-3"
                     href="#"
                   >
                     {" "}
@@ -120,7 +120,7 @@ function NavbarLogoPutih() {
 
                 <li>
                   <a
-                    className="text-white/60 transition hover:text-white font-semibold"
+                    className="text-white/60 transition hover:text-white font-semibold hover:shadow rounded-xl hover:bg-gray-400 p-3"
                     href="#"
                   >
                     {" "}
@@ -137,15 +137,15 @@ function NavbarLogoPutih() {
                 className="  px-5 py-2.5 transition text-base font-medium text-white hover:shadow rounded-xl hover:bg-gray-400"
                 href="/"
               >
-                Sign In
+                Masuk
               </a>
 
               <div className="hidden md:flex">
                 <a
-                  className="rounded-xl bg-[#2A91E5] px-5 py-2.5 transition text-base font-medium text-white hover:bg-sky-700 hover:shadow"
+                  className="rounded-xl bg-[#2A91E5] px-5 py-2.5 transition text-base font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow"
                   href="/register"
                 >
-                  Sign Up
+                  Daftar
                 </a>
               </div>
             </div>
@@ -176,19 +176,19 @@ function NavbarLogoPutih() {
                     href="#"
                     className="block rounded-md  px-4 py-2 text-[#333333]/60 hover:bg-gray-300 hover:text-[#333333] font-semibold"
                   >
-                    Sign In
+                    Masuk
                   </a>
                   <a
                     href="#"
                     className="block rounded-md  px-4 py-2 text-[#333333]/60 hover:bg-gray-300 hover:text-[#333333] font-semibold"
                   >
-                    Sign Up
+                    Daftar
                   </a>
                   <a
                     href="#"
                     className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold"
                   >
-                    Home
+                    Beranda
                   </a>
                   <a
                     href="#"

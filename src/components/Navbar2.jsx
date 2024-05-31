@@ -93,17 +93,17 @@ function NavbarLogoBiru() {
               <ul className="flex items-center gap-10 text-base ">
                 <li>
                   <a
-                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold"
+                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold hover:shadow rounded-xl hover:bg-gray-200 p-3"
                     href="/search"
                   >
                     {" "}
-                    Home{" "}
+                    Beranda{" "}
                   </a>
                 </li>
 
                 <li>
                   <a
-                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold"
+                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold hover:shadow rounded-xl hover:bg-gray-200 p-3"
                     href="#"
                   >
                     {" "}
@@ -113,7 +113,7 @@ function NavbarLogoBiru() {
 
                 <li>
                   <a
-                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold"
+                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold hover:shadow rounded-xl hover:bg-gray-200 p-3"
                     href="#"
                   >
                     {" "}
@@ -123,7 +123,7 @@ function NavbarLogoBiru() {
 
                 <li>
                   <a
-                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold"
+                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold hover:shadow rounded-xl hover:bg-gray-200 p-3"
                     href="#"
                   >
                     {" "}
@@ -145,7 +145,7 @@ function NavbarLogoBiru() {
 
               <div className="hidden md:flex">
                 <a
-                  className="rounded-xl bg-[#2A91E5] px-5 py-2.5 transition text-base font-medium text-white hover:bg-sky-700 hover:shadow"
+                  className="rounded-xl bg-[#2A91E5] px-5 py-2.5 transition text-base font-medium text-white hover:text-gray-200 hover:bg-sky-700 hover:shadow"
                   href="/register"
                 >
                   Daftar
@@ -191,7 +191,7 @@ function NavbarLogoBiru() {
                     href="#"
                     className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold"
                   >
-                    Home
+                    Beranda
                   </a>
                   <a
                     href="#"
