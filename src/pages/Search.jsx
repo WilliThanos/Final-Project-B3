@@ -37,7 +37,7 @@ export default function Search() {
         <div className=" flex ">
           <Filter />
         </div>
-        <div className=" bg-white rounded-xl shadow-sm p-6 px-10 max-md:text-sm">
+        <div className=" bg-white rounded-xl shadow-sm p-6 px-10 max-md:text-sm max-md:px-5">
           <div className="bg-[#D9EDFF] font-medium text-[#2A91E5] p-1 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
             Tiket Keberangkatan
           </div>
