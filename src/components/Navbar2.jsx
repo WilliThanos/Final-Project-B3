@@ -11,7 +11,7 @@ function NavbarLogoBiru() {
   console.log("cekState :>> ", cekState);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 mx-auto max-w-screen-2xl my-4 bg-white/30 rounded-xl shadow-lg">
+    <div className="fixed top-0 left-0 right-0 z-50 mx-auto max-w-screen-2xl my-4 bg-white/30 rounded-xl shadow-lg max-md:mx-2">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between max-w-screen-2xl">
           <div className="md:flex md:items-center md:gap-12">
@@ -90,7 +90,7 @@ function NavbarLogoBiru() {
 
           <div className="hidden md:block">
             <nav aria-label="Global">
-              <ul className="flex items-center gap-10 text-base ">
+              <ul className="flex items-center gap-6 text-base text-pretty text-center">
                 <li>
                   <a
                     className="text-[#333333]/60 transition hover:text-[#333333] font-semibold hover:shadow rounded-xl hover:bg-gray-200 p-3"
@@ -101,14 +101,12 @@ function NavbarLogoBiru() {
                   </a>
                 </li>
 
-                <li>
-                  <a
-                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold hover:shadow rounded-xl hover:bg-gray-200 p-3"
-                    href="#"
-                  >
-                    {" "}
-                    Tujuan Terbaik{" "}
-                  </a>
+                <li
+                  href="#"
+                  className="flex gap-1 p-3 cursor-pointer hover:bg-gray-200 hover:text-[#333333] text-[#333333]/60 transition  font-semibold hover:shadow rounded-xl "
+                >
+                  <a className=" "> Tujuan </a>
+                  <a className=""> Terbaik </a>
                 </li>
 
                 <li>
@@ -121,14 +119,12 @@ function NavbarLogoBiru() {
                   </a>
                 </li>
 
-                <li>
-                  <a
-                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold hover:shadow rounded-xl hover:bg-gray-200 p-3"
-                    href="#"
-                  >
-                    {" "}
-                    Mengapa Kami{" "}
-                  </a>
+                <li
+                  href="#"
+                  className="flex gap-1 p-3 cursor-pointer hover:bg-gray-200 hover:text-[#333333] text-[#333333]/60 transition  font-semibold hover:shadow rounded-xl "
+                >
+                  <a className=" ">Mengapa </a>
+                  <a className=""> Kami </a>
                 </li>
               </ul>
             </nav>

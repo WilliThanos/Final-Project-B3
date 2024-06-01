@@ -24,21 +24,24 @@ export default function Search() {
   };
 
   return (
-    <div className="max-w-screen-2xl mx-auto ">
+    <div className="max-w-screen-2xl mx-auto  ">
       <NavbarLogoBiru />
+      {/* <div className="mt-24">
+        <NavbarLogoPutih />
+      </div> */}
 
       <div className="mt-24">
         <CariTiketLain />
       </div>
-      <div className="flex pt-32 justify-between">
-        <div className="  ">
+      <div className="flex pt-32 gap-8 max-md:flex-col max-md:mx-2 max-md:gap-3  max-lg:pt-40  max-xl:pt-40">
+        <div className=" flex ">
           <Filter />
         </div>
-        <div className=" bg-white rounded-xl shadow-sm p-6 px-10 ">
-          <div className="bg-[#D9EDFF] font-medium text-[#2A91E5] p-1 rounded-lg px-72 text-center border ">
+        <div className=" bg-white rounded-xl shadow-sm p-6 px-10 max-md:text-sm">
+          <div className="bg-[#D9EDFF] font-medium text-[#2A91E5] p-1 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
             Tiket Keberangkatan
           </div>
-          <div className="bg-[#2A91E5] font-medium text-white p-1 rounded-lg px-64 mt-2 text-center">
+          <div className="bg-[#2A91E5] font-medium text-white p-1 rounded-lg px-64 mt-2 text-center max-md:px-0 max-lg:px-10 max-xl:px-32 ">
             Jakarta (CGK) - Medan (KNO) pada {`${formattedDate}`}
           </div>
           <div>
@@ -46,17 +49,21 @@ export default function Search() {
               onClick={handleDropdownToggle}
               className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg mt-2 cursor-pointer"
             >
-              <div className="flex justify-between items-center cursor-pointer">
+              <div className="flex justify-between items-center cursor-pointer  max-md:text-sm">
                 <div>AirAsia - Ekonomi</div>
-                <div className="text-orange-500">2 kursi tersisa</div>
+                <div className="text-orange-500  max-md:text-sm">
+                  2 kursi tersisa
+                </div>
               </div>
               <div className="flex justify-between items-center">
                 <div className="flex pt-6 w-3/4">
                   <div className="flex flex-col text-center">
                     <div className="flex items-center gap-1">
-                      <div className="font-bold text-base">Jakarta (CGK)</div>
+                      <div className="font-bold text-base max-md:text-sm">
+                        Jakarta (CGK)
+                      </div>
                     </div>
-                    <div>19.00</div>
+                    <div className="">19.00</div>
                   </div>
                   <div className="flex flex-col justify-center w-2/4">
                     <p className="text-center text-gray-400 text-sm">4h 0m</p>
@@ -72,12 +79,14 @@ export default function Search() {
                   </div>
                   <div className="flex flex-col text-center">
                     <div className="flex items-center gap-1">
-                      <div className="font-bold text-base">Medan (KNO)</div>
+                      <div className="font-bold text-base  max-md:text-sm">
+                        Medan (KNO)
+                      </div>
                     </div>
                     <div>23.00</div>
                   </div>
                 </div>
-                <div className="font-bold text-xl text-[#2A91E5]">
+                <div className="font-bold text-xl text-[#2A91E5]  max-md:text-sm">
                   Rp 2.300.000
                 </div>
               </div>
@@ -168,7 +177,8 @@ export default function Search() {
           </div>
         </div>
         <div>
-          <div className="w-52 mx-auto bg-white rounded-xl shadow-sm p-4">
+          {/* SDG CARD */}
+          <div className="w-52 mx-auto bg-white rounded-xl shadow-sm p-4 max-md:mx-0 ">
             <a href="#" className="group relative block h-64 sm:h-80 lg:h-96">
               <span className="absolute inset-0 border rounded-xl bg-[#D9EDFF] border-dashed border-gray-300"></span>
 
@@ -189,7 +199,7 @@ export default function Search() {
                     />
                   </svg>
 
-                  <h2 className="mt-10 text-lg font-medium ">
+                  <h2 className="mt-10 text-lg font-medium  max-md:text-md">
                     Go around the world
                   </h2>
                 </div>
@@ -199,7 +209,7 @@ export default function Search() {
                     Go around the world
                   </h3>
 
-                  <p className="mt-4 text-sm sm:text-base">
+                  <p className="mt-4 text-sm sm:text-base ">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Cupiditate, praesentium voluptatem omnis atque culpa
                     repellendus.
@@ -208,6 +218,7 @@ export default function Search() {
               </div>
             </a>
           </div>
+          {/* SDG CARD */}
         </div>
       </div>
     </div>

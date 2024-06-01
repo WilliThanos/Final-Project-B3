@@ -86,7 +86,7 @@ export default function CariTiketLain() {
   }, [totalPenumpang]);
 
   return (
-    <div className="mx-auto fixed left-0 right-0 max-w-screen-2xl flex justify-between items-center bg-white rounded-xl shadow-sm">
+    <div className="mx-auto fixed left-0 right-0 max-w-screen-2xl flex justify-between items-center bg-white rounded-xl shadow-sm max-md:mx-2 max-md:text-sm">
       <div className="flex items-center p-8">
         <div className="block sm:hidden pr-5 absolute ">
           <button
@@ -391,15 +391,15 @@ export default function CariTiketLain() {
           )}
         </div>
         <div
-          className="hidden flex-col pr-20 border-r border-gray-500 sm:flex"
+          className="hidden flex-col pr-20 border-r border-gray-500 sm:flex max-xl:pr-0 max-lg:pr-0"
           style={{ borderRight: "1px solid", height: "40px" }}
         >
-          <div className="flex items-center font-semibold gap-x-2">
+          <div className="flex items-center font-semibold max-xl:pr-20 max-lg:pr-20">
             <div className="flex items-center gap-2">
               <GiAirplaneDeparture />
               <div>Jakarta (CGK)</div>
             </div>
-            <div> - </div>
+            <div className="px-2"> - </div>
             <div className="flex items-center gap-2">
               <GiAirplaneArrival />
               <div>Medan (KNO)</div>
