@@ -202,10 +202,10 @@ export default function BookingDetail() {
                 <div className="flex items-center gap-4 pt-4">
                   <div
                     onClick={handleDropdownToggle}
-                    className="flex flex-col gap-2 w-full"
+                    className="flex flex-col gap-2 w-full "
                   >
                     <div className=" text-xs">Jenis Kelamin</div>
-                    <div className="flex  justify-between items-center gap-2 px-4 rounded border-2 border-gray-300 h-14 w-auto ">
+                    <div className="flex  justify-between items-center gap-2 px-4 rounded border-2  border-gray-300  h-14 w-auto ">
                       <div className="font-medium text-sm  ">
                         {jenisKelamin}
                       </div>
@@ -271,7 +271,7 @@ export default function BookingDetail() {
                   </div>
                   <div className="flex flex-col gap-2 w-full">
                     <div className=" text-xs">Tanggal Lahir</div>
-                    <div className="flex  justify-between items-center gap-2 px-2 rounded border-2 border-gray-300 h-14 w-auto ">
+                    <div className="flex  justify-between items-center gap-2 px-2 rounded border-2 border-gray-300 focus:border-sk h-14 w-auto ">
                       <div>
                         <DatePicker
                           selected={tanggalLahir}
