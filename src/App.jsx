@@ -8,7 +8,7 @@ import ReactDOM from "react-dom/client";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Search from "./pages/Search.jsx";
-
+import BookingDetail from "./pages/BookingDetail.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useSelector } from "react-redux";
 
@@ -25,6 +25,10 @@ export default function App() {
     {
       path: "/search",
       element: <Search />,
+    },
+    {
+      path: "/booking-detail",
+      element: <BookingDetail />,
     },
   ]);
 

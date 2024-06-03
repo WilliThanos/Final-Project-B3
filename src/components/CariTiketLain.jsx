@@ -390,6 +390,7 @@ export default function CariTiketLain() {
             </div>
           )}
         </div>
+        {/* mainLook  */}
         <div
           className="hidden flex-col pr-20 border-r border-gray-500 sm:flex max-xl:pr-0 max-lg:pr-0"
           style={{ borderRight: "1px solid", height: "40px" }}
@@ -604,7 +605,7 @@ export default function CariTiketLain() {
             )}
           </div>
         </div>
-
+        {/* MAIN LOOK  */}
         <div
           className="hidden flex-col pr-20 pl-20 border-r border-gray-500 md:flex "
           style={{ borderRight: "1px solid", height: "40px" }}

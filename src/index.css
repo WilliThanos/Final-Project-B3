@@ -44,3 +44,7 @@ body {
   max-height: 500px; /* Adjust this value based on the expected height of the content */
   opacity: 1;
 }
+
+.tilted-icon {
+  transform: rotate(45deg); /* Adjust the degree as needed */
+}

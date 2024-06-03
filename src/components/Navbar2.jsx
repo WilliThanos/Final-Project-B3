@@ -101,12 +101,15 @@ function NavbarLogoBiru() {
                   </a>
                 </li>
 
-                <li
-                  href="#"
-                  className="flex gap-1 p-3 cursor-pointer hover:bg-gray-200 hover:text-[#333333] text-[#333333]/60 transition  font-semibold hover:shadow rounded-xl "
-                >
-                  <a className=" "> Tujuan </a>
-                  <a className=""> Terbaik </a>
+                <li className="flex gap-1 p-3 cursor-pointer hover:bg-gray-200 hover:text-[#333333] text-[#333333]/60 transition  font-semibold hover:shadow rounded-xl ">
+                  <a href="/booking-detail" className=" ">
+                    {" "}
+                    Tujuan{" "}
+                  </a>
+                  <a href="/booking-detail" className="">
+                    {" "}
+                    Terbaik{" "}
+                  </a>
                 </li>
 
                 <li>

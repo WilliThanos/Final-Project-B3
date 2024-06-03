@@ -1,15 +1,17 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import dataReducer from "./reducers/dataReducer";
+import bookingReducer from "./reducers/bookingReducer";
 import { thunk } from "redux-thunk";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 
 const rootReducers = combineReducers({
   data: dataReducer,
+  booking: bookingReducer,
 });
 
 const persistConfig = {
-  key: "root2",
+  key: "root3",
   storage,
 };
 
