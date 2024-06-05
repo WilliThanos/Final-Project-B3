@@ -63,13 +63,13 @@ export default function BookingDetail() {
       <div className="mt-24">
         <CariTiketLain />
       </div>
-      <div className="flex pt-32 gap-8max-md:mx-2 max-md:gap-3  max-lg:pt-40  max-xl:pt-40 max-xl:flex-col max-xl:mx-2 ">
-        <div className="flex flex-col gap-7">
-          <div className="w-full">
+      <div className="flex pt-32 gap-8  max-md:mx-2 max-md:gap-3  max-lg:pt-40  max-xl:pt-40 max-xl:flex-col max-xl:mx-2 ">
+        <div className="flex flex-col gap-8 w-full">
+          <div className="">
             <div className="pb-4 font-bold text-2xl max-lg:text-xl max-sm:text-lg">
               Detail Pemesanan Tiket
             </div>
-            <div className=" mx-auto bg-gray-200 rounded-xl shadow-sm px-6 max-sm:px-4 ">
+            <div className=" mx-auto w-full bg-white rounded-xl shadow-sm px-6 max-sm:px-4 ">
               <div className="py-10 flex flex-col gap-10">
                 <div>
                   <div className="flex items-center gap-4">
@@ -230,11 +230,11 @@ export default function BookingDetail() {
               </div>
             </div>
           </div>
-          <div className="w-full">
+          <div className="">
             <div className="pb-4 font-bold text-2xl max-lg:text-xl max-sm:text-lg">
               Detail Penumpang
             </div>
-            <div className=" mx-auto bg-white rounded-xl shadow-sm px-6 max-sm:px-4 ">
+            <div className=" mx-auto w-full bg-white rounded-xl shadow-sm px-6 max-sm:px-4 ">
               <div className="w-3/4 pt-10 max-lg:w-full ">
                 <div className="font-semibold text-lg max-md:text-base">
                   Informasi Penumpang
@@ -346,7 +346,7 @@ export default function BookingDetail() {
                       required
                       value={email}
                       onChange={(e) => dispatch(setEmail(e.target.value))}
-                      className="flex justify-between text-sm items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full pr-10 max-md:h-10"
+                      className="flex justify-between text-sm items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full  max-md:h-10"
                       placeholder="abc@gmail.com"
                     />{" "}
                   </div>

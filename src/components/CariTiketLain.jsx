@@ -86,7 +86,7 @@ export default function CariTiketLain() {
   }, [totalPenumpang]);
 
   return (
-    <div className="mx-auto fixed left-0 right-0 max-w-screen-2xl flex justify-between items-center bg-white rounded-xl shadow-sm max-md:mx-2 max-md:text-sm">
+    <div className="mx-auto fixed left-0 right-0 z-40 max-w-screen-2xl flex justify-between items-center bg-white rounded-xl shadow-sm max-md:mx-2 max-md:text-sm">
       <div className="flex items-center p-8">
         <div className="block sm:hidden pr-5 absolute ">
           <button
@@ -392,7 +392,7 @@ export default function CariTiketLain() {
         </div>
         {/* mainLook  */}
         <div
-          className="hidden flex-col pr-20 border-r border-gray-500 sm:flex max-xl:pr-0 max-lg:pr-0"
+          className="flex flex-col pr-20 border-r border-gray-500 max-sm:hidden max-xl:pr-0 max-lg:pr-0"
           style={{ borderRight: "1px solid", height: "40px" }}
         >
           <div className="flex items-center font-semibold max-xl:pr-20 max-lg:pr-20">
