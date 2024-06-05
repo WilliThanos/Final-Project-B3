@@ -71,7 +71,7 @@ export default function BookingDetail() {
             </div>
             <div className=" mx-auto w-full bg-white rounded-xl shadow-sm px-6 max-sm:px-4 ">
               <div className="py-10 flex flex-col gap-10">
-                <div>
+                <div className="">
                   <div className="flex items-center gap-4">
                     <GiAirplaneDeparture size={20} />
                     <div className="font-bold text-base max-sm:text-sm">
