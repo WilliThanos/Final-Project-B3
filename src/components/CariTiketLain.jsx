@@ -13,7 +13,14 @@ import {
   setJumlahDewasa,
   setJumlahAnak,
   setJumlahBayi,
+  setArrivalAirportId,
+  setDepartureAirportId,
 } from "../redux/reducers/dataReducer";
+import {
+  getAllAirports,
+  getDepartureAirport,
+  getArrivalAirport,
+} from "../redux/action/dataAction";
 
 export default function CariTiketLain() {
   const dispatch = useDispatch();
@@ -23,12 +30,34 @@ export default function CariTiketLain() {
   const jumlahDewasa = useSelector((state) => state?.data?.jumlahDewasa);
   const jumlahAnak = useSelector((state) => state?.data?.jumlahAnak);
   const jumlahBayi = useSelector((state) => state?.data?.jumlahBayi);
+  const allAirport = useSelector((state) => state?.data?.allAirport);
+  const departureAirport = useSelector(
+    (state) => state?.data?.departureAirport
+  );
+  const arrivalAirport = useSelector((state) => state?.data?.arrivalAirport);
   const totalPenumpang = jumlahAnak + jumlahDewasa + jumlahBayi;
 
   // const [departureDate, setDepartureDate] = useState(new Date());
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);
   const [isDropdownOpen3, setIsDropdownOpen3] = useState(false);
+  const [isDropdownOpen4, setIsDropdownOpen4] = useState(false);
+  const [isDropdownOpen5, setIsDropdownOpen5] = useState(false);
+  const [airportQuery, setAirportQuery] = useState("");
+
+  const filteredAirports = allAirport.filter(
+    (airport) =>
+      airport?.city.toLowerCase().includes(airportQuery.toLowerCase()) ||
+      airport?.iata_code.toLowerCase().includes(airportQuery.toLowerCase())
+  );
+
+  useEffect(() => {
+    dispatch(getAllAirports());
+  }, []);
+
+  useEffect(() => {
+    dispatch(getDepartureAirport());
+  }, []);
 
   const kurangJumlahDewasa = () => {
     if (jumlahDewasa > 0) {
@@ -67,11 +96,29 @@ export default function CariTiketLain() {
   const handleDropdownToggle2 = () => {
     setIsDropdownOpen2(!isDropdownOpen2);
     setIsDropdownOpen3(false);
+    setIsDropdownOpen4(false);
+    setIsDropdownOpen5(false);
   };
 
   const handleDropdownToggle3 = () => {
     setIsDropdownOpen3(!isDropdownOpen3);
     setIsDropdownOpen2(false);
+    setIsDropdownOpen4(false);
+    setIsDropdownOpen5(false);
+  };
+
+  const handleDropdownToggle4 = () => {
+    setIsDropdownOpen4(!isDropdownOpen4);
+    setIsDropdownOpen2(false);
+    setIsDropdownOpen3(false);
+    setIsDropdownOpen5(false);
+  };
+
+  const handleDropdownToggle5 = () => {
+    setIsDropdownOpen5(!isDropdownOpen5);
+    setIsDropdownOpen2(false);
+    setIsDropdownOpen3(false);
+    setIsDropdownOpen4(false);
   };
 
   const departureDateRef = useRef(null);
@@ -157,9 +204,52 @@ export default function CariTiketLain() {
                 className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold sm:hidden"
               >
                 <div className="flex items-center font-semibold gap-x-2">
-                  <div className="flex items-center gap-2">
-                    <GiAirplaneDeparture />
-                    <div>Jakarta (CGK)</div>
+                  <div className="relative">
+                    <div
+                      onClick={handleDropdownToggle4}
+                      className="flex items-center gap-2 cursor-pointer"
+                    >
+                      <GiAirplaneDeparture />
+                      <div>
+                        {departureAirport?.city} ({departureAirport?.iata_code})
+                      </div>
+                    </div>
+                    {isDropdownOpen4 && (
+                      <div className="absolute mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                        <input
+                          type="text"
+                          value={airportQuery}
+                          onChange={(e) => setAirportQuery(e.target.value)}
+                          placeholder="Search..."
+                          className="w-full px-3 py-2  border rounded border-gray-300 focus:outline-none"
+                        />
+                        <div
+                          className={`overflow-y-auto ${
+                            filteredAirports.length > 5 ? "h-60" : "max-h-auto"
+                          }`}
+                        >
+                          {filteredAirports.length > 0 ? (
+                            filteredAirports.map((airport) => (
+                              <div
+                                key={airport?.id}
+                                onClick={() => {
+                                  dispatch(setDepartureAirportId(airport?.id));
+                                  dispatch(getDepartureAirport());
+                                  setIsDropdownOpen4(false);
+                                }}
+                                className="px-3 py-2 flex gap-1 items-center border-gray-300 border-b last:border-0 hover:bg-[#2A91E5] hover:text-white cursor-pointer"
+                              >
+                                {airport?.city} ({airport?.iata_code})
+                              </div>
+                            ))
+                          ) : (
+                            <div className="px-3 py-2 text-center text-gray-500 border-gray-300 border rounded">
+                              Bandara Tidak Ditemukan
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </a>
@@ -168,9 +258,53 @@ export default function CariTiketLain() {
                 className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold sm:hidden"
               >
                 <div className="flex items-center font-semibold gap-x-2">
-                  <div className="flex items-center gap-2">
-                    <GiAirplaneArrival />
-                    <div>Medan (KLM)</div>
+                  <div className="relative">
+                    <div
+                      onClick={handleDropdownToggle5}
+                      className="flex items-center gap-2 cursor-pointer"
+                    >
+                      <GiAirplaneArrival />
+                      <div>
+                        {" "}
+                        {arrivalAirport?.city} ({arrivalAirport?.iata_code})
+                      </div>
+                    </div>
+                    {isDropdownOpen5 && (
+                      <div className="absolute mt-1 w-48  bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                        <input
+                          type="text"
+                          value={airportQuery}
+                          onChange={(e) => setAirportQuery(e.target.value)}
+                          placeholder="Search..."
+                          className="w-full px-3 py-2  border rounded border-gray-300 focus:outline-none"
+                        />
+                        <div
+                          className={`overflow-y-auto ${
+                            filteredAirports.length > 5 ? "h-60" : "max-h-auto"
+                          }`}
+                        >
+                          {filteredAirports.length > 0 ? (
+                            filteredAirports.map((airport) => (
+                              <div
+                                key={airport?.id}
+                                onClick={() => {
+                                  dispatch(setArrivalAirportId(airport?.id));
+                                  dispatch(getArrivalAirport());
+                                  setIsDropdownOpen5(false);
+                                }}
+                                className=" px-3 py-2 flex gap-1 items-center  border-gray-300 border rounded hover:bg-[#2A91E5] hover:rounded hover:text-white cursor-pointer"
+                              >
+                                {airport?.city} ({airport?.iata_code})
+                              </div>
+                            ))
+                          ) : (
+                            <div className="px-3 py-2 text-center text-gray-500 border-gray-300 border rounded">
+                              Bandara Tidak Ditemukan
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </a>
@@ -390,20 +524,107 @@ export default function CariTiketLain() {
             </div>
           )}
         </div>
-        {/* mainLook  */}
+        {/* NON RESPONSIVE LOOK  */}
         <div
           className="flex flex-col pr-20 border-r border-gray-500 max-sm:hidden max-xl:pr-0 max-lg:pr-0"
           style={{ borderRight: "1px solid", height: "40px" }}
         >
           <div className="flex items-center font-semibold max-xl:pr-20 max-lg:pr-20">
-            <div className="flex items-center gap-2">
-              <GiAirplaneDeparture />
-              <div>Jakarta (CGK)</div>
+            <div className="relative">
+              <div
+                onClick={handleDropdownToggle4}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <GiAirplaneDeparture />
+                <div>
+                  {departureAirport?.city} ({departureAirport?.iata_code})
+                </div>
+              </div>
+              {isDropdownOpen4 && (
+                <div className="absolute mt-1 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                  <input
+                    type="text"
+                    value={airportQuery}
+                    onChange={(e) => setAirportQuery(e.target.value)}
+                    placeholder="Search..."
+                    className="w-full px-3 py-2  border rounded border-gray-300 focus:outline-none"
+                  />
+                  <div
+                    className={`overflow-y-auto ${
+                      filteredAirports.length > 5 ? "h-60" : "max-h-auto"
+                    }`}
+                  >
+                    {filteredAirports.length > 0 ? (
+                      filteredAirports.map((airport) => (
+                        <div
+                          key={airport?.id}
+                          onClick={() => {
+                            dispatch(setDepartureAirportId(airport?.id));
+                            dispatch(getDepartureAirport());
+                            setIsDropdownOpen4(false);
+                          }}
+                          className="px-3 py-2 flex gap-1 items-center border-gray-300 border-b last:border-0 hover:bg-[#2A91E5] hover:text-white cursor-pointer"
+                        >
+                          {airport?.city} ({airport?.iata_code})
+                        </div>
+                      ))
+                    ) : (
+                      <div className="px-3 py-2 text-center text-gray-500 border-gray-300 border rounded">
+                        Bandara Tidak Ditemukan
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
             <div className="px-2"> - </div>
-            <div className="flex items-center gap-2">
-              <GiAirplaneArrival />
-              <div>Medan (KNO)</div>
+            <div className="relative">
+              <div
+                onClick={handleDropdownToggle5}
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                <GiAirplaneArrival />
+                <div>
+                  {" "}
+                  {arrivalAirport?.city} ({arrivalAirport?.iata_code})
+                </div>
+              </div>
+              {isDropdownOpen5 && (
+                <div className="absolute mt-1 w-48  bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                  <input
+                    type="text"
+                    value={airportQuery}
+                    onChange={(e) => setAirportQuery(e.target.value)}
+                    placeholder="Search..."
+                    className="w-full px-3 py-2  border rounded border-gray-300 focus:outline-none"
+                  />
+                  <div
+                    className={`overflow-y-auto ${
+                      filteredAirports.length > 5 ? "h-60" : "max-h-auto"
+                    }`}
+                  >
+                    {filteredAirports.length > 0 ? (
+                      filteredAirports.map((airport) => (
+                        <div
+                          key={airport?.id}
+                          onClick={() => {
+                            dispatch(setArrivalAirportId(airport?.id));
+                            dispatch(getArrivalAirport());
+                            setIsDropdownOpen5(false);
+                          }}
+                          className=" px-3 py-2 flex gap-1 items-center  border-gray-300 border rounded hover:bg-[#2A91E5] hover:rounded hover:text-white cursor-pointer"
+                        >
+                          {airport?.city} ({airport?.iata_code})
+                        </div>
+                      ))
+                    ) : (
+                      <div className="px-3 py-2 text-center text-gray-500 border-gray-300 border rounded">
+                        Bandara Tidak Ditemukan
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-x-2 ">
@@ -605,7 +826,7 @@ export default function CariTiketLain() {
             )}
           </div>
         </div>
-        {/* MAIN LOOK  */}
+        {/* NON RESPONSIVE LOOK 2  */}
         <div
           className="hidden flex-col pr-20 pl-20 border-r border-gray-500 md:flex "
           style={{ borderRight: "1px solid", height: "40px" }}
