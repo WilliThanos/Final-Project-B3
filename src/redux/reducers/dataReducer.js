@@ -2,12 +2,18 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   departureAirport: null,
+  departureAirportId: null,
   arrivalAirport: null,
+  arrivalAirportId: null,
   departureDate: null,
   returnDate: null,
-  penumpang: null,
+  penumpang: 0,
   class: "",
   type: null,
+  jumlahDewasa: 0,
+  jumlahAnak: 0,
+  jumlahBayi: 0,
+  allAirport: [],
 };
 
 const dataSlicer = createSlice({
@@ -36,6 +42,24 @@ const dataSlicer = createSlice({
     setType: (state, action) => {
       state.type = action.payload;
     },
+    setJumlahDewasa: (state, action) => {
+      state.jumlahDewasa = action.payload;
+    },
+    setJumlahAnak: (state, action) => {
+      state.jumlahAnak = action.payload;
+    },
+    setJumlahBayi: (state, action) => {
+      state.jumlahBayi = action.payload;
+    },
+    setAllAirport: (state, action) => {
+      state.allAirport = action.payload;
+    },
+    setDepartureAirportId: (state, action) => {
+      state.departureAirportId = action.payload;
+    },
+    setArrivalAirportId: (state, action) => {
+      state.arrivalAirportId = action.payload;
+    },
   },
 });
 
@@ -47,6 +71,12 @@ export const {
   setPenumpang,
   setClass,
   setType,
+  setJumlahDewasa,
+  setJumlahAnak,
+  setJumlahBayi,
+  setAllAirport,
+  setDepartureAirportId,
+  setArrivalAirportId,
 } = dataSlicer.actions;
 
 export default dataSlicer.reducer;
