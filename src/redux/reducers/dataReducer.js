@@ -9,7 +9,7 @@ const initialState = {
   returnDate: null,
   penumpang: 0,
   class: "",
-  type: null,
+  roundtrip: null,
   jumlahDewasa: 0,
   jumlahAnak: 0,
   jumlahBayi: 0,
@@ -39,8 +39,8 @@ const dataSlicer = createSlice({
     setClass: (state, action) => {
       state.class = action.payload;
     },
-    setType: (state, action) => {
-      state.type = action.payload;
+    setRoundTrip: (state, action) => {
+      state.roundtrip = action.payload;
     },
     setJumlahDewasa: (state, action) => {
       state.jumlahDewasa = action.payload;
@@ -70,7 +70,7 @@ export const {
   setReturnDate,
   setPenumpang,
   setClass,
-  setType,
+  setRoundTrip,
   setJumlahDewasa,
   setJumlahAnak,
   setJumlahBayi,

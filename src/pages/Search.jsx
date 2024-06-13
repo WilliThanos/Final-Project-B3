@@ -3,24 +3,85 @@ import NavbarLogoBiru from "../components/Navbar2";
 import NavbarLogoPutih from "../components/Navbar";
 import CariTiketLain from "../components/CariTiketLain";
 import Filter from "../components/Filter";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { GiAirplaneDeparture, GiAirplaneArrival } from "react-icons/gi";
 import { HiArrowSmRight } from "react-icons/hi";
 import { LiaCircleSolid } from "react-icons/lia";
+import {
+  setSelectedDepartureFlight,
+  setSelectedReturnFlight,
+} from "../redux/reducers/ticketReducer";
+import { FaCircleCheck } from "react-icons/fa6";
+import { FaRegEdit } from "react-icons/fa";
 
 export default function Search() {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const departureDate = useSelector((state) => state.data.departureDate);
+  const dispatch = useDispatch();
 
-  const formattedDate = new Intl.DateTimeFormat("id-ID", {
+  const [isDropdownOpen, setIsDropdownOpen] = useState({});
+
+  const roundTrip = useSelector((state) => state?.data?.roundtrip);
+  const departureFlights = useSelector(
+    (state) => state?.ticket?.departureFlights
+  );
+  const returnFlights = useSelector((state) => state?.ticket?.returnFlights);
+  const selectedDepartureFlight = useSelector(
+    (state) => state?.ticket?.selectedDepartureFlight
+  );
+  const selectedReturnFlight = useSelector(
+    (state) => state?.ticket?.selectedReturnFlight
+  );
+
+  const departureAirport = useSelector(
+    (state) => state?.data?.departureAirport
+  );
+  const arrivalAirport = useSelector((state) => state?.data?.arrivalAirport);
+
+  const departureDate = useSelector((state) => state?.data?.departureDate);
+  const returnDate = useSelector((state) => state?.data?.returnDate);
+
+  const formattedDepartureDate = new Intl.DateTimeFormat("id-ID", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
   }).format(new Date(departureDate));
 
-  const handleDropdownToggle = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+  const formattedReturnDate = new Intl.DateTimeFormat("id-ID", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(new Date(returnDate));
+
+  const handleDropdownToggle = (flightId) => {
+    setIsDropdownOpen((prevState) => ({
+      ...prevState,
+      [flightId]: !prevState[flightId], // Toggle the dropdown state for the specific flightId
+    }));
+  };
+
+  const calculateTravelTime = (departure, arrival) => {
+    // Parse the time strings
+    const [depHours, depMinutes] = departure.split(":").map(Number);
+    const [arrHours, arrMinutes] = arrival.split(":").map(Number);
+
+    // Convert times to minutes since the start of the day
+    const departureInMinutes = depHours * 60 + depMinutes;
+    const arrivalInMinutes = arrHours * 60 + arrMinutes;
+
+    // Calculate the difference in minutes
+    let differenceInMinutes = arrivalInMinutes - departureInMinutes;
+    if (differenceInMinutes < 0) {
+      // If the arrival time is the next day
+      differenceInMinutes += 24 * 60;
+    }
+
+    // Convert the difference to hours and minutes
+    const hours = Math.floor(differenceInMinutes / 60);
+    const minutes = differenceInMinutes % 60;
+
+    // Return the formatted string
+    return `${hours}j ${minutes}m`;
   };
 
   return (
@@ -38,143 +99,818 @@ export default function Search() {
           <Filter />
         </div>
         <div className=" bg-white rounded-xl shadow-sm p-6 px-10 max-md:text-sm max-md:px-5">
-          <div className="bg-[#D9EDFF] font-medium text-[#2A91E5] p-1 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
-            Tiket Keberangkatan
-          </div>
-          <div className="bg-[#2A91E5] font-medium text-white p-1 rounded-lg px-64 mt-2 text-center max-md:px-0 max-lg:px-10 max-xl:px-32 ">
-            Jakarta (CGK) - Medan (KNO) pada {`${formattedDate}`}
-          </div>
           <div>
-            <div
-              onClick={handleDropdownToggle}
-              className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg mt-2 cursor-pointer"
-            >
-              <div className="flex justify-between items-center cursor-pointer  max-md:text-sm">
-                <div>AirAsia - Ekonomi</div>
-                <div className="text-orange-500  max-md:text-sm">
-                  2 kursi tersisa
-                </div>
-              </div>
-              <div className="flex justify-between items-center">
-                <div className="flex pt-6 w-3/4">
-                  <div className="flex flex-col text-center">
-                    <div className="flex items-center gap-1">
-                      <div className="font-bold text-base max-md:text-sm">
-                        Jakarta (CGK)
-                      </div>
+            {/* DEPARTURE FLIGHTS */}
+            <div className="bg-[#D9EDFF] font-medium text-[#2A91E5] p-1 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
+              Tiket Keberangkatan
+            </div>
+            <div className="bg-[#2A91E5] font-medium text-white p-1 rounded-lg px-64 mt-2 text-center max-md:px-0 max-lg:px-10 max-xl:px-32 ">
+              {departureAirport?.city} ({departureAirport?.iata_code}) -{" "}
+              {arrivalAirport?.city} ({arrivalAirport?.iata_code}) pada{" "}
+              {`${formattedDepartureDate}`}
+            </div>
+            {selectedDepartureFlight ? (
+              <div>
+                <div
+                  key={selectedDepartureFlight?.id}
+                  onClick={() =>
+                    handleDropdownToggle(selectedDepartureFlight?.id)
+                  }
+                  className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg mt-2 cursor-pointer"
+                >
+                  <div className="flex justify-between items-center cursor-pointer max-md:text-sm">
+                    <div>
+                      <div className="flex items-center gap-3">
+                        <div className="text-lime-500">
+                          <FaCircleCheck size={25} />
+                        </div>
+                        <img
+                          src={`${selectedDepartureFlight?.airline?.icon_url}`}
+                          className="h-7 w-auto rounded"
+                        />
+                        <div>{selectedDepartureFlight?.airline?.name}</div>{" "}
+                        <div>-</div>
+                        <div>
+                          {(selectedDepartureFlight?.class)
+                            .charAt(0)
+                            .toUpperCase() +
+                            (selectedDepartureFlight?.class)
+                              .slice(1)
+                              .toLowerCase()}
+                        </div>
+                      </div>{" "}
                     </div>
-                    <div className="">19.00</div>
+                    <div className="text-lg font-bold text-lime-500">
+                      {" "}
+                      Tiket terpilih
+                    </div>
                   </div>
-                  <div className="flex flex-col justify-center w-2/4">
-                    <p className="text-center text-gray-400 text-sm">4h 0m</p>
-                    <div className="flex items-center mx-3">
-                      <div className="mb-3">
-                        <GiAirplaneDeparture />
+                  <div className="flex justify-between items-center">
+                    <div className="flex pt-6 w-3/4">
+                      <div className="flex flex-col text-center">
+                        <div className="flex items-center gap-1">
+                          <div className="font-bold text-base max-md:text-sm">
+                            {selectedDepartureFlight?.departure_airport?.city} (
+                            {
+                              selectedDepartureFlight?.departure_airport
+                                ?.iata_code
+                            }
+                            )
+                          </div>
+                        </div>
+                        <div className="">
+                          {selectedDepartureFlight?.departure_time}
+                        </div>
                       </div>
-                      <div className="border-t-2 w-full border-gray-400 mx-2 "></div>
-                      <div className="mb-3">
-                        <GiAirplaneArrival />
+                      <div className="flex flex-col justify-center w-2/4">
+                        <p className="text-center text-gray-400 text-sm">
+                          {calculateTravelTime(
+                            selectedDepartureFlight?.departure_time,
+                            selectedDepartureFlight?.arrival_time
+                          )}
+                        </p>
+                        <div className="flex items-center mx-3">
+                          <div className="mb-3">
+                            <GiAirplaneDeparture />
+                          </div>
+                          <div className="border-t-2 w-full border-gray-400 mx-2 "></div>
+                          <div className="mb-3">
+                            <GiAirplaneArrival />
+                          </div>
+                        </div>
                       </div>
+                      <div className="flex flex-col text-center">
+                        <div className="flex items-center gap-1">
+                          <div className="font-bold text-base max-md:text-sm">
+                            {selectedDepartureFlight?.arrival_airport?.city} (
+                            {
+                              selectedDepartureFlight?.arrival_airport
+                                ?.iata_code
+                            }
+                            )
+                          </div>
+                        </div>
+                        <div>{selectedDepartureFlight?.arrival_time}</div>
+                      </div>
+                    </div>
+                    <div className="font-bold text-xl text-[#2A91E5] max-md:text-sm">
+                      Rp{" "}
+                      {selectedDepartureFlight?.price.toLocaleString("id-ID")}
                     </div>
                   </div>
-                  <div className="flex flex-col text-center">
-                    <div className="flex items-center gap-1">
-                      <div className="font-bold text-base  max-md:text-sm">
-                        Medan (KNO)
-                      </div>
+                  {/* DROPDOWN DETAILS */}
+                  <div
+                    className={` dropdown-content ${
+                      isDropdownOpen[selectedDepartureFlight?.id] ? "open" : ""
+                    }`}
+                  >
+                    <div className="flex n items-center cursor-pointer border-t border-gray-400 mt-4 ">
+                      <div className="font-bold mt-4 ">Detail Tiket</div>
                     </div>
-                    <div>23.00</div>
-                  </div>
-                </div>
-                <div className="font-bold text-xl text-[#2A91E5]  max-md:text-sm">
-                  Rp 2.300.000
-                </div>
-              </div>
-              {/* DROPDOWN DETAILS */}
-              <div
-                className={` dropdown-content ${isDropdownOpen ? "open" : ""}`}
-              >
-                <div className="flex n items-center cursor-pointer border-t border-gray-400  mt-4 ">
-                  <div className="font-bold mt-4 ">Detail Tiket</div>
-                </div>
-                <div className="flex justify-between items-center ">
-                  <div className="flex pt-6 w-3/4">
-                    <div className="flex  gap-3 ">
-                      <div className="flex flex-col justify-center ">
-                        <div className="text-center text-gray-500 text-sm ">
-                          4j 0m
+                    <div className="flex pt-6 w-4/5">
+                      <div className="flex ">
+                        <div className="flex flex-col justify-center ">
+                          <div className="text-center text-gray-500 text-sm ">
+                            {calculateTravelTime(
+                              selectedDepartureFlight?.departure_time,
+                              selectedDepartureFlight?.arrival_time
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex flex-col items-center">
+                          <LiaCircleSolid size={20} />
+                          <div className="border-r border-gray-500 h-64 "></div>
+                          <LiaCircleSolid size={20} />
                         </div>
                       </div>
-                      <div className="flex flex-col items-center">
-                        <LiaCircleSolid size={20} />
-                        <div className="border-r  border-gray-500 h-64 "></div>
-                        <LiaCircleSolid size={20} />
-                      </div>
-                    </div>
-                    <div className="flex flex-col justify-between  pr-32 pl-3 ">
-                      <div className="flex flex-col ">
-                        <div className="flex items-center gap-2">
-                          <div className="font-bold text-lg">19.00</div>
-                          <div className="font-semibold text-base">Jakarta</div>
+                      <div className="flex justify-between pl-3 w-full">
+                        <div className="flex flex-col justify-between">
+                          <div className="flex flex-col">
+                            <div className="flex items-center gap-2">
+                              <div className="font-bold text-lg">
+                                {selectedDepartureFlight?.departure_time}
+                              </div>
+                              <div className="font-semibold text-base">
+                                {
+                                  selectedDepartureFlight?.departure_airport
+                                    ?.city
+                                }
+                              </div>
+                            </div>
+                            <div className="font-semibold text-base">
+                              {`${formattedDepartureDate}`}
+                            </div>
+                          </div>
+                          <div className="flex flex-col gap- text-gray-500 text-sm">
+                            <div className="">Maskapai : </div>
+                            <div className="">Kelas :</div>
+                            <div className="">Nomor Penerbangan :</div>
+                            <div className="mt-2">Bagasi :</div>
+                            <div className="">Bagasi Kabin :</div>
+                          </div>
+                          <div className="flex flex-col">
+                            <div className="flex items-center gap-2">
+                              <div className="font-bold text-lg">
+                                {selectedDepartureFlight?.arrival_time}
+                              </div>
+                              <div className="font-semibold text-base">
+                                {selectedDepartureFlight?.arrival_airport?.city}
+                              </div>
+                            </div>
+                            <div className="font-semibold text-base">
+                              {`${formattedDepartureDate}`}
+                            </div>
+                          </div>
                         </div>
-                        <div className="font-semibold text-base">
-                          {`${formattedDate}`}
-                        </div>
-                      </div>
-                      <div className="flex flex-col gap- text-gray-500 text-sm">
-                        <div className="">Maskapai : </div>
-                        <div className="">Kelas :</div>
-                        <div className="">Nomor Penerbangan :</div>
-                        <div className="">Tipe Pesawat :</div>
-                        <div className="mt-2">Bagasi :</div>
-                        <div className="">Bagasi Kabin :</div>
-                      </div>
-                      <div className="flex flex-col ">
-                        <div className="flex items-center gap-2">
-                          <div className="font-bold text-lg">23.00</div>
-                          <div className="font-semibold text-base">Medan</div>
-                        </div>
-                        <div className="font-semibold text-base">
-                          {`${formattedDate}`}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex flex-col justify-between  ">
-                      <div className="flex flex-col">
-                        <div className="font-bold text-lg">
-                          Bandara Soekarno-Hatta
-                        </div>
-                        <div className="font-semibold text-base">
-                          Terminal 1
-                        </div>
-                      </div>
-                      <div className="flex flex-col gap- text-gray-500 text-sm">
-                        <div className="">Air Asia</div>
-                        <div className="">Ekonomi</div>
-                        <div className="">QZ 7924</div>
-                        <div className="">Airbus A320 - 300</div>
-                        <div className="mt-2">20 kg</div>
-                        <div className="">7 kg</div>
-                      </div>
 
-                      <div className="flex flex-col">
-                        <div className="font-bold text-lg">
-                          Bandara Kualanamu
-                        </div>
-                        <div className="font-semibold text-base">
-                          Terminal Domestik
+                        <div className="flex flex-col justify-between">
+                          <div className="flex flex-col">
+                            <div className="font-bold text-lg">
+                              {
+                                selectedDepartureFlight?.departure_airport
+                                  ?.name_airport
+                              }
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col gap- text-gray-500 text-sm">
+                            <div className="">
+                              {selectedDepartureFlight?.airline?.name}
+                            </div>
+                            <div className="">
+                              {(selectedDepartureFlight?.class)
+                                .charAt(0)
+                                .toUpperCase() +
+                                (selectedDepartureFlight?.class)
+                                  .slice(1)
+                                  .toLowerCase()}
+                            </div>
+                            <div className="">
+                              {selectedDepartureFlight?.flight_number}
+                            </div>
+                            <div className="mt-2">
+                              {selectedDepartureFlight?.free_baggage} kg
+                            </div>
+                            <div className="">
+                              {selectedDepartureFlight?.cabin_baggage} kg
+                            </div>
+                          </div>
+                          <div className="flex flex-col">
+                            <div className="font-bold text-lg">
+                              {
+                                selectedDepartureFlight?.arrival_airport
+                                  ?.name_airport
+                              }
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
+                  {/* END DROPDOWN DETAILS */}
+                </div>
+                <div
+                  onClick={() => dispatch(setSelectedDepartureFlight(null))}
+                  className="bg-[#2A91E5] flex items-center justify-center gap-2 hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer"
+                >
+                  Pilih Tiket Lain
+                  <FaRegEdit />
                 </div>
               </div>
-              {/* END DROPDOWN DETAILS */}
-            </div>
-            <div className="bg-[#2A91E5] hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer">
-              Pilih Tiket
-            </div>
+            ) : departureFlights && departureFlights.length > 0 ? (
+              departureFlights.map((flight) => (
+                <div>
+                  <div
+                    key={flight?.id}
+                    onClick={() => handleDropdownToggle(flight?.id)}
+                    className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg mt-2 cursor-pointer"
+                  >
+                    <div className="flex justify-between items-center cursor-pointer  max-md:text-sm">
+                      <div>
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={`${flight?.airline?.icon_url}`}
+                            className="h-7 w-auto rounded"
+                          />
+                          <div>{flight?.airline?.name}</div> <div>-</div>
+                          <div>
+                            {(flight?.class).charAt(0).toUpperCase() +
+                              (flight?.class).slice(1).toLowerCase()}
+                          </div>
+                        </div>{" "}
+                      </div>
+                      <div className="text-orange-500  max-md:text-sm">
+                        {flight.seat_available} kursi tersisa
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <div className="flex pt-6 w-3/4">
+                        <div className="flex flex-col text-center">
+                          <div className="flex items-center gap-1">
+                            <div className="font-bold text-base max-md:text-sm">
+                              {flight?.departure_airport?.city} (
+                              {flight?.departure_airport?.iata_code})
+                            </div>
+                          </div>
+                          <div className="">{flight?.departure_time}</div>
+                        </div>
+                        <div className="flex flex-col justify-center w-2/4">
+                          <p className="text-center text-gray-400 text-sm">
+                            {calculateTravelTime(
+                              flight?.departure_time,
+                              flight?.arrival_time
+                            )}
+                          </p>
+                          <div className="flex items-center mx-3">
+                            <div className="mb-3">
+                              <GiAirplaneDeparture />
+                            </div>
+                            <div className="border-t-2 w-full border-gray-400 mx-2 "></div>
+                            <div className="mb-3">
+                              <GiAirplaneArrival />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex flex-col text-center">
+                          <div className="flex items-center gap-1">
+                            <div className="font-bold text-base  max-md:text-sm">
+                              {flight?.arrival_airport?.city} (
+                              {flight?.arrival_airport?.iata_code})
+                            </div>
+                          </div>
+                          <div>{flight?.arrival_time}</div>
+                        </div>
+                      </div>
+                      <div className="font-bold text-xl text-[#2A91E5]  max-md:text-sm">
+                        Rp {flight?.price.toLocaleString("id-ID")}
+                      </div>
+                    </div>
+                    {/* DROPDOWN DETAILS */}
+                    <div
+                      className={` dropdown-content ${
+                        isDropdownOpen[flight?.id] ? "open" : ""
+                      }`}
+                    >
+                      <div className="flex n items-center cursor-pointer border-t border-gray-400  mt-4 ">
+                        <div className="font-bold mt-4 ">Detail Tiket</div>
+                      </div>
+                      <div className="flex pt-6 w-4/5">
+                        <div className="flex ">
+                          <div className="flex flex-col justify-center ">
+                            <div className="text-center text-gray-500 text-sm ">
+                              {calculateTravelTime(
+                                flight?.departure_time,
+                                flight?.arrival_time
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex flex-col items-center">
+                            <LiaCircleSolid size={20} />
+                            <div className="border-r  border-gray-500 h-64 "></div>
+                            <LiaCircleSolid size={20} />
+                          </div>
+                        </div>
+                        <div className="flex  justify-between  pl-3 w-full    ">
+                          <div className="flex flex-col justify-between ">
+                            <div className="flex flex-col ">
+                              <div className="flex items-center gap-2">
+                                <div className="font-bold text-lg">
+                                  {flight?.departure_time}
+                                </div>
+                                <div className="font-semibold text-base">
+                                  {flight?.departure_airport?.city}
+                                </div>
+                              </div>
+                              <div className="font-semibold text-base">
+                                {`${formattedDepartureDate}`}
+                              </div>
+                            </div>
+                            <div className="flex flex-col gap- text-gray-500 text-sm">
+                              <div className="">Maskapai : </div>
+                              <div className="">Kelas :</div>
+                              <div className="">Nomor Penerbangan :</div>
+                              <div className="mt-2">Bagasi :</div>
+                              <div className="">Bagasi Kabin :</div>
+                            </div>
+                            <div className="flex flex-col ">
+                              <div className="flex items-center gap-2">
+                                <div className="font-bold text-lg">
+                                  {" "}
+                                  {flight?.arrival_time}
+                                </div>
+                                <div className="font-semibold text-base">
+                                  {flight?.arrival_airport?.city}
+                                </div>
+                              </div>
+                              <div className="font-semibold text-base">
+                                {`${formattedDepartureDate}`}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col justify-between ">
+                            <div className="flex flex-col">
+                              <div className="font-bold text-lg">
+                                {flight?.departure_airport?.name_airport}
+                              </div>
+                            </div>
+
+                            <div className="flex flex-col gap- text-gray-500 text-sm">
+                              <div className="">{flight?.airline?.name}</div>
+                              <div className="">
+                                {(flight?.class).charAt(0).toUpperCase() +
+                                  (flight?.class).slice(1).toLowerCase()}
+                              </div>
+                              <div className="">{flight?.flight_number}</div>
+                              <div className="mt-2">
+                                {flight?.free_baggage} kg
+                              </div>
+                              <div className="">{flight?.cabin_baggage} kg</div>
+                            </div>
+                            <div className="flex flex-col">
+                              <div className="font-bold text-lg">
+                                {flight?.arrival_airport?.name_airport}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {/* END DROPDOWN DETAILS */}
+                  </div>
+                  <div
+                    onClick={() => dispatch(setSelectedDepartureFlight(flight))}
+                    className="bg-[#2A91E5] hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer"
+                  >
+                    Pilih Tiket
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="bg-white font-medium text-red-500 p-1 mt-2 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
+                Tiket Tidak Ditemukan{" "}
+              </div>
+            )}
+            {/* RETURN FLIGHTS */}
+            {roundTrip ? (
+              <div>
+                <div className="bg-[#D9EDFF] font-medium mt-2 text-[#2A91E5] p-1 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
+                  Tiket Kembali
+                </div>
+                <div className="bg-[#2A91E5] font-medium text-white p-1 rounded-lg px-64 mt-2 text-center max-md:px-0 max-lg:px-10 max-xl:px-32 ">
+                  {arrivalAirport?.city} ({arrivalAirport?.iata_code}) -{" "}
+                  {departureAirport?.city} ({departureAirport?.iata_code}) pada{" "}
+                  {`${formattedReturnDate}`}
+                </div>
+                {selectedReturnFlight ? (
+                  <div>
+                    <div
+                      key={selectedReturnFlight?.id}
+                      onClick={() =>
+                        handleDropdownToggle(selectedReturnFlight?.id)
+                      }
+                      className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg mt-2 cursor-pointer"
+                    >
+                      <div className="flex justify-between items-center cursor-pointer max-md:text-sm">
+                        <div>
+                          <div className="flex items-center gap-3">
+                            <div className="text-lime-500">
+                              <FaCircleCheck size={25} />
+                            </div>
+                            <img
+                              src={`${selectedReturnFlight?.airline?.icon_url}`}
+                              className="h-7 w-auto rounded"
+                            />
+                            <div>{selectedReturnFlight?.airline?.name}</div>{" "}
+                            <div>-</div>
+                            <div>
+                              {(selectedReturnFlight?.class)
+                                .charAt(0)
+                                .toUpperCase() +
+                                (selectedReturnFlight?.class)
+                                  .slice(1)
+                                  .toLowerCase()}
+                            </div>
+                          </div>{" "}
+                        </div>
+                        <div className="text-lg font-bold text-lime-500">
+                          {" "}
+                          Tiket terpilih
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <div className="flex pt-6 w-3/4">
+                          <div className="flex flex-col text-center">
+                            <div className="flex items-center gap-1">
+                              <div className="font-bold text-base max-md:text-sm">
+                                {selectedReturnFlight?.departure_airport?.city}{" "}
+                                (
+                                {
+                                  selectedReturnFlight?.departure_airport
+                                    ?.iata_code
+                                }
+                                )
+                              </div>
+                            </div>
+                            <div className="">
+                              {selectedReturnFlight?.departure_time}
+                            </div>
+                          </div>
+                          <div className="flex flex-col justify-center w-2/4">
+                            <p className="text-center text-gray-400 text-sm">
+                              {calculateTravelTime(
+                                selectedReturnFlight?.departure_time,
+                                selectedReturnFlight?.arrival_time
+                              )}
+                            </p>
+                            <div className="flex items-center mx-3">
+                              <div className="mb-3">
+                                <GiAirplaneDeparture />
+                              </div>
+                              <div className="border-t-2 w-full border-gray-400 mx-2 "></div>
+                              <div className="mb-3">
+                                <GiAirplaneArrival />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex flex-col text-center">
+                            <div className="flex items-center gap-1">
+                              <div className="font-bold text-base max-md:text-sm">
+                                {selectedReturnFlight?.arrival_airport?.city} (
+                                {
+                                  selectedReturnFlight?.arrival_airport
+                                    ?.iata_code
+                                }
+                                )
+                              </div>
+                            </div>
+                            <div>{selectedReturnFlight?.arrival_time}</div>
+                          </div>
+                        </div>
+                        <div className="font-bold text-xl text-[#2A91E5] max-md:text-sm">
+                          Rp{" "}
+                          {selectedReturnFlight?.price.toLocaleString("id-ID")}
+                        </div>
+                      </div>
+                      {/* DROPDOWN DETAILS */}
+                      <div
+                        className={` dropdown-content ${
+                          isDropdownOpen[selectedReturnFlight?.id] ? "open" : ""
+                        }`}
+                      >
+                        <div className="flex n items-center cursor-pointer border-t border-gray-400 mt-4 ">
+                          <div className="font-bold mt-4 ">Detail Tiket</div>
+                        </div>
+                        <div className="flex pt-6 w-4/5">
+                          <div className="flex ">
+                            <div className="flex flex-col justify-center ">
+                              <div className="text-center text-gray-500 text-sm ">
+                                {calculateTravelTime(
+                                  selectedReturnFlight?.departure_time,
+                                  selectedReturnFlight?.arrival_time
+                                )}
+                              </div>
+                            </div>
+                            <div className="flex flex-col items-center">
+                              <LiaCircleSolid size={20} />
+                              <div className="border-r border-gray-500 h-64 "></div>
+                              <LiaCircleSolid size={20} />
+                            </div>
+                          </div>
+                          <div className="flex justify-between pl-3 w-full">
+                            <div className="flex flex-col justify-between">
+                              <div className="flex flex-col">
+                                <div className="flex items-center gap-2">
+                                  <div className="font-bold text-lg">
+                                    {selectedReturnFlight?.departure_time}
+                                  </div>
+                                  <div className="font-semibold text-base">
+                                    {
+                                      selectedReturnFlight?.departure_airport
+                                        ?.city
+                                    }
+                                  </div>
+                                </div>
+                                <div className="font-semibold text-base">
+                                  {`${formattedReturnDate}`}
+                                </div>
+                              </div>
+                              <div className="flex flex-col gap- text-gray-500 text-sm">
+                                <div className="">Maskapai : </div>
+                                <div className="">Kelas :</div>
+                                <div className="">Nomor Penerbangan :</div>
+                                <div className="mt-2">Bagasi :</div>
+                                <div className="">Bagasi Kabin :</div>
+                              </div>
+                              <div className="flex flex-col">
+                                <div className="flex items-center gap-2">
+                                  <div className="font-bold text-lg">
+                                    {selectedReturnFlight?.arrival_time}
+                                  </div>
+                                  <div className="font-semibold text-base">
+                                    {
+                                      selectedReturnFlight?.arrival_airport
+                                        ?.city
+                                    }
+                                  </div>
+                                </div>
+                                <div className="font-semibold text-base">
+                                  {`${formattedReturnDate}`}
+                                </div>
+                              </div>
+                            </div>
+
+                            <div className="flex flex-col justify-between">
+                              <div className="flex flex-col">
+                                <div className="font-bold text-lg">
+                                  {
+                                    selectedReturnFlight?.departure_airport
+                                      ?.name_airport
+                                  }
+                                </div>
+                              </div>
+
+                              <div className="flex flex-col gap- text-gray-500 text-sm">
+                                <div className="">
+                                  {selectedDepartureFlight?.airline?.name}
+                                </div>
+                                <div className="">
+                                  {(selectedReturnFlight?.class)
+                                    .charAt(0)
+                                    .toUpperCase() +
+                                    (selectedReturnFlight?.class)
+                                      .slice(1)
+                                      .toLowerCase()}
+                                </div>
+                                <div className="">
+                                  {selectedReturnFlight?.flight_number}
+                                </div>
+                                <div className="mt-2">
+                                  {selectedReturnFlight?.free_baggage} kg
+                                </div>
+                                <div className="">
+                                  {selectedReturnFlight?.cabin_baggage} kg
+                                </div>
+                              </div>
+                              <div className="flex flex-col">
+                                <div className="font-bold text-lg">
+                                  {
+                                    selectedReturnFlight?.arrival_airport
+                                      ?.name_airport
+                                  }
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      {/* END DROPDOWN DETAILS */}
+                    </div>
+                    <div
+                      onClick={() => dispatch(setSelectedReturnFlight(null))}
+                      className="bg-[#2A91E5] flex items-center justify-center gap-2 hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer"
+                    >
+                      Pilih Tiket Lain
+                      <FaRegEdit />
+                    </div>
+
+                    {/* <div className="bg-[#2A91E5] mt-2 hover:bg-sky-700 hover:shadow hover:text-gray-200 border border-gray-300 font-medium text-white p-2 rounded-lg text-center cursor-pointer">
+                  {" "}
+                  Lanjut Ke Pembayaran
+                </div> */}
+                  </div>
+                ) : returnFlights && returnFlights.length > 0 ? (
+                  returnFlights.map((flight) => (
+                    <div>
+                      <div
+                        key={flight?.id}
+                        onClick={() => handleDropdownToggle(flight?.id)}
+                        className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg mt-2 cursor-pointer"
+                      >
+                        <div className="flex justify-between items-center cursor-pointer  max-md:text-sm">
+                          <div>
+                            <div className="flex items-center gap-3">
+                              <img
+                                src={`${flight?.airline?.icon_url}`}
+                                className="h-7 w-auto rounded"
+                              />
+                              <div>{flight?.airline?.name}</div> <div>-</div>
+                              <div>
+                                {(flight?.class).charAt(0).toUpperCase() +
+                                  (flight?.class).slice(1).toLowerCase()}
+                              </div>
+                            </div>{" "}
+                          </div>
+                          <div className="text-orange-500  max-md:text-sm">
+                            {flight.seat_available} kursi tersisa
+                          </div>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <div className="flex pt-6 w-3/4">
+                            <div className="flex flex-col text-center">
+                              <div className="flex items-center gap-1">
+                                <div className="font-bold text-base max-md:text-sm">
+                                  {flight?.departure_airport?.city} (
+                                  {flight?.departure_airport?.iata_code})
+                                </div>
+                              </div>
+                              <div className="">{flight?.departure_time}</div>
+                            </div>
+                            <div className="flex flex-col justify-center w-2/4">
+                              <p className="text-center text-gray-400 text-sm">
+                                {calculateTravelTime(
+                                  flight?.departure_time,
+                                  flight?.arrival_time
+                                )}
+                              </p>
+                              <div className="flex items-center mx-3">
+                                <div className="mb-3">
+                                  <GiAirplaneDeparture />
+                                </div>
+                                <div className="border-t-2 w-full border-gray-400 mx-2 "></div>
+                                <div className="mb-3">
+                                  <GiAirplaneArrival />
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex flex-col text-center">
+                              <div className="flex items-center gap-1">
+                                <div className="font-bold text-base  max-md:text-sm">
+                                  {flight?.arrival_airport?.city} (
+                                  {flight?.arrival_airport?.iata_code})
+                                </div>
+                              </div>
+                              <div>{flight?.arrival_time}</div>
+                            </div>
+                          </div>
+                          <div className="font-bold text-xl text-[#2A91E5]  max-md:text-sm">
+                            Rp {flight?.price.toLocaleString("id-ID")}
+                          </div>
+                        </div>
+                        {/* DROPDOWN DETAILS */}
+                        <div
+                          className={` dropdown-content ${
+                            isDropdownOpen[flight?.id] ? "open" : ""
+                          }`}
+                        >
+                          <div className="flex n items-center cursor-pointer border-t border-gray-400  mt-4 ">
+                            <div className="font-bold mt-4 ">Detail Tiket</div>
+                          </div>
+                          <div className="flex pt-6 w-4/5">
+                            <div className="flex ">
+                              <div className="flex flex-col justify-center ">
+                                <div className="text-center text-gray-500 text-sm ">
+                                  {calculateTravelTime(
+                                    flight?.departure_time,
+                                    flight?.arrival_time
+                                  )}
+                                </div>
+                              </div>
+                              <div className="flex flex-col items-center">
+                                <LiaCircleSolid size={20} />
+                                <div className="border-r  border-gray-500 h-64 "></div>
+                                <LiaCircleSolid size={20} />
+                              </div>
+                            </div>
+                            <div className="flex  justify-between  pl-3 w-full    ">
+                              <div className="flex flex-col justify-between ">
+                                <div className="flex flex-col ">
+                                  <div className="flex items-center gap-2">
+                                    <div className="font-bold text-lg">
+                                      {flight?.departure_time}
+                                    </div>
+                                    <div className="font-semibold text-base">
+                                      {flight?.departure_airport?.city}
+                                    </div>
+                                  </div>
+                                  <div className="font-semibold text-base">
+                                    {`${formattedReturnDate}`}
+                                  </div>
+                                </div>
+                                <div className="flex flex-col gap- text-gray-500 text-sm">
+                                  <div className="">Maskapai : </div>
+                                  <div className="">Kelas :</div>
+                                  <div className="">Nomor Penerbangan :</div>
+                                  <div className="mt-2">Bagasi :</div>
+                                  <div className="">Bagasi Kabin :</div>
+                                </div>
+                                <div className="flex flex-col ">
+                                  <div className="flex items-center gap-2">
+                                    <div className="font-bold text-lg">
+                                      {" "}
+                                      {flight?.arrival_time}
+                                    </div>
+                                    <div className="font-semibold text-base">
+                                      {flight?.arrival_airport?.city}
+                                    </div>
+                                  </div>
+                                  <div className="font-semibold text-base">
+                                    {`${formattedReturnDate}`}
+                                  </div>
+                                </div>
+                              </div>
+
+                              <div className="flex flex-col justify-between ">
+                                <div className="flex flex-col">
+                                  <div className="font-bold text-lg">
+                                    {flight?.departure_airport?.name_airport}
+                                  </div>
+                                </div>
+
+                                <div className="flex flex-col gap- text-gray-500 text-sm">
+                                  <div className="">
+                                    {flight?.airline?.name}
+                                  </div>
+                                  <div className="">
+                                    {(flight?.class).charAt(0).toUpperCase() +
+                                      (flight?.class).slice(1).toLowerCase()}
+                                  </div>
+                                  <div className="">
+                                    {flight?.flight_number}
+                                  </div>
+                                  <div className="mt-2">
+                                    {flight?.free_baggage} kg
+                                  </div>
+                                  <div className="">
+                                    {flight?.cabin_baggage} kg
+                                  </div>
+                                </div>
+                                <div className="flex flex-col">
+                                  <div className="font-bold text-lg">
+                                    {flight?.arrival_airport?.name_airport}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        {/* END DROPDOWN DETAILS */}
+                      </div>
+                      <div
+                        onClick={() =>
+                          dispatch(setSelectedReturnFlight(flight))
+                        }
+                        className="bg-[#2A91E5] hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer"
+                      >
+                        Pilih Tiket
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="bg-white font-medium text-red-500 p-1 mt-2 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
+                    Tiket Tidak Ditemukan{" "}
+                  </div>
+                )}
+              </div>
+            ) : null}
           </div>
+
+          {((!roundTrip && selectedDepartureFlight) ||
+            (roundTrip && selectedDepartureFlight && selectedReturnFlight)) && (
+            <div className="bg-[#2A91E5] mt-2 hover:bg-sky-700 hover:shadow hover:text-gray-200 border border-gray-300 font-medium text-white p-2 rounded-lg text-center cursor-pointer">
+              Lanjut Ke Pembayaran
+            </div>
+          )}
         </div>
         <div>
           {/* SDG CARD */}
