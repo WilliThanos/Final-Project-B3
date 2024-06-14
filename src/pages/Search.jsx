@@ -13,9 +13,11 @@ import {
 } from "../redux/reducers/ticketReducer";
 import { FaCircleCheck } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function Search() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState({});
   const [
@@ -946,7 +948,10 @@ export default function Search() {
 
           {((!roundTrip && selectedDepartureFlight) ||
             (roundTrip && selectedDepartureFlight && selectedReturnFlight)) && (
-            <div className="bg-lime-500 mt-2 hover:bg-lime-600 hover:shadow hover:text-gray-200 border border-gray-300 font-medium text-white p-2 rounded-lg text-center cursor-pointer">
+            <div
+              onClick={() => navigate("/booking-detail")}
+              className="bg-lime-500 mt-2 hover:bg-lime-600 hover:shadow hover:text-gray-200 border border-gray-300 font-medium text-white p-2 rounded-lg text-center cursor-pointer"
+            >
               Pesan Tiket{" "}
             </div>
           )}
