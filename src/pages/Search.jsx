@@ -20,12 +20,7 @@ export default function Search() {
   const navigate = useNavigate();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState({});
-  const [
-    filteredAndSortedDepartureFlights,
-    setFilteredAndSortedDepartureFlights,
-  ] = useState([]);
-  const [filteredAndSortedReturnFlights, setFilteredAndSortedReturnFlights] =
-    useState([]);
+
   const totalPenumpang = useSelector((state) => state?.data?.penumpang);
   const departureFlights = useSelector(
     (state) => state?.ticket?.departureFlights
@@ -40,37 +35,33 @@ export default function Search() {
   const filterClass = useSelector((state) => state?.filter?.filterClass);
   const sortHarga = useSelector((state) => state?.filter?.sortHarga);
 
-  const filterAndSortFlights = (flights) => {
-    let filteredFlights = flights || [];
+  const filteredAndSortedDepartureFlights = departureFlights
+    ?.filter(
+      (flight) => flight?.class?.toLowerCase() === filterClass?.toLowerCase()
+    )
 
-    if (filterClass) {
-      filteredFlights = filteredFlights?.filter(
-        (flight) => flight?.class?.toLowerCase() === filterClass?.toLowerCase()
-      );
-    }
+    .sort((a, b) => {
+      if (sortHarga === "asc") {
+        return a.price - b.price;
+      } else if (sortHarga === "desc") {
+        return b.price - a.price;
+      }
+      return 0;
+    });
 
-    if (sortHarga === "asc") {
-      filteredFlights?.sort((a, b) => a.price - b.price);
-    } else if (sortHarga === "desc") {
-      filteredFlights?.sort((a, b) => b.price - a.price);
-    }
+  const filteredAndSortedReturnFlights = returnFlights
+    ?.filter(
+      (flight) => flight?.class?.toLowerCase() === filterClass?.toLowerCase()
+    )
+    .sort((a, b) => {
+      if (sortHarga === "asc") {
+        return a.price - b.price;
+      } else if (sortHarga === "desc") {
+        return b.price - a.price;
+      }
+      return 0;
+    });
 
-    return filteredFlights;
-  };
-
-  useEffect(() => {
-    // Filter and sort departure flights if available
-    if (departureFlights) {
-      const filteredDepartureFlights = filterAndSortFlights(departureFlights);
-      setFilteredAndSortedDepartureFlights(filteredDepartureFlights);
-    }
-
-    // Filter and sort return flights if available
-    if (returnFlights) {
-      const filteredReturnFlights = filterAndSortFlights(returnFlights);
-      setFilteredAndSortedReturnFlights(filteredReturnFlights);
-    }
-  }, [filterClass, sortHarga, departureFlights, returnFlights]);
   const roundTrip = useSelector((state) => state?.data?.roundtrip);
 
   const departureAirport = useSelector(
