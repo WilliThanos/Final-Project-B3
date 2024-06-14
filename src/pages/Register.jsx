@@ -1,52 +1,107 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import mascot from "../assets/mascot.png";
 import logo from "../assets/weblogo.png";
 import bg from "../assets/bg.png";
 import bgresp from "../assets/bgresp.png";
 import NavbarLogoBiru from "../components/Navbar2";
 import Footer from "../components/Footer";
+import { useDispatch, useSelector } from "react-redux";
+import { register } from "../redux/action/authAction";
+import FlashMessage from "../components/FlashMessage";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
+  const dispatch = useDispatch();
+  const authState = useSelector((state) => state.auth);
+  const error = authState.error;
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [errorFirstName, setErrorFirstName] = useState("");
+  const [errorLastName, setErrorLastName] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
+  const [errorConfirmPassword, setErrorConfirmPassword] = useState("");
 
+  const validateFirstName = () => {
+    if (firstName.trim() === "") {
+      setErrorFirstName("First name is required");
+      return false;
+    }
+    setErrorFirstName("");
+    return true;
+  };
+
+  const validateLastName = () => {
+    if (lastName.trim() === "") {
+      setErrorLastName("Last name is required");
+      return false;
+    }
+    setErrorLastName("");
+    return true;
+  };
+
+  const validateEmail = () => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      setErrorEmail("Invalid email address");
+      return false;
+    }
+    setErrorEmail("");
+    return true;
+  };
+
+  const validatePassword = () => {
+    if (password.length < 6) {
+      setErrorPassword("Password must be at least 6 characters long");
+      return false;
+    }
+    setErrorPassword("");
+    return true;
+  };
+
+  const validateConfirmPassword = () => {
+    if (password !== confirmPassword) {
+      setErrorConfirmPassword("Passwords do not match");
+      return false;
+    }
+    setErrorConfirmPassword("");
+    return true;
+  };
+  
   const handleRegister = async (event) => {
     event.preventDefault();
+    // Handle registration logic here
+    const isValidFirstName = validateFirstName();
+    const isValidLastName = validateLastName();
+    const isValidEmail = validateEmail();
+    const isValidPassword = validatePassword();
+    const isValidConfirmPassword = validateConfirmPassword();
+    if (isValidFirstName &&
+      isValidLastName &&
+      isValidEmail &&
+      isValidPassword &&
+      isValidConfirmPassword) {
+      const userData = {
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        password: password,
+        confirmPassword: confirmPassword
+      };
+      const result = await dispatch(register(userData));
 
-    if (password !== confirmPassword) {
-      alert('Passwords do not match');
-      return;
-    }
-
-    try {
-      const response = await fetch('https://expressjs-develop-b4d1.up.railway.app/api/v1/auth/daftar-sekarang', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          first_name: firstName,
-          last_name: lastName,
-          email,
-          password,
-          confirmPassword,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Network response was not ok');
+      if(result.payload) {
+        setFirstName("")
+        setLastName("")
+        setEmail("")
+        setPassword("")
+        setConfirmPassword("")
       }
-
-      const data = await response.json();
-      // console.log(data);
-      alert(data.message);
-    } catch (error) {
-      alert(error)
-    }
+    } 
   };
 
   return (
@@ -70,6 +125,7 @@ export default function Register() {
             </div>
 
             <form onSubmit={handleRegister} className="mt-8 space-y-6">
+              <FlashMessage />
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label
@@ -80,15 +136,19 @@ export default function Register() {
                   </label>
                   <div className="mt-1">
                     <input
-                      id="first_name"
-                      name="first_name"
+                      id="first-name"
+                      name="first-name"
                       type="text"
                       autoComplete="given-name"
                       required
                       className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       value={firstName}
                       onChange={(event) => setFirstName(event.target.value)}
+                      onBlur={validateFirstName}
                     />
+                    {errorFirstName && (
+                      <p className="text-red-500 text-xs mt-1">{errorFirstName}</p>
+                    )}
                   </div>
                 </div>
                 <div>
@@ -100,15 +160,19 @@ export default function Register() {
                   </label>
                   <div className="mt-1">
                     <input
-                      id="last_name"
-                      name="last_name"
+                      id="last-name"
+                      name="last-name"
                       type="text"
                       autoComplete="family-name"
                       required
                       className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                       value={lastName}
                       onChange={(event) => setLastName(event.target.value)}
+                      onBlur={validateLastName}
                     />
+                    {errorLastName && (
+                      <p className="text-red-500 text-xs mt-1">{errorLastName}</p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -130,7 +194,11 @@ export default function Register() {
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
+                    onBlur={validateEmail}
                   />
+                  {errorEmail && (
+                      <p className="text-red-500 text-xs mt-1">{errorEmail}</p>
+                    )}
                 </div>
               </div>
 
@@ -151,7 +219,11 @@ export default function Register() {
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
+                    onBlur={validatePassword}
                   />
+                  {errorPassword && (
+                      <p className="text-red-500 text-xs mt-1">{errorPassword}</p>
+                    )}
                 </div>
               </div>
 
@@ -164,15 +236,19 @@ export default function Register() {
                 </label>
                 <div className="mt-1 relative rounded-md shadow-sm">
                   <input
-                    id="confirmPassword"
-                    name="confirmPassword"
+                    id="confirm-password"
+                    name="confirm-password"
                     type="password"
                     autoComplete="new-password"
                     required
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     value={confirmPassword}
                     onChange={(event) => setConfirmPassword(event.target.value)}
+                    onBlur={validateConfirmPassword}
                   />
+                  {errorConfirmPassword && (
+                      <p className="text-red-500 text-xs mt-1">{errorConfirmPassword}</p>
+                    )}
                 </div>
               </div>
 
@@ -183,9 +259,10 @@ export default function Register() {
                 >
                   Register
                 </button>
+                {/* {authState.loading && <p>Loading...</p>}
+                {authState.error && <p>Error: {authState.error}</p>}
+                {authState.user && <p>Registration successful!</p>} */}
               </div>
-
-
               <div className="text-center">
                 <p className="text-sm text-gray-600">
                   Sudah Punya Akun?{" "}
