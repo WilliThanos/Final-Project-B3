@@ -5,6 +5,7 @@ import bg from "../assets/bg.png";
 import bgresp from "../assets/bgresp.png";
 import NavbarLogoBiru from "../components/Navbar2";
 import NavbarLogoPutih from "../components/Navbar";
+import NavbarLogin from "../components/Navbar3";
 import Footer from "../components/Footer";
 import FlashMessage from "../components/FlashMessage";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,7 +17,7 @@ export default function Login() {
   const navigate = useNavigate();
   const authState = useSelector((state) => state.auth);
   const [error, setError] = useState(true);
-  const getError = localStorage.getItem('error');
+  const getError = localStorage.getItem("error");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorEmail, setErrorEmail] = useState("");
@@ -54,21 +55,20 @@ export default function Login() {
     // Handle login logic here
     const isValidEmail = validateEmail();
     const isValidPassword = validatePassword();
-    if(isValidEmail &&
-      isValidPassword) {
-        const credentials = {
-          email,
-          password
-        };
-        const result = await dispatch(login(credentials));
+    if (isValidEmail && isValidPassword) {
+      const credentials = {
+        email,
+        password,
+      };
+      const result = await dispatch(login(credentials));
 
-        if (result.payload) {
-            //Login berhasil
-            navigate("/");
-        } else {
-            // Ketika Login gagal
-        }
+      if (result.payload) {
+        //Login berhasil
+        navigate("/");
+      } else {
+        // Ketika Login gagal
       }
+    }
   };
 
   const togglePasswordVisibility = () => {
@@ -89,7 +89,7 @@ export default function Login() {
           className="absolute inset-0 opacity-80 md:opacity-0"
           style={{ backgroundImage: `url(${bgresp})` }}
         ></div>
-        <NavbarLogoBiru />
+        <NavbarLogin />
         <main className="flex-1 flex items-center justify-center p-6 relative z-10">
           <div className="max-w-md w-full bg-white shadow-lg rounded-xl p-10">
             <div className="text-center">
@@ -169,8 +169,8 @@ export default function Login() {
                     onBlur={validateEmail}
                   />
                   {errorEmail && (
-                      <p className="text-red-500 text-xs mt-1">{errorEmail}</p>
-                    )}
+                    <p className="text-red-500 text-xs mt-1">{errorEmail}</p>
+                  )}
                 </div>
               </div>
 
@@ -193,7 +193,7 @@ export default function Login() {
                     onChange={(event) => setPassword(event.target.value)}
                     onBlur={validatePassword}
                   />
-                  
+
                   <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
                     <button
                       type="button"
@@ -244,8 +244,8 @@ export default function Login() {
                     </button>
                   </div>
                   {errorPassword && (
-                      <p className="text-red-500 text-xs mt-1">{errorPassword}</p>
-                    )}
+                    <p className="text-red-500 text-xs mt-1">{errorPassword}</p>
+                  )}
                 </div>
               </div>
 

@@ -48,12 +48,15 @@ export default function BookingDetail() {
     day: "numeric",
   })?.format(new Date(departureFlights?.Date));
 
-  const formattedarrivalDate = new Intl.DateTimeFormat("id-ID", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })?.format(new Date(returnFlights?.Date));
+  const formattedarrivalDate =
+    returnFlights && returnFlights.Date
+      ? new Intl.DateTimeFormat("id-ID", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        }).format(new Date(returnFlights.Date))
+      : "Date not available";
 
   console.log("roundTrip :>> ", departureFlights);
   const calculateTravelTime = (departure, arrival) => {

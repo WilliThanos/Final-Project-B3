@@ -31,12 +31,14 @@ export default function DetailPembayaran() {
 
   const cekPulangPergi = useSelector((state) => state?.data?.roundtrip);
   // cek harga
-  const cekHarga = cekPulangPergi ? hargaTiket : departureFlights?.price;
+  const cekHarga = cekPulangPergi
+    ? hargaTiket
+    : departureFlights?.price * jmlPenumpang;
 
   //pajak
-  const pajak = (10 / 100) * hargaTiket;
+  const pajak = (10 / 100) * cekHarga;
   //biayayaa admin
-  const biayaAdmin = (2 / 100) * hargaTiket;
+  const biayaAdmin = (2 / 100) * cekHarga;
 
   //harga total
   const totalHarga = (pajak || 0) + (biayaAdmin || 0) + (cekHarga || 0);
@@ -82,7 +84,7 @@ export default function DetailPembayaran() {
               <div className="font-semibold">
                 {cekPulangPergi
                   ? formatRupiah(hargaTiket)
-                  : formatRupiah(departureFlights?.price)}
+                  : formatRupiah(departureFlights?.price * jmlPenumpang)}
               </div>
               <div className="font-semibold">{formatRupiah(biayaAdmin)}</div>
               <div className="font-semibold">{formatRupiah(pajak)}</div>

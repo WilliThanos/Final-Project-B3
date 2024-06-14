@@ -3,7 +3,7 @@ import mascot from "../assets/mascot.png";
 import logo from "../assets/weblogo.png";
 import bg from "../assets/bg.png";
 import bgresp from "../assets/bgresp.png";
-import NavbarLogoBiru from "../components/Navbar2";
+import NavbarLogin from "../components/Navbar3";
 import Footer from "../components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "../redux/action/authAction";
@@ -12,8 +12,8 @@ import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const dispatch = useDispatch();
-  const authState = useSelector((state) => state.auth);
-  const error = authState.error;
+  const authState = useSelector((state) => state?.auth);
+  const error = authState?.error;
   const navigate = useNavigate();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -71,7 +71,7 @@ export default function Register() {
     setErrorConfirmPassword("");
     return true;
   };
-  
+
   const handleRegister = async (event) => {
     event.preventDefault();
     // Handle registration logic here
@@ -80,28 +80,30 @@ export default function Register() {
     const isValidEmail = validateEmail();
     const isValidPassword = validatePassword();
     const isValidConfirmPassword = validateConfirmPassword();
-    if (isValidFirstName &&
+    if (
+      isValidFirstName &&
       isValidLastName &&
       isValidEmail &&
       isValidPassword &&
-      isValidConfirmPassword) {
+      isValidConfirmPassword
+    ) {
       const userData = {
         first_name: firstName,
         last_name: lastName,
         email: email,
         password: password,
-        confirmPassword: confirmPassword
+        confirmPassword: confirmPassword,
       };
       const result = await dispatch(register(userData));
 
-      if(result.payload) {
-        setFirstName("")
-        setLastName("")
-        setEmail("")
-        setPassword("")
-        setConfirmPassword("")
+      if (result.payload) {
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
       }
-    } 
+    }
   };
 
   return (
@@ -115,7 +117,7 @@ export default function Register() {
           style={{ backgroundImage: `url(${bgresp})` }}
         ></div>
         <main className="flex-1 flex items-center justify-center p-6 relative z-10">
-          <NavbarLogoBiru />
+          <NavbarLogin />
           <div className="max-w-md w-full bg-white shadow-lg rounded-xl p-10">
             <div className="text-center">
               <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -147,7 +149,9 @@ export default function Register() {
                       onBlur={validateFirstName}
                     />
                     {errorFirstName && (
-                      <p className="text-red-500 text-xs mt-1">{errorFirstName}</p>
+                      <p className="text-red-500 text-xs mt-1">
+                        {errorFirstName}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -171,7 +175,9 @@ export default function Register() {
                       onBlur={validateLastName}
                     />
                     {errorLastName && (
-                      <p className="text-red-500 text-xs mt-1">{errorLastName}</p>
+                      <p className="text-red-500 text-xs mt-1">
+                        {errorLastName}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -197,8 +203,8 @@ export default function Register() {
                     onBlur={validateEmail}
                   />
                   {errorEmail && (
-                      <p className="text-red-500 text-xs mt-1">{errorEmail}</p>
-                    )}
+                    <p className="text-red-500 text-xs mt-1">{errorEmail}</p>
+                  )}
                 </div>
               </div>
 
@@ -222,8 +228,8 @@ export default function Register() {
                     onBlur={validatePassword}
                   />
                   {errorPassword && (
-                      <p className="text-red-500 text-xs mt-1">{errorPassword}</p>
-                    )}
+                    <p className="text-red-500 text-xs mt-1">{errorPassword}</p>
+                  )}
                 </div>
               </div>
 
@@ -247,8 +253,10 @@ export default function Register() {
                     onBlur={validateConfirmPassword}
                   />
                   {errorConfirmPassword && (
-                      <p className="text-red-500 text-xs mt-1">{errorConfirmPassword}</p>
-                    )}
+                    <p className="text-red-500 text-xs mt-1">
+                      {errorConfirmPassword}
+                    </p>
+                  )}
                 </div>
               </div>
 
