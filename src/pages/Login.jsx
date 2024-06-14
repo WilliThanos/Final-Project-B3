@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import mascot from "../assets/mascot.png";
 import logo from "../assets/weblogo.png";
 import bg from "../assets/bg.png";
@@ -6,16 +6,69 @@ import bgresp from "../assets/bgresp.png";
 import NavbarLogoBiru from "../components/Navbar2";
 import NavbarLogoPutih from "../components/Navbar";
 import Footer from "../components/Footer";
+import FlashMessage from "../components/FlashMessage";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "../redux/action/authAction";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const authState = useSelector((state) => state.auth);
+  const [error, setError] = useState(true);
+  const getError = localStorage.getItem('error');
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
+  const [errorPassword, setErrorPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleLogin = (event) => {
+  useEffect(() => {
+    // const getError = localStorage.getItem('error');
+    setError(!getError);
+    // console.log(authState);
+  }, [getError]);
+
+  const validateEmail = () => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      setErrorEmail("Invalid email address");
+      return false;
+    }
+    setErrorEmail("");
+    return true;
+  };
+
+  const validatePassword = () => {
+    if (password.length < 6) {
+      setErrorPassword("Password must be at least 6 characters long");
+      return false;
+    }
+    setErrorPassword("");
+    return true;
+  };
+
+  const handleLogin = async (event) => {
     event.preventDefault();
     // Handle login logic here
+    const isValidEmail = validateEmail();
+    const isValidPassword = validatePassword();
+    if(isValidEmail &&
+      isValidPassword) {
+        const credentials = {
+          email,
+          password
+        };
+        const result = await dispatch(login(credentials));
+
+        if (result.payload) {
+            //Login berhasil
+            navigate("/");
+        } else {
+            // Ketika Login gagal
+        }
+      }
   };
 
   const togglePasswordVisibility = () => {
@@ -95,6 +148,7 @@ export default function Login() {
             </div>
 
             <form onSubmit={handleLogin} className="mt-8 space-y-6">
+              <FlashMessage />
               <div>
                 <label
                   htmlFor="email"
@@ -112,7 +166,11 @@ export default function Login() {
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
+                    onBlur={validateEmail}
                   />
+                  {errorEmail && (
+                      <p className="text-red-500 text-xs mt-1">{errorEmail}</p>
+                    )}
                 </div>
               </div>
 
@@ -133,7 +191,9 @@ export default function Login() {
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     value={password}
                     onChange={(event) => setPassword(event.target.value)}
+                    onBlur={validatePassword}
                   />
+                  
                   <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
                     <button
                       type="button"
@@ -183,6 +243,9 @@ export default function Login() {
                       )}
                     </button>
                   </div>
+                  {errorPassword && (
+                      <p className="text-red-500 text-xs mt-1">{errorPassword}</p>
+                    )}
                 </div>
               </div>
 
@@ -218,16 +281,18 @@ export default function Login() {
               <div>
                 <button
                   type="submit"
+                  // disabled={authState.loading}
                   className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#2a91e5] hover:bg-[#1e73b5] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
-                  Sign in
+                  {/* {authState.loading ? "Loading" : "Sign In" } */}
+                  Sign In
                 </button>
               </div>
               <div className="text-center">
                 <p className="text-sm text-gray-600">
                   Belum Punya Akun?{" "}
                   <a
-                    href="#"
+                    href="/register"
                     className="font-medium text-[#2a91e5] hover:text-[#1e73b5]"
                   >
                     Register
