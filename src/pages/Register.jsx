@@ -13,13 +13,39 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleRegister = (event) => {
+  const handleRegister = async (event) => {
     event.preventDefault();
-    // Handle registration logic here
-    if (password === confirmPassword) {
-      // Proceed with registration
-    } else {
-      // Show error message for password mismatch
+
+    if (password !== confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+
+    try {
+      const response = await fetch('https://expressjs-develop-b4d1.up.railway.app/api/v1/auth/daftar-sekarang', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          first_name: firstName,
+          last_name: lastName,
+          email,
+          password,
+          confirmPassword,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Network response was not ok');
+      }
+
+      const data = await response.json();
+      // console.log(data);
+      alert(data.message);
+    } catch (error) {
+      alert(error)
     }
   };
 
@@ -54,8 +80,8 @@ export default function Register() {
                   </label>
                   <div className="mt-1">
                     <input
-                      id="first-name"
-                      name="first-name"
+                      id="first_name"
+                      name="first_name"
                       type="text"
                       autoComplete="given-name"
                       required
@@ -74,8 +100,8 @@ export default function Register() {
                   </label>
                   <div className="mt-1">
                     <input
-                      id="last-name"
-                      name="last-name"
+                      id="last_name"
+                      name="last_name"
                       type="text"
                       autoComplete="family-name"
                       required
@@ -138,8 +164,8 @@ export default function Register() {
                 </label>
                 <div className="mt-1 relative rounded-md shadow-sm">
                   <input
-                    id="confirm-password"
-                    name="confirm-password"
+                    id="confirmPassword"
+                    name="confirmPassword"
                     type="password"
                     autoComplete="new-password"
                     required
@@ -158,11 +184,13 @@ export default function Register() {
                   Register
                 </button>
               </div>
+
+
               <div className="text-center">
                 <p className="text-sm text-gray-600">
                   Sudah Punya Akun?{" "}
                   <a
-                    href="#"
+                    href="/"
                     className="font-medium text-[#2a91e5] hover:text-[#1e73b5]"
                   >
                     Login
