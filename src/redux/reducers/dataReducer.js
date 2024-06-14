@@ -7,10 +7,10 @@ const initialState = {
   arrivalAirportId: null,
   departureDate: null,
   returnDate: null,
-  penumpang: 0,
+  penumpang: 1,
   class: "",
   roundtrip: null,
-  jumlahDewasa: 0,
+  jumlahDewasa: 1,
   jumlahAnak: 0,
   jumlahBayi: 0,
   allAirport: [],
@@ -27,7 +27,6 @@ const dataSlicer = createSlice({
       state.arrivalAirport = action.payload;
     },
     setDepartureDate: (state, action) => {
-      console.log("action :>> ", action);
       state.departureDate = action.payload;
     },
     setReturnDate: (state, action) => {

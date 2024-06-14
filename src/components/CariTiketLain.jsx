@@ -3,6 +3,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { GiAirplaneDeparture, GiAirplaneArrival } from "react-icons/gi";
 import { SlCalender } from "react-icons/sl";
+import { IoWarning } from "react-icons/io5";
+
 import { id } from "date-fns/locale";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -665,31 +667,41 @@ export default function CariTiketLain() {
           </div>
           <div className="flex items-center gap-x-2 ">
             <div
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex-col items-center  "
               onClick={handleDropdownToggle3}
             >
-              <div>{totalPenumpang}</div>
-
-              <div>Penumpang</div>
-              <span
-                className={`transition ${isDropdownOpen3 ? "rotate-180" : ""}`}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="h-4 w-4"
+              <div className="flex items-center gap-2 cursor-pointer">
+                <div>{totalPenumpang}</div>
+                <div>Penumpang</div>
+                <span
+                  className={`transition ${
+                    isDropdownOpen3 ? "rotate-180" : ""
+                  }`}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
-              </span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="h-4 w-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </span>
+              </div>
             </div>
+            {totalPenumpang < 1 && (
+              <div className="flex items-center gap-2 text-red-500  text-sm">
+                <IoWarning size={20} />
+                <div>Mohon isi jumlah penumpang</div>
+              </div>
+            )}
+
             {isDropdownOpen3 && (
               <div className="absolute mt-40 w-44 bg-white border border-gray-200 rounded-md shadow-lg z-10">
                 <a

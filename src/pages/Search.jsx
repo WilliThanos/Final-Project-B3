@@ -101,7 +101,7 @@ export default function Search() {
         <div className=" bg-white rounded-xl shadow-sm p-6 px-10 max-md:text-sm max-md:px-5">
           <div>
             {/* DEPARTURE FLIGHTS */}
-            <div className="bg-[#D9EDFF] font-medium text-[#2A91E5] p-1 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
+            <div className="bg-[#D9EDFF] font-bold text-lg text-[#2A91E5] p-1 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
               Tiket Keberangkatan
             </div>
             <div className="bg-[#2A91E5] font-medium text-white p-1 rounded-lg px-64 mt-2 text-center max-md:px-0 max-lg:px-10 max-xl:px-32 ">
@@ -494,7 +494,7 @@ export default function Search() {
             {/* RETURN FLIGHTS */}
             {roundTrip ? (
               <div>
-                <div className="bg-[#D9EDFF] font-medium mt-2 text-[#2A91E5] p-1 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
+                <div className="bg-[#D9EDFF] font-bold text-lg mt-2 text-[#2A91E5] p-1 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
                   Tiket Kembali
                 </div>
                 <div className="bg-[#2A91E5] font-medium text-white p-1 rounded-lg px-64 mt-2 text-center max-md:px-0 max-lg:px-10 max-xl:px-32 ">
@@ -907,8 +907,8 @@ export default function Search() {
 
           {((!roundTrip && selectedDepartureFlight) ||
             (roundTrip && selectedDepartureFlight && selectedReturnFlight)) && (
-            <div className="bg-[#2A91E5] mt-2 hover:bg-sky-700 hover:shadow hover:text-gray-200 border border-gray-300 font-medium text-white p-2 rounded-lg text-center cursor-pointer">
-              Lanjut Ke Pembayaran
+            <div className="bg-lime-500 mt-2 hover:bg-lime-600 hover:shadow hover:text-gray-200 border border-gray-300 font-medium text-white p-2 rounded-lg text-center cursor-pointer">
+              Pesan Tiket{" "}
             </div>
           )}
         </div>
