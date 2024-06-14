@@ -35,7 +35,8 @@ export default function CariTiketLain() {
   const jumlahAnak = useSelector((state) => state?.data?.jumlahAnak);
   const jumlahBayi = useSelector((state) => state?.data?.jumlahBayi);
   const allAirport = useSelector((state) => state?.data?.allAirport);
-  const [isRoundTrip, setIsRoundTrip] = useState(false);
+  const roundTrip = useSelector((state) => state?.data?.roundtrip);
+  console.log("roundTrip :>> ", roundTrip);
 
   const departureAirport = useSelector(
     (state) => state?.data?.departureAirport
@@ -142,6 +143,27 @@ export default function CariTiketLain() {
     updatePenumpang();
   }, [totalPenumpang]);
 
+  const departureDateString = departureDate
+    ? new Date(departureDate).toISOString().split("T")[0]
+    : "";
+  const returnDateString = returnDate
+    ? new Date(returnDate).toISOString().split("T")[0]
+    : "";
+
+  const isSameDate = departureDateString === returnDateString && roundTrip;
+  const isReturnDateBeforeDeparture =
+    returnDateString &&
+    departureDateString &&
+    roundTrip &&
+    returnDateString < departureDateString;
+
+  const isButtonEnabled = !(
+    departureAirport?.id === arrivalAirport?.id ||
+    isSameDate ||
+    isReturnDateBeforeDeparture ||
+    totalPenumpang === 0
+  );
+
   return (
     <div className="mx-auto fixed left-0 right-0 z-40 max-w-screen-2xl flex justify-between items-center bg-white rounded-xl shadow-sm max-md:mx-2 max-md:text-sm">
       <div className="flex items-center p-8">
@@ -187,6 +209,14 @@ export default function CariTiketLain() {
                   className="cursor-pointer text-[#0C68BE]"
                   ref={departureDateRef}
                 />
+                {isSameDate && (
+                  <div className="flex items-center gap-2 mt-1 text-red-500 font-normal  text-sm">
+                    <IoWarning size={20} />
+                    <div>
+                      Tanggal keberangkatan dan kembali tidak boleh sama
+                    </div>
+                  </div>
+                )}
               </a>
               <a
                 href="#"
@@ -204,10 +234,9 @@ export default function CariTiketLain() {
                           type="checkbox"
                           id="AcceptConditions"
                           className="peer sr-only"
-                          checked={isRoundTrip}
+                          checked={roundTrip}
                           onChange={() => {
-                            setIsRoundTrip(!isRoundTrip);
-                            dispatch(setRoundTrip(!isRoundTrip));
+                            dispatch(setRoundTrip(roundTrip));
                           }}
                         />
 
@@ -215,7 +244,7 @@ export default function CariTiketLain() {
                       </label>
                     </div>
                   </div>
-                  {isRoundTrip && (
+                  {roundTrip && (
                     <div className="flex-col items-center gap-x-2 ">
                       <div className="flex gap-2 items-center">
                         <div className="cursor-pointer">
@@ -233,6 +262,17 @@ export default function CariTiketLain() {
                         className="cursor-pointer text-[#0C68BE]"
                         ref={returnDateRef}
                       />
+                      <div>
+                        {isReturnDateBeforeDeparture && (
+                          <div className="flex items-center gap-2 mt-1 text-red-500 font-normal  text-sm">
+                            <IoWarning size={20} />
+                            <div>
+                              Tanggal kembali tidak boleh lebih awal dari
+                              tanggal keberangkatan
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -346,6 +386,12 @@ export default function CariTiketLain() {
                   </div>
                 </div>
               </a>
+              {departureAirport?.id === arrivalAirport?.id && (
+                <div className="flex items-center gap-2 text-red-500 font-normal  text-sm">
+                  <IoWarning size={20} />
+                  <div>Bandara keberangkatan dan tujuan tidak boleh sama</div>
+                </div>
+              )}
               <a
                 href="#"
                 className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold sm:hidden"
@@ -380,6 +426,14 @@ export default function CariTiketLain() {
                         </svg>
                       </span>
                     </div>
+
+                    {totalPenumpang < 1 && (
+                      <div className="flex items-center gap-2 text-red-500  text-sm">
+                        <IoWarning size={20} />
+                        <div>Mohon isi jumlah penumpang</div>
+                      </div>
+                    )}
+
                     {isDropdownOpen3 && (
                       <div className="absolute mt- w-44  bg-white border border-gray-200 rounded-md shadow-lg z-10">
                         <a
@@ -564,10 +618,10 @@ export default function CariTiketLain() {
         </div>
         {/* NON RESPONSIVE LOOK  */}
         <div
-          className="flex flex-col pr-20 border-r border-gray-500 max-sm:hidden max-xl:pr-0 max-lg:pr-0"
+          className="flex flex-col pr-10 border-r border-gray-500 max-sm:hidden max-xl:pr-0 max-lg:pr-0"
           style={{ borderRight: "1px solid", height: "40px" }}
         >
-          <div className="flex items-center font-semibold max-xl:pr-20 max-lg:pr-20">
+          <div className="flex items-center gap-4  font-semibold max-xl:pr-20 max-lg:pr-20">
             <div className="relative">
               <div
                 onClick={handleDropdownToggle4}
@@ -664,18 +718,170 @@ export default function CariTiketLain() {
                 </div>
               )}
             </div>
+            {departureAirport?.id === arrivalAirport?.id && (
+              <div className="flex items-center gap-2 text-red-500 font-normal  text-sm">
+                <IoWarning size={20} />
+                <div>Bandara keberangkatan dan tujuan tidak boleh sama</div>
+              </div>
+            )}
           </div>
+
           <div className="flex items-center gap-x-2 ">
-            <div
-              className="flex-col items-center  "
-              onClick={handleDropdownToggle3}
-            >
-              <div className="flex items-center gap-2 cursor-pointer">
-                <div>{totalPenumpang}</div>
-                <div>Penumpang</div>
+            <div className="relative">
+              <div className="flex items-center gap-2">
+                <div
+                  className="flex-col items-center  "
+                  onClick={handleDropdownToggle3}
+                >
+                  <div className="flex items-center gap-2 cursor-pointer">
+                    <div>{totalPenumpang}</div>
+                    <div>Penumpang</div>
+                    <span
+                      className={`transition ${
+                        isDropdownOpen3 ? "rotate-180" : ""
+                      }`}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.5"
+                        stroke="currentColor"
+                        className="h-4 w-4"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                        />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+                {totalPenumpang < 1 && (
+                  <div className="flex items-center gap-2 text-red-500  text-sm">
+                    <IoWarning size={20} />
+                    <div>Mohon isi jumlah penumpang</div>
+                  </div>
+                )}
+              </div>
+
+              {isDropdownOpen3 && (
+                <div className="absolute  w-44 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                  <a
+                    href="#"
+                    className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
+                  >
+                    <div className="flex items-center gap-x-2">
+                      <div className="">Dewasa</div>
+                      <div class="flex items-center rounded border border-gray-200 ">
+                        <button
+                          type="button"
+                          onClick={kurangJumlahDewasa}
+                          class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                        >
+                          -
+                        </button>
+
+                        <input
+                          type="number"
+                          id="Quantity"
+                          value={jumlahDewasa}
+                          onChange={(e) =>
+                            dispatch(setJumlahDewasa(jumlahDewasa))
+                          }
+                          class="h-6 w-8 border-transparent text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                        />
+
+                        <button
+                          type="button"
+                          onClick={tambahJumlahDewasa}
+                          class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </a>
+                  <a
+                    href="#"
+                    className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
+                  >
+                    <div className="flex items-center gap-x-[27px]">
+                      <div className="font-">Anak</div>
+                      <div class="flex items-center rounded border border-gray-200  ">
+                        <button
+                          type="button"
+                          onClick={kurangJumlahAnak}
+                          class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                        >
+                          -
+                        </button>
+
+                        <input
+                          type="number"
+                          id="Quantity"
+                          value={jumlahAnak}
+                          onChange={(e) => dispatch(setJumlahAnak(jumlahAnak))}
+                          class="h-6 w-8 border-transparent text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                        />
+
+                        <button
+                          type="button"
+                          onClick={tambahJumlahAnak}
+                          class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </a>
+                  <a
+                    href="#"
+                    className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
+                  >
+                    <div className="flex items-center gap-x-[18px]">
+                      <div className="font-">Bayi</div>
+                      <div class="flex items-center rounded border border-gray-200 ml-4">
+                        <button
+                          type="button"
+                          onClick={kurangJumlahBayi}
+                          class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                        >
+                          -
+                        </button>
+
+                        <input
+                          type="number"
+                          id="Quantity"
+                          value={jumlahBayi}
+                          onChange={(e) => dispatch(setJumlahBayi(jumlahBayi))}
+                          class="h-6 w-8 border-transparent text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
+                        />
+
+                        <button
+                          type="button"
+                          onClick={tambahJumlahBayi}
+                          class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              )}
+            </div>
+            <div>|</div>
+            <div className="relative">
+              <div
+                className="flex items-center gap-2 cursor-pointer"
+                onClick={handleDropdownToggle2}
+              >
+                <div>{`${seatClass}`} </div>
                 <span
                   className={`transition ${
-                    isDropdownOpen3 ? "rotate-180" : ""
+                    isDropdownOpen2 ? "rotate-180" : ""
                   }`}
                 >
                   <svg
@@ -694,211 +900,89 @@ export default function CariTiketLain() {
                   </svg>
                 </span>
               </div>
+              {isDropdownOpen2 && (
+                <div className="absolute w-32 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                  <a
+                    href="#"
+                    className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
+                    onClick={() => {
+                      dispatch(setClass("Eksekutif"));
+                      setIsDropdownOpen2(false);
+                    }}
+                  >
+                    <div className="flex items-center gap-x-2">
+                      <div className="font-">Eksekutif</div>
+                    </div>
+                  </a>
+                  <a
+                    href="#"
+                    className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
+                    onClick={() => {
+                      dispatch(setClass("Bisnis"));
+                      setIsDropdownOpen2(false);
+                    }}
+                  >
+                    <div className="flex items-center gap-x-2">
+                      <div className="font-">Bisnis</div>
+                    </div>
+                  </a>
+                  <a
+                    href="#"
+                    className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
+                    onClick={() => {
+                      dispatch(setClass("Ekonomi"));
+                      setIsDropdownOpen2(false);
+                    }}
+                  >
+                    <div className="flex items-center gap-x-2">
+                      <div className="font-">Ekonomi</div>
+                    </div>
+                  </a>
+                </div>
+              )}
             </div>
-            {totalPenumpang < 1 && (
-              <div className="flex items-center gap-2 text-red-500  text-sm">
-                <IoWarning size={20} />
-                <div>Mohon isi jumlah penumpang</div>
-              </div>
-            )}
-
-            {isDropdownOpen3 && (
-              <div className="absolute mt-40 w-44 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                <a
-                  href="#"
-                  className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
-                >
-                  <div className="flex items-center gap-x-2">
-                    <div className="">Dewasa</div>
-                    <div class="flex items-center rounded border border-gray-200 ">
-                      <button
-                        type="button"
-                        onClick={kurangJumlahDewasa}
-                        class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
-                      >
-                        -
-                      </button>
-
-                      <input
-                        type="number"
-                        id="Quantity"
-                        value={jumlahDewasa}
-                        onChange={(e) =>
-                          dispatch(setJumlahDewasa(jumlahDewasa))
-                        }
-                        class="h-6 w-8 border-transparent text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
-                      />
-
-                      <button
-                        type="button"
-                        onClick={tambahJumlahDewasa}
-                        class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                </a>
-                <a
-                  href="#"
-                  className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
-                >
-                  <div className="flex items-center gap-x-[27px]">
-                    <div className="font-">Anak</div>
-                    <div class="flex items-center rounded border border-gray-200  ">
-                      <button
-                        type="button"
-                        onClick={kurangJumlahAnak}
-                        class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
-                      >
-                        -
-                      </button>
-
-                      <input
-                        type="number"
-                        id="Quantity"
-                        value={jumlahAnak}
-                        onChange={(e) => dispatch(setJumlahAnak(jumlahAnak))}
-                        class="h-6 w-8 border-transparent text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
-                      />
-
-                      <button
-                        type="button"
-                        onClick={tambahJumlahAnak}
-                        class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                </a>
-                <a
-                  href="#"
-                  className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
-                >
-                  <div className="flex items-center gap-x-[18px]">
-                    <div className="font-">Bayi</div>
-                    <div class="flex items-center rounded border border-gray-200 ml-4">
-                      <button
-                        type="button"
-                        onClick={kurangJumlahBayi}
-                        class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
-                      >
-                        -
-                      </button>
-
-                      <input
-                        type="number"
-                        id="Quantity"
-                        value={jumlahBayi}
-                        onChange={(e) => dispatch(setJumlahBayi(jumlahBayi))}
-                        class="h-6 w-8 border-transparent text-center [-moz-appearance:_textfield] sm:text-sm [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none"
-                      />
-
-                      <button
-                        type="button"
-                        onClick={tambahJumlahBayi}
-                        class="size-6 leading-6 text-gray-600 transition hover:opacity-75 hover:bg-gray-300"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            )}
-            <div>|</div>
-            <div
-              className="flex items-center gap-2 cursor-pointer"
-              onClick={handleDropdownToggle2}
-            >
-              <div>{`${seatClass}`} </div>
-              <span
-                className={`transition ${isDropdownOpen2 ? "rotate-180" : ""}`}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="h-4 w-4"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
-              </span>
-            </div>
-            {isDropdownOpen2 && (
-              <div className="absolute mt-40 ml-28 w-28 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                <a
-                  href="#"
-                  className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
-                  onClick={() => {
-                    dispatch(setClass("Eksekutif"));
-                    setIsDropdownOpen2(false);
-                  }}
-                >
-                  <div className="flex items-center gap-x-2">
-                    <div className="font-">Eksekutif</div>
-                  </div>
-                </a>
-                <a
-                  href="#"
-                  className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
-                  onClick={() => {
-                    dispatch(setClass("Bisnis"));
-                    setIsDropdownOpen2(false);
-                  }}
-                >
-                  <div className="flex items-center gap-x-2">
-                    <div className="font-">Bisnis</div>
-                  </div>
-                </a>
-                <a
-                  href="#"
-                  className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
-                  onClick={() => {
-                    dispatch(setClass("Ekonomi"));
-                    setIsDropdownOpen2(false);
-                  }}
-                >
-                  <div className="flex items-center gap-x-2">
-                    <div className="font-">Ekonomi</div>
-                  </div>
-                </a>
-              </div>
-            )}
           </div>
         </div>
         {/* NON RESPONSIVE LOOK 2  */}
         <div
-          className="hidden flex-col pr-20 pl-20 border-r border-gray-500 md:flex "
+          className="hidden flex-col pr-10 pl-10 border-r border-gray-500 md:flex "
           style={{ borderRight: "1px solid", height: "40px" }}
         >
-          <div className="flex items-center gap-x-2 ">
-            <div className="cursor-pointer">
-              <SlCalender onClick={() => departureDateRef.current.setFocus()} />
+          <div className="flex">
+            <div>
+              <div className="flex items-center gap-x-2 ">
+                <div className="cursor-pointer">
+                  <SlCalender
+                    onClick={() => departureDateRef.current.setFocus()}
+                  />
+                </div>
+                <div className="font-medium">Waktu Keberangkatan</div>
+              </div>
+              <DatePicker
+                selected={departureDate}
+                onChange={(date) => {
+                  dispatch(setDepartureDate(date));
+                  console.log("date :>> ", typeof date);
+                }}
+                dateFormat="EEE, d MMM yyyy"
+                locale={id}
+                className="cursor-pointer text-[#0C68BE]"
+                ref={departureDateRef}
+              />
             </div>
-            <div className="font-medium">Waktu Keberangkatan</div>
+            <div>
+              {isSameDate && (
+                <div className="hidden md:flex items-center gap-2 text-red-500 font-normal  text-sm">
+                  <IoWarning size={20} />
+                  <div>Tanggal keberangkatan dan kembali tidak boleh sama</div>
+                </div>
+              )}
+            </div>
           </div>
-          <DatePicker
-            selected={departureDate}
-            onChange={(date) => {
-              dispatch(setDepartureDate(date));
-              console.log("date :>> ", typeof date);
-            }}
-            dateFormat="EEE, d MMM yyyy"
-            locale={id}
-            className="cursor-pointer text-[#0C68BE]"
-            ref={departureDateRef}
-          />
         </div>
-        <div className="flex items-center pl-16 gap-x-8">
-          <div className="flex flex-col gap-1">
+
+        <div className="flex items-center pl-10 gap-x-8">
+          <div className="flex flex-col text-center gap-1">
             <div className="font-medium text-md max-md:hidden">
               Pulang - Pergi
             </div>
@@ -911,10 +995,9 @@ export default function CariTiketLain() {
                   type="checkbox"
                   id="AcceptConditions"
                   className="peer sr-only"
-                  checked={isRoundTrip}
+                  checked={roundTrip}
                   onChange={() => {
-                    setIsRoundTrip(!isRoundTrip);
-                    dispatch(setRoundTrip(!isRoundTrip));
+                    dispatch(setRoundTrip(!roundTrip));
                   }}
                 />
 
@@ -922,27 +1005,43 @@ export default function CariTiketLain() {
               </label>
             </div>
           </div>
-          {isRoundTrip && (
-            <div
-              className="hidden flex-col  md:flex"
-              style={{ borderRight: "1px", height: "40px" }}
-            >
-              <div className="flex items-center gap-x-2 ">
-                <div className="cursor-pointer ">
-                  <SlCalender
-                    onClick={() => returnDateRef.current.setFocus()}
+          {roundTrip && (
+            <div className="max-md:hidden">
+              <div className="flex gap-4">
+                <div
+                  className="hidden flex-col  md:flex"
+                  style={{ borderRight: "1px", height: "40px" }}
+                >
+                  <div className="flex items-center gap-x-2 ">
+                    <div className="cursor-pointer ">
+                      <SlCalender
+                        onClick={() => returnDateRef.current.setFocus()}
+                      />
+                    </div>
+                    <div className="font-medium ">Waktu Kembali</div>
+                  </div>
+                  <DatePicker
+                    selected={returnDate}
+                    onChange={(date) => dispatch(setReturnDate(date))}
+                    dateFormat="EEE, d MMM yyyy"
+                    locale={id}
+                    className="cursor-pointer text-[#0C68BE]"
+                    ref={returnDateRef}
                   />
                 </div>
-                <div className="font-medium ">Waktu Kembali</div>
+
+                <div>
+                  {isReturnDateBeforeDeparture && (
+                    <div className="flex items-center gap-2 text-red-500 font-normal  text-sm">
+                      <IoWarning size={20} />
+                      <div>
+                        Tanggal kembali tidak boleh lebih awal dari tanggal
+                        keberangkatan
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
-              <DatePicker
-                selected={returnDate}
-                onChange={(date) => dispatch(setReturnDate(date))}
-                dateFormat="EEE, d MMM yyyy"
-                locale={id}
-                className="cursor-pointer text-[#0C68BE]"
-                ref={returnDateRef}
-              />
             </div>
           )}
         </div>
@@ -990,6 +1089,14 @@ export default function CariTiketLain() {
                   className="cursor-pointer text-[#0C68BE]"
                   ref={departureDateRef}
                 />
+                {isSameDate && (
+                  <div className="flex items-center gap-2 mt-1 text-red-500 font-normal  text-sm">
+                    <IoWarning size={20} />
+                    <div>
+                      Tanggal keberangkatan dan kembali tidak boleh sama
+                    </div>
+                  </div>
+                )}
               </a>
               <a
                 href="#"
@@ -1007,10 +1114,9 @@ export default function CariTiketLain() {
                           type="checkbox"
                           id="AcceptConditions"
                           className="peer sr-only"
-                          checked={isRoundTrip}
+                          checked={roundTrip}
                           onChange={() => {
-                            setIsRoundTrip(!isRoundTrip);
-                            dispatch(setRoundTrip(!isRoundTrip));
+                            dispatch(setRoundTrip(!roundTrip));
                           }}
                         />
 
@@ -1018,7 +1124,7 @@ export default function CariTiketLain() {
                       </label>
                     </div>
                   </div>
-                  {isRoundTrip && (
+                  {roundTrip && (
                     <div className="flex-col items-center gap-x-2 ">
                       <div className="flex gap-2 items-center">
                         <div className="cursor-pointer">
@@ -1036,6 +1142,17 @@ export default function CariTiketLain() {
                         className="cursor-pointer text-[#0C68BE]"
                         ref={returnDateRef}
                       />
+                      <div>
+                        {isReturnDateBeforeDeparture && (
+                          <div className="flex items-center gap-2 mt-1 text-red-500 font-normal  text-sm">
+                            <IoWarning size={20} />
+                            <div>
+                              Tanggal kembali tidak boleh lebih awal dari
+                              tanggal keberangkatan
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1119,9 +1236,16 @@ export default function CariTiketLain() {
         </div>
         <button
           onClick={() => {
-            dispatch(getSearchTicket());
+            if (isButtonEnabled) {
+              dispatch(getSearchTicket());
+            }
           }}
-          className="rounded-xl bg-[#2A91E5] px-5 py-2.5 font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow"
+          className={`rounded-xl px-5 py-2.5 font-medium text-white hover:shadow ${
+            isButtonEnabled
+              ? "bg-[#2A91E5] hover:bg-sky-700 hover:text-gray-200"
+              : "bg-gray-400 cursor-not-allowed"
+          }`}
+          disabled={!isButtonEnabled}
         >
           Cari Tiket Lainnya
         </button>
