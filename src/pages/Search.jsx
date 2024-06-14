@@ -36,7 +36,7 @@ export default function Search() {
   const sortHarga = useSelector((state) => state?.filter?.sortHarga);
 
   const filteredAndSortedDepartureFlights = departureFlights
-    .filter(
+    ?.filter(
       (flight) => flight?.class?.toLowerCase() === filterClass?.toLowerCase()
     )
 
@@ -50,7 +50,7 @@ export default function Search() {
     });
 
   const filteredAndSortedReturnFlights = returnFlights
-    .filter(
+    ?.filter(
       (flight) => flight?.class?.toLowerCase() === filterClass?.toLowerCase()
     )
     .sort((a, b) => {
