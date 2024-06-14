@@ -3,6 +3,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { GiAirplaneDeparture, GiAirplaneArrival } from "react-icons/gi";
 import { SlCalender } from "react-icons/sl";
+import { IoWarning } from "react-icons/io5";
+
 import { id } from "date-fns/locale";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -15,11 +17,13 @@ import {
   setJumlahBayi,
   setArrivalAirportId,
   setDepartureAirportId,
+  setRoundTrip,
 } from "../redux/reducers/dataReducer";
 import {
   getAllAirports,
   getDepartureAirport,
   getArrivalAirport,
+  getSearchTicket,
 } from "../redux/action/dataAction";
 
 export default function CariTiketLain() {
@@ -31,6 +35,8 @@ export default function CariTiketLain() {
   const jumlahAnak = useSelector((state) => state?.data?.jumlahAnak);
   const jumlahBayi = useSelector((state) => state?.data?.jumlahBayi);
   const allAirport = useSelector((state) => state?.data?.allAirport);
+  const [isRoundTrip, setIsRoundTrip] = useState(false);
+
   const departureAirport = useSelector(
     (state) => state?.data?.departureAirport
   );
@@ -53,6 +59,10 @@ export default function CariTiketLain() {
 
   useEffect(() => {
     dispatch(getAllAirports());
+  }, []);
+
+  useEffect(() => {
+    dispatch(getSearchTicket());
   }, []);
 
   useEffect(() => {
@@ -182,22 +192,50 @@ export default function CariTiketLain() {
                 href="#"
                 className="block rounded-md  px-4 py-2 text-gray-800/60  hover:text-gray-800 font-semibold"
               >
-                <div className="flex items-center gap-x-2 ">
-                  <div className="cursor-pointer ">
-                    <SlCalender
-                      onClick={() => returnDateRef.current.setFocus()}
-                    />
+                <div className="flex flex-col  gap-x-2 ">
+                  <div className="flex gap-2">
+                    <div className="font-medium text-sm">Pulang - Pergi</div>
+                    <div className=" items-center gap-x-4  flex-col  ">
+                      <label
+                        htmlFor="AcceptConditions"
+                        className="relative inline-block h-5 w-9 cursor-pointer rounded-full bg-gray-300 transition [-webkit-tap-highlight-color:_transparent] has-[:checked]:bg-[#2A91E5]"
+                      >
+                        <input
+                          type="checkbox"
+                          id="AcceptConditions"
+                          className="peer sr-only"
+                          checked={isRoundTrip}
+                          onChange={() => {
+                            setIsRoundTrip(!isRoundTrip);
+                            dispatch(setRoundTrip(!isRoundTrip));
+                          }}
+                        />
+
+                        <span className="absolute inset-y-0 start-0 m-1 size-3 rounded-full bg-white transition-all peer-checked:start-4"></span>
+                      </label>
+                    </div>
                   </div>
-                  <div className="font-medium ">Waktu Kembali</div>
+                  {isRoundTrip && (
+                    <div className="flex-col items-center gap-x-2 ">
+                      <div className="flex gap-2 items-center">
+                        <div className="cursor-pointer">
+                          <SlCalender
+                            onClick={() => departureDateRef.current.setFocus()}
+                          />
+                        </div>
+                        <div className="font-medium">Waktu Kembali</div>
+                      </div>
+                      <DatePicker
+                        selected={returnDate}
+                        onChange={(date) => dispatch(setReturnDate(date))}
+                        dateFormat="EEE, d MMM yyyy"
+                        locale={id}
+                        className="cursor-pointer text-[#0C68BE]"
+                        ref={returnDateRef}
+                      />
+                    </div>
+                  )}
                 </div>
-                <DatePicker
-                  selected={returnDate}
-                  onChange={(date) => dispatch(setReturnDate(date))}
-                  dateFormat="EEE, d MMM yyyy"
-                  locale={id}
-                  className="cursor-pointer text-[#0C68BE]"
-                  ref={returnDateRef}
-                />
               </a>
               <a
                 href="#"
@@ -629,31 +667,41 @@ export default function CariTiketLain() {
           </div>
           <div className="flex items-center gap-x-2 ">
             <div
-              className="flex items-center gap-2 cursor-pointer"
+              className="flex-col items-center  "
               onClick={handleDropdownToggle3}
             >
-              <div>{totalPenumpang}</div>
-
-              <div>Penumpang</div>
-              <span
-                className={`transition ${isDropdownOpen3 ? "rotate-180" : ""}`}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth="1.5"
-                  stroke="currentColor"
-                  className="h-4 w-4"
+              <div className="flex items-center gap-2 cursor-pointer">
+                <div>{totalPenumpang}</div>
+                <div>Penumpang</div>
+                <span
+                  className={`transition ${
+                    isDropdownOpen3 ? "rotate-180" : ""
+                  }`}
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 8.25l-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
-              </span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="h-4 w-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                    />
+                  </svg>
+                </span>
+              </div>
             </div>
+            {totalPenumpang < 1 && (
+              <div className="flex items-center gap-2 text-red-500  text-sm">
+                <IoWarning size={20} />
+                <div>Mohon isi jumlah penumpang</div>
+              </div>
+            )}
+
             {isDropdownOpen3 && (
               <div className="absolute mt-40 w-44 bg-white border border-gray-200 rounded-md shadow-lg z-10">
                 <a
@@ -849,24 +897,54 @@ export default function CariTiketLain() {
             ref={departureDateRef}
           />
         </div>
-        <div
-          className="hidden flex-col pl-20 md:flex"
-          style={{ borderRight: "1px", height: "40px" }}
-        >
-          <div className="flex items-center gap-x-2 ">
-            <div className="cursor-pointer ">
-              <SlCalender onClick={() => returnDateRef.current.setFocus()} />
+        <div className="flex items-center pl-16 gap-x-8">
+          <div className="flex flex-col gap-1">
+            <div className="font-medium text-md max-md:hidden">
+              Pulang - Pergi
             </div>
-            <div className="font-medium ">Waktu Kembali</div>
+            <div className=" items-center gap-x-4 hidden flex-col  md:flex">
+              <label
+                htmlFor="AcceptConditions"
+                className="relative inline-block h-5 w-9 cursor-pointer rounded-full bg-gray-300 transition [-webkit-tap-highlight-color:_transparent] has-[:checked]:bg-[#2A91E5]"
+              >
+                <input
+                  type="checkbox"
+                  id="AcceptConditions"
+                  className="peer sr-only"
+                  checked={isRoundTrip}
+                  onChange={() => {
+                    setIsRoundTrip(!isRoundTrip);
+                    dispatch(setRoundTrip(!isRoundTrip));
+                  }}
+                />
+
+                <span className="absolute inset-y-0 start-0 m-1 size-3 rounded-full bg-white transition-all peer-checked:start-4"></span>
+              </label>
+            </div>
           </div>
-          <DatePicker
-            selected={returnDate}
-            onChange={(date) => dispatch(setReturnDate(date))}
-            dateFormat="EEE, d MMM yyyy"
-            locale={id}
-            className="cursor-pointer text-[#0C68BE]"
-            ref={returnDateRef}
-          />
+          {isRoundTrip && (
+            <div
+              className="hidden flex-col  md:flex"
+              style={{ borderRight: "1px", height: "40px" }}
+            >
+              <div className="flex items-center gap-x-2 ">
+                <div className="cursor-pointer ">
+                  <SlCalender
+                    onClick={() => returnDateRef.current.setFocus()}
+                  />
+                </div>
+                <div className="font-medium ">Waktu Kembali</div>
+              </div>
+              <DatePicker
+                selected={returnDate}
+                onChange={(date) => dispatch(setReturnDate(date))}
+                dateFormat="EEE, d MMM yyyy"
+                locale={id}
+                className="cursor-pointer text-[#0C68BE]"
+                ref={returnDateRef}
+              />
+            </div>
+          )}
         </div>
       </div>
       <div className="flex items-center p-8">
@@ -917,22 +995,50 @@ export default function CariTiketLain() {
                 href="#"
                 className="block rounded-md  px-4 py-2 text-gray-800/60  hover:text-gray-800 font-semibold"
               >
-                <div className="flex items-center gap-x-2 ">
-                  <div className="cursor-pointer ">
-                    <SlCalender
-                      onClick={() => returnDateRef.current.setFocus()}
-                    />
+                <div className="flex flex-col  gap-x-2 ">
+                  <div className="flex gap-2">
+                    <div className="font-medium text-sm">Pulang - Pergi</div>
+                    <div className=" items-center gap-x-4  flex-col  ">
+                      <label
+                        htmlFor="AcceptConditions"
+                        className="relative inline-block h-5 w-9 cursor-pointer rounded-full bg-gray-300 transition [-webkit-tap-highlight-color:_transparent] has-[:checked]:bg-[#2A91E5]"
+                      >
+                        <input
+                          type="checkbox"
+                          id="AcceptConditions"
+                          className="peer sr-only"
+                          checked={isRoundTrip}
+                          onChange={() => {
+                            setIsRoundTrip(!isRoundTrip);
+                            dispatch(setRoundTrip(!isRoundTrip));
+                          }}
+                        />
+
+                        <span className="absolute inset-y-0 start-0 m-1 size-3 rounded-full bg-white transition-all peer-checked:start-4"></span>
+                      </label>
+                    </div>
                   </div>
-                  <div className="font-medium ">Waktu Kembali</div>
+                  {isRoundTrip && (
+                    <div className="flex-col items-center gap-x-2 ">
+                      <div className="flex gap-2 items-center">
+                        <div className="cursor-pointer">
+                          <SlCalender
+                            onClick={() => departureDateRef.current.setFocus()}
+                          />
+                        </div>
+                        <div className="font-medium">Waktu Kembali</div>
+                      </div>
+                      <DatePicker
+                        selected={returnDate}
+                        onChange={(date) => dispatch(setReturnDate(date))}
+                        dateFormat="EEE, d MMM yyyy"
+                        locale={id}
+                        className="cursor-pointer text-[#0C68BE]"
+                        ref={returnDateRef}
+                      />
+                    </div>
+                  )}
                 </div>
-                <DatePicker
-                  selected={returnDate}
-                  onChange={(date) => dispatch(setReturnDate(date))}
-                  dateFormat="EEE, d MMM yyyy"
-                  locale={id}
-                  className="cursor-pointer text-[#0C68BE]"
-                  ref={returnDateRef}
-                />
               </a>
               <a
                 href="#"
@@ -1011,7 +1117,12 @@ export default function CariTiketLain() {
             </div>
           )}
         </div>
-        <button className="rounded-xl bg-[#2A91E5] px-5 py-2.5 font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow">
+        <button
+          onClick={() => {
+            dispatch(getSearchTicket());
+          }}
+          className="rounded-xl bg-[#2A91E5] px-5 py-2.5 font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow"
+        >
           Cari Tiket Lainnya
         </button>
       </div>
