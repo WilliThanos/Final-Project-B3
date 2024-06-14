@@ -14,6 +14,7 @@ export const getAllAirports = () => async (dispatch, getState) => {
     const response = await axios.get(
       `https://expressjs-develop-b4d1.up.railway.app/api/v1/bandara`
     );
+    console.log("response airport redux :>> ", response.data);
     dispatch(setAllAirport(response.data.data));
   } catch (error) {
     if (axios.isAxiosError(error)) {

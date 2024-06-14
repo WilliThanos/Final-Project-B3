@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NavbarLogoBiru from "../components/Navbar2";
 import NavbarLogoPutih from "../components/Navbar";
 import CariTiketLain from "../components/CariTiketLain";
@@ -20,8 +20,13 @@ export default function Search() {
   const navigate = useNavigate();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState({});
-
-  const roundTrip = useSelector((state) => state?.data?.roundtrip);
+  const [
+    filteredAndSortedDepartureFlights,
+    setFilteredAndSortedDepartureFlights,
+  ] = useState([]);
+  const [filteredAndSortedReturnFlights, setFilteredAndSortedReturnFlights] =
+    useState([]);
+  const totalPenumpang = useSelector((state) => state?.data?.penumpang);
   const departureFlights = useSelector(
     (state) => state?.ticket?.departureFlights
   );
@@ -32,6 +37,41 @@ export default function Search() {
   const selectedReturnFlight = useSelector(
     (state) => state?.ticket?.selectedReturnFlight
   );
+  const filterClass = useSelector((state) => state?.filter?.filterClass);
+  const sortHarga = useSelector((state) => state?.filter?.sortHarga);
+
+  const filterAndSortFlights = (flights) => {
+    let filteredFlights = flights || [];
+
+    if (filterClass) {
+      filteredFlights = filteredFlights?.filter(
+        (flight) => flight?.class?.toLowerCase() === filterClass?.toLowerCase()
+      );
+    }
+
+    if (sortHarga === "asc") {
+      filteredFlights?.sort((a, b) => a.price - b.price);
+    } else if (sortHarga === "desc") {
+      filteredFlights?.sort((a, b) => b.price - a.price);
+    }
+
+    return filteredFlights;
+  };
+
+  useEffect(() => {
+    // Filter and sort departure flights if available
+    if (departureFlights) {
+      const filteredDepartureFlights = filterAndSortFlights(departureFlights);
+      setFilteredAndSortedDepartureFlights(filteredDepartureFlights);
+    }
+
+    // Filter and sort return flights if available
+    if (returnFlights) {
+      const filteredReturnFlights = filterAndSortFlights(returnFlights);
+      setFilteredAndSortedReturnFlights(filteredReturnFlights);
+    }
+  }, [filterClass, sortHarga, departureFlights, returnFlights]);
+  const roundTrip = useSelector((state) => state?.data?.roundtrip);
 
   const departureAirport = useSelector(
     (state) => state?.data?.departureAirport
@@ -40,14 +80,12 @@ export default function Search() {
 
   const departureDate = useSelector((state) => state?.data?.departureDate);
   const returnDate = useSelector((state) => state?.data?.returnDate);
-
   const formattedDepartureDate = new Intl.DateTimeFormat("id-ID", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
   }).format(new Date(departureDate));
-
   const formattedReturnDate = new Intl.DateTimeFormat("id-ID", {
     weekday: "long",
     year: "numeric",
@@ -197,7 +235,10 @@ export default function Search() {
                     </div>
                     <div className="font-bold text-xl text-[#2A91E5] max-md:text-sm">
                       Rp{" "}
-                      {selectedDepartureFlight?.price.toLocaleString("id-ID")}
+                      {(
+                        selectedDepartureFlight?.price * totalPenumpang
+                      ).toLocaleString("id-ID")}
+                      ,00
                     </div>
                   </div>
                   {/* DROPDOWN DETAILS */}
@@ -319,8 +360,9 @@ export default function Search() {
                   <FaRegEdit />
                 </div>
               </div>
-            ) : departureFlights && departureFlights.length > 0 ? (
-              departureFlights.map((flight) => (
+            ) : filteredAndSortedDepartureFlights &&
+              filteredAndSortedDepartureFlights.length > 0 ? (
+              filteredAndSortedDepartureFlights?.map((flight) => (
                 <div>
                   <div
                     key={flight?.id}
@@ -384,7 +426,7 @@ export default function Search() {
                         </div>
                       </div>
                       <div className="font-bold text-xl text-[#2A91E5]  max-md:text-sm">
-                        Rp {flight?.price.toLocaleString("id-ID")}
+                        Rp {flight?.price.toLocaleString("id-ID")},00
                       </div>
                     </div>
                     {/* DROPDOWN DETAILS */}
@@ -591,7 +633,10 @@ export default function Search() {
                         </div>
                         <div className="font-bold text-xl text-[#2A91E5] max-md:text-sm">
                           Rp{" "}
-                          {selectedReturnFlight?.price.toLocaleString("id-ID")}
+                          {(
+                            selectedReturnFlight?.price * totalPenumpang
+                          ).toLocaleString("id-ID")}
+                          ,00
                         </div>
                       </div>
                       {/* DROPDOWN DETAILS */}
@@ -721,8 +766,9 @@ export default function Search() {
                   Lanjut Ke Pembayaran
                 </div> */}
                   </div>
-                ) : returnFlights && returnFlights.length > 0 ? (
-                  returnFlights.map((flight) => (
+                ) : filteredAndSortedReturnFlights &&
+                  filteredAndSortedReturnFlights.length > 0 ? (
+                  filteredAndSortedReturnFlights.map((flight) => (
                     <div>
                       <div
                         key={flight?.id}
@@ -786,7 +832,7 @@ export default function Search() {
                             </div>
                           </div>
                           <div className="font-bold text-xl text-[#2A91E5]  max-md:text-sm">
-                            Rp {flight?.price.toLocaleString("id-ID")}
+                            Rp {flight?.price.toLocaleString("id-ID")},00
                           </div>
                         </div>
                         {/* DROPDOWN DETAILS */}

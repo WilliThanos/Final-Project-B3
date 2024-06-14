@@ -20,8 +20,7 @@ import {
   setEmail,
   setNomorHP,
 } from "../redux/reducers/bookingReducer";
-import "react-date-picker/dist/DatePicker.css";
-import "react-calendar/dist/Calendar.css";
+
 import { LiaCircleSolid } from "react-icons/lia";
 
 export default function BookingDetail() {
