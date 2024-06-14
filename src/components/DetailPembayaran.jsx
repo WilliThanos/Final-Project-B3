@@ -16,6 +16,7 @@ export default function DetailPembayaran() {
     (state) => state?.ticket?.selectedReturnFlight
   );
 
+  const jmlPenumpang = useSelector((state) => state?.data?.penumpang);
   //formating ke bentuk ruupiah
   const formatRupiah = (number) => {
     return new Intl.NumberFormat("id-ID", {
@@ -23,17 +24,23 @@ export default function DetailPembayaran() {
       currency: "IDR",
     }).format(number);
   };
-
   // harga tiket
   const hargaTiket =
-    (departureFlights?.price || 0) + (returnFlights?.price || 0);
+    ((departureFlights?.price || 0) + (returnFlights?.price || 0)) *
+    jmlPenumpang;
+
+  const cekPulangPergi = useSelector((state) => state?.data?.roundtrip);
+  // cek harga
+  const cekHarga = cekPulangPergi ? hargaTiket : departureFlights?.price;
 
   //pajak
   const pajak = (10 / 100) * hargaTiket;
   //biayayaa admin
   const biayaAdmin = (2 / 100) * hargaTiket;
+
   //harga total
-  const totalHarga = (pajak || 0) + (biayaAdmin || 0) + (hargaTiket || 0);
+  const totalHarga = (pajak || 0) + (biayaAdmin || 0) + (cekHarga || 0);
+  //harga total bgt
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -72,7 +79,11 @@ export default function DetailPembayaran() {
               <div className="">Pajak 10%</div>
             </div>
             <div className="flex flex-col gap-2 ">
-              <div className="font-semibold">{formatRupiah(hargaTiket)}</div>
+              <div className="font-semibold">
+                {cekPulangPergi
+                  ? formatRupiah(hargaTiket)
+                  : formatRupiah(departureFlights?.price)}
+              </div>
               <div className="font-semibold">{formatRupiah(biayaAdmin)}</div>
               <div className="font-semibold">{formatRupiah(pajak)}</div>
             </div>
