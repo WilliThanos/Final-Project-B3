@@ -8,11 +8,10 @@ import ReactDOM from "react-dom/client";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Search from "./pages/Search.jsx";
-import Profile from "./pages/Profile.jsx";
-import History from "./pages/History.jsx";
-
+import BookingDetail from "./pages/BookingDetail.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useSelector } from "react-redux";
+import Payment from "./pages/Payment.jsx";
 
 export default function App() {
   const router = createBrowserRouter([
@@ -29,12 +28,12 @@ export default function App() {
       element: <Search />,
     },
     {
-      path: "/profile",
-      element: <Profile />,
+      path: "/booking-detail",
+      element: <BookingDetail />,
     },
     {
-      path: "/history",
-      element: <History />,
+      path: "/payment",
+      element: <Payment />,
     },
   ]);
 

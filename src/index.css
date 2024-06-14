@@ -5,3 +5,46 @@
 body {
   background-color: #f5f5f5;
 }
+
+.arrow-border {
+  position: relative;
+}
+
+.arrow-border::after {
+  content: "";
+  position: absolute;
+  right: -5px; /* Adjust this to control the arrow position */
+  top: 50%;
+  transform: translateY(-50%);
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 6px solid black; /* Match the border color */
+}
+
+.dropdown-content {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+.dropdown-content.open {
+  max-height: 500px; /* Adjust this value based on the expected height of the content */
+  opacity: 1;
+}
+
+.dropdown-content2 {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.dropdown-content2.open {
+  max-height: 500px; /* Adjust this value based on the expected height of the content */
+  opacity: 1;
+}
+
+.tilted-icon {
+  transform: rotate(45deg); /* Adjust the degree as needed */
+}
