@@ -46,20 +46,20 @@ export default function BookingDetail() {
     year: "numeric",
     month: "long",
     day: "numeric",
-  }).format(new Date(departureFlights?.Date));
+  })?.format(new Date(departureFlights?.Date));
 
   const formattedarrivalDate = new Intl.DateTimeFormat("id-ID", {
     weekday: "long",
     year: "numeric",
     month: "long",
     day: "numeric",
-  }).format(new Date(returnFlights?.Date));
+  })?.format(new Date(returnFlights?.Date));
 
   console.log("roundTrip :>> ", departureFlights);
   const calculateTravelTime = (departure, arrival) => {
     // Parse the time strings
-    const [depHours, depMinutes] = departure.split(":").map(Number);
-    const [arrHours, arrMinutes] = arrival.split(":").map(Number);
+    const [depHours, depMinutes] = departure?.split(":")?.map(Number);
+    const [arrHours, arrMinutes] = arrival?.split(":")?.map(Number);
 
     // Convert times to minutes since the start of the day
     const departureInMinutes = depHours * 60 + depMinutes;
@@ -87,7 +87,7 @@ export default function BookingDetail() {
     year: "numeric",
     month: "long",
     day: "numeric",
-  }).format(new Date(tanggalLahir));
+  })?.format(new Date(tanggalLahir));
 
   const departureDateRef = useRef(null);
 
