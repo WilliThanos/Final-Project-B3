@@ -11,11 +11,11 @@ function NavbarLogoBiru() {
   console.log("cekState :>> ", cekState);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 mx-auto max-w-screen-2xl my-4 bg-white/30 rounded-xl shadow-lg">
+    <div className="fixed top-0 left-0 right-0 z-50 mx-auto max-w-screen-2xl my-4 bg-white/30 rounded-xl shadow-lg max-md:mx-2">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between max-w-screen-2xl">
           <div className="md:flex md:items-center md:gap-12">
-            <a className="block " href="#">
+            <a className="flex w-4/6 md:w-4/5 lg:w-full " href="#">
               <span className="sr-only">Home</span>
               <svg
                 width="251"
@@ -90,45 +90,44 @@ function NavbarLogoBiru() {
 
           <div className="hidden md:block">
             <nav aria-label="Global">
-              <ul className="flex items-center gap-10 text-base ">
+              <ul className="flex items-center gap-6 text-base text-pretty text-center">
                 <li>
                   <a
-                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold"
+                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold hover:shadow rounded-xl hover:bg-gray-200 p-3"
                     href="/search"
                   >
                     {" "}
-                    Home{" "}
+                    Beranda{" "}
                   </a>
                 </li>
 
-                <li>
-                  <a
-                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold"
-                    href="#"
-                  >
+                <li className="flex gap-1 p-3 cursor-pointer hover:bg-gray-200 hover:text-[#333333] text-[#333333]/60 transition  font-semibold hover:shadow rounded-xl ">
+                  <a href="/booking-detail" className=" ">
                     {" "}
-                    Tujuan Terbaik{" "}
+                    Tujuan{" "}
+                  </a>
+                  <a href="/booking-detail" className="">
+                    {" "}
+                    Terbaik{" "}
                   </a>
                 </li>
 
                 <li>
                   <a
-                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold"
-                    href="#"
+                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold hover:shadow rounded-xl hover:bg-gray-200 p-3"
+                    href="/payment"
                   >
                     {" "}
                     Promo{" "}
                   </a>
                 </li>
 
-                <li>
-                  <a
-                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold"
-                    href="#"
-                  >
-                    {" "}
-                    Mengapa Kami{" "}
-                  </a>
+                <li
+                  href="#"
+                  className="flex gap-1 p-3 cursor-pointer hover:bg-gray-200 hover:text-[#333333] text-[#333333]/60 transition  font-semibold hover:shadow rounded-xl "
+                >
+                  <a className=" ">Mengapa </a>
+                  <a className=""> Kami </a>
                 </li>
               </ul>
             </nav>
@@ -145,7 +144,7 @@ function NavbarLogoBiru() {
 
               <div className="hidden md:flex">
                 <a
-                  className="rounded-xl bg-[#2A91E5] px-5 py-2.5 transition text-base font-medium text-white hover:bg-sky-700 hover:shadow"
+                  className="rounded-xl bg-[#2A91E5] px-5 py-2.5 transition text-base font-medium text-white hover:text-gray-200 hover:bg-sky-700 hover:shadow"
                   href="/register"
                 >
                   Daftar
@@ -191,7 +190,7 @@ function NavbarLogoBiru() {
                     href="#"
                     className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold"
                   >
-                    Home
+                    Beranda
                   </a>
                   <a
                     href="#"
