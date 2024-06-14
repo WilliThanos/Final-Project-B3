@@ -38,6 +38,10 @@ export default function CariTiketLain() {
   const roundTrip = useSelector((state) => state?.data?.roundtrip);
   console.log("roundTrip :>> ", roundTrip);
 
+  useEffect(() => {
+    dispatch(getAllAirports());
+  }, []);
+
   const departureAirport = useSelector(
     (state) => state?.data?.departureAirport
   );
@@ -57,10 +61,6 @@ export default function CariTiketLain() {
       airport?.city.toLowerCase().includes(airportQuery.toLowerCase()) ||
       airport?.iata_code.toLowerCase().includes(airportQuery.toLowerCase())
   );
-
-  useEffect(() => {
-    dispatch(getAllAirports());
-  }, []);
 
   useEffect(() => {
     dispatch(getSearchTicket());

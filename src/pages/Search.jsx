@@ -39,31 +39,38 @@ export default function Search() {
   );
   const filterClass = useSelector((state) => state?.filter?.filterClass);
   const sortHarga = useSelector((state) => state?.filter?.sortHarga);
+
   const filterAndSortFlights = (flights) => {
-    let filteredFlights = [...flights];
+    let filteredFlights = flights || [];
 
     if (filterClass) {
-      filteredFlights = filteredFlights.filter(
-        (flight) => flight.class.toLowerCase() === filterClass.toLowerCase()
+      filteredFlights = filteredFlights?.filter(
+        (flight) => flight?.class?.toLowerCase() === filterClass?.toLowerCase()
       );
     }
 
     if (sortHarga === "asc") {
-      filteredFlights.sort((a, b) => a.price - b.price);
+      filteredFlights?.sort((a, b) => a.price - b.price);
     } else if (sortHarga === "desc") {
-      filteredFlights.sort((a, b) => b.price - a.price);
+      filteredFlights?.sort((a, b) => b.price - a.price);
     }
 
     return filteredFlights;
   };
 
   useEffect(() => {
-    setFilteredAndSortedDepartureFlights(
-      filterAndSortFlights(departureFlights)
-    );
-    setFilteredAndSortedReturnFlights(filterAndSortFlights(returnFlights));
-  }, [filterClass, sortHarga, departureFlights, returnFlights]);
+    // Filter and sort departure flights if available
+    if (departureFlights) {
+      const filteredDepartureFlights = filterAndSortFlights(departureFlights);
+      setFilteredAndSortedDepartureFlights(filteredDepartureFlights);
+    }
 
+    // Filter and sort return flights if available
+    if (returnFlights) {
+      const filteredReturnFlights = filterAndSortFlights(returnFlights);
+      setFilteredAndSortedReturnFlights(filteredReturnFlights);
+    }
+  }, [filterClass, sortHarga, departureFlights, returnFlights]);
   const roundTrip = useSelector((state) => state?.data?.roundtrip);
 
   const departureAirport = useSelector(
@@ -355,7 +362,7 @@ export default function Search() {
               </div>
             ) : filteredAndSortedDepartureFlights &&
               filteredAndSortedDepartureFlights.length > 0 ? (
-              filteredAndSortedDepartureFlights.map((flight) => (
+              filteredAndSortedDepartureFlights?.map((flight) => (
                 <div>
                   <div
                     key={flight?.id}
