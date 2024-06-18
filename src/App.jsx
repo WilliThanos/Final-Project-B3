@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import ReactDOM from "react-dom/client";
 import Login from "./pages/Login.jsx";
+import Landing from "./pages/Landing.jsx";
 import Register from "./pages/Register.jsx";
 import Search from "./pages/Search.jsx";
 import BookingDetail from "./pages/BookingDetail.jsx";
@@ -18,7 +19,7 @@ export default function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Login />,
+      element: <Landing />,
     },
     {
       path: "/register",
@@ -37,8 +38,10 @@ export default function App() {
       element: <Payment />,
     },
     {
-      path: "/profile",
-      element: <Profile />,
+
+      path: "/login",
+      element: <Login />,
+
     },
   ]);
 
