@@ -1,14 +1,47 @@
 import React, { useState } from "react";
+
+import PotoProfile from "../assets/profile.png";
+import { logout } from "../redux/reducers/authReducer";
+
 import { useDispatch, useSelector } from "react-redux";
 
 function NavbarLogoBiru() {
+  const dispatch = useDispatch();
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+  const handleDropdownToggle2 = () => {
+    setIsDropdownOpen2(!isDropdownOpen2);
+  };
   const cekState = useSelector((state) => state);
+  const token = useSelector((state) => state?.auth?.token);
+  const userFirstName = useSelector(
+    (state) => state?.profile?.profile?.user?.first_name
+  );
+  const userProfilePic = useSelector(
+    (state) => state?.profile?.profile?.user?.image_url
+  );
+
+  const handleLogout = () => {
+    setShowConfirmation(true);
+  };
+
+  const confirmLogout = () => {
+    dispatch(logout());
+    setShowConfirmation(false);
+  };
+
+  const cancelLogout = () => {
+    setShowConfirmation(false);
+  };
+
   console.log("cekState :>> ", cekState);
+  console.log("token :>> ", token);
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 mx-auto max-w-screen-2xl my-4 bg-white/30 rounded-xl shadow-lg max-md:mx-2">
@@ -134,23 +167,103 @@ function NavbarLogoBiru() {
           </div>
 
           <div className="flex items-center gap-4">
-            <div className="hidden md:flex md:gap-4">
-              <a
-                className="  px-5 py-2.5 transition text-base font-medium text-[#333333] hover:shadow rounded-xl hover:bg-gray-200"
-                href="/login"
-              >
-                Masuk
-              </a>
-
-              <div className="hidden md:flex">
+            {!token ? (
+              <>
                 <a
-                  className="rounded-xl bg-[#2A91E5] px-5 py-2.5 transition text-base font-medium text-white hover:text-gray-200 hover:bg-sky-700 hover:shadow"
-                  href="/register"
+                  className="hidden md:flex px-5 py-2.5 transition text-base font-medium text-[#333333] hover:shadow rounded-xl hover:bg-gray-200"
+                  href="/login"
                 >
-                  Daftar
+                  Masuk
                 </a>
+                <div className="hidden md:flex">
+                  <a
+                    className="rounded-xl bg-[#2A91E5] px-5 py-2.5 transition text-base font-medium text-white hover:text-gray-200 hover:bg-sky-700 hover:shadow"
+                    href="/register"
+                  >
+                    Daftar
+                  </a>
+                </div>
+              </>
+            ) : (
+              <div className="relative hidden md:flex">
+                <div
+                  onClick={handleDropdownToggle2}
+                  className="flex items-center gap-4"
+                >
+                  <img
+                    className="w-10 h-10 rounded-full"
+                    src={userProfilePic === null ? PotoProfile : userProfilePic}
+                    alt="Profile"
+                  />
+                  <div className="text-base font-medium text-[#333333]">
+                    Hi, {userFirstName}
+                  </div>
+                  <span
+                    className={`transition ${
+                      isDropdownOpen2 ? "rotate-180" : ""
+                    }`}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                      className="h-4 w-4"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                      />
+                    </svg>
+                  </span>
+                  {/* You can add more profile related options here */}
+                </div>
+                {isDropdownOpen2 && (
+                  <div className="absolute mt-11 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                    <a
+                      href="/profile"
+                      className="block rounded-md  px-4 py-2 text-[#333333]/60 hover:bg-gray-300 hover:text-[#333333] font-semibold"
+                    >
+                      Profil{" "}
+                    </a>
+                    <a
+                      onClick={handleLogout}
+                      href="#"
+                      className="block rounded-md  px-4 py-2 text-[#333333]/60 hover:bg-gray-300 hover:text-[#333333] font-semibold"
+                    >
+                      Keluar
+                    </a>
+                  </div>
+                )}
               </div>
-            </div>
+            )}
+            {showConfirmation && (
+              <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 flex justify-center items-center">
+                <div className="bg-white p-4 rounded-lg shadow-lg font-semibold text-lg">
+                  <p className="text-[#333333]">Keluar</p>
+                  <p className="font-thin text-sm text-[#333333]">
+                    Anda akan dikembalikan ke halaman utama{" "}
+                  </p>
+
+                  <div className="flex justify-center mt-4 text-sm  ">
+                    <button
+                      className="mr-2 px-4 py-2 bg-white text-gray-400 rounded-lg hover:bg-gray-300 "
+                      onClick={cancelLogout}
+                    >
+                      Tidak{" "}
+                    </button>
+                    <button
+                      className=" px-4 py-2 bg-white text-red-500 rounded-lg hover:bg-red-400"
+                      onClick={confirmLogout}
+                    >
+                      Ya{" "}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
 
             <div className="block md:hidden">
               <button
@@ -174,18 +287,81 @@ function NavbarLogoBiru() {
               </button>
               {isDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                  <a
-                    href="#"
-                    className="block rounded-md  px-4 py-2 text-[#333333]/60 hover:bg-gray-300 hover:text-[#333333] font-semibold"
-                  >
-                    Masuk
-                  </a>
-                  <a
-                    href="#"
-                    className="block rounded-md  px-4 py-2 text-[#333333]/60 hover:bg-gray-300 hover:text-[#333333] font-semibold"
-                  >
-                    Daftar
-                  </a>
+                  {!token ? (
+                    <>
+                      <a
+                        href="/login"
+                        className="block rounded-md  px-4 py-2 text-[#333333]/60 hover:bg-gray-300 hover:text-[#333333] font-semibold"
+                      >
+                        Masuk
+                      </a>
+                      <a
+                        href="/register"
+                        className="block rounded-md  px-4 py-2 text-[#333333]/60 hover:bg-gray-300 hover:text-[#333333] font-semibold"
+                      >
+                        Daftar
+                      </a>
+                    </>
+                  ) : (
+                    <div className="relative md:hidden">
+                      <div
+                        onClick={handleDropdownToggle2}
+                        className="flex items-center gap-4 px-4 py-2"
+                      >
+                        <img
+                          className="w-7 h-7 rounded-full"
+                          src={
+                            userProfilePic === null
+                              ? PotoProfile
+                              : userProfilePic
+                          }
+                          alt="Profile"
+                        />
+                        <div className="text-base font-medium text-[#333333]">
+                          Hi, {userFirstName}
+                        </div>
+                        <span
+                          className={`transition ${
+                            isDropdownOpen2 ? "rotate-180" : ""
+                          }`}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.5"
+                            stroke="currentColor"
+                            className="h-4 w-4"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+                            />
+                          </svg>
+                        </span>
+                        {/* You can add more profile related options here */}
+                      </div>
+                      {isDropdownOpen2 && (
+                        <>
+                          <a
+                            href="/profile"
+                            className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold"
+                          >
+                            Profil{" "}
+                          </a>
+                          <a
+                            onClick={handleLogout}
+                            href="#"
+                            className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold"
+                          >
+                            Keluar{" "}
+                          </a>
+                        </>
+                      )}
+                    </div>
+                  )}
+
                   <a
                     href="#"
                     className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold"

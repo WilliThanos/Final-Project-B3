@@ -38,10 +38,12 @@ export default function App() {
       element: <Payment />,
     },
     {
-
       path: "/login",
       element: <Login />,
-
+    },
+    {
+      path: "/profile",
+      element: <Profile />,
     },
   ]);
 
