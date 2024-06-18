@@ -27,7 +27,7 @@ export default function Profile() {
         <div className="flex justify-between px-5 py-5 ">
           <div className="flex justify-start items-center gap-5">
             <img
-              className="max-md:w-20 rounded-full"
+              className="max-md:w-20 w-28 rounded-full"
               src={cekPP === null ? PotoProfile : cekPP}
               alt=""
             />
@@ -80,6 +80,7 @@ export default function Profile() {
               <button
                 className="bg-[#2A91E5] rounded-3xl py-2 text-white font-semibold focus:bg-[#094D85] "
                 type="submit"
+                onClick={() => {}}
               >
                 Konfirmasi
               </button>
