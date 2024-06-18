@@ -14,6 +14,7 @@ import BookingDetail from "./pages/BookingDetail.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useSelector } from "react-redux";
 import Payment from "./pages/Payment.jsx";
+import Profile from "./pages/Profile.jsx";
 
 export default function App() {
   const router = createBrowserRouter([
@@ -38,8 +39,10 @@ export default function App() {
       element: <Payment />,
     },
     {
+
       path: "/login",
       element: <Login />,
+
     },
     {
       path: "/profile",
