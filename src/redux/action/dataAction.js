@@ -12,9 +12,7 @@ import { setProfile, setUpdateProfile } from "../reducers/profileReducer";
 
 export const updateProfile = () => async (dispatch) => {
   try {
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImV4cGlyZWRBdCI6MTcxODUzNzA5NjA0MiwiaWF0IjoxNzE4MzY0Mjk2fQ.Vmea4kY-1PEiuYusssBa5e_HGaK82tv_L_SNu2pDIDs";
-
+    const token = getState().auth?.token;
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -57,11 +55,9 @@ export const getAllAirports = () => async (dispatch, getState) => {
   }
 };
 
-export const getProfile = () => async (dispatch) => {
+export const getProfile = () => async (dispatch, getState) => {
   try {
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImV4cGlyZWRBdCI6MTcxODUzNzA5NjA0MiwiaWF0IjoxNzE4MzY0Mjk2fQ.Vmea4kY-1PEiuYusssBa5e_HGaK82tv_L_SNu2pDIDs";
-
+    const token = getState().auth?.token;
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -75,16 +71,15 @@ export const getProfile = () => async (dispatch) => {
       config
     );
 
-    console.log("response profile redux :>> ", response.data);
-    dispatch(setProfile(response.data.data)); // Dispatch data yang diterima dari API
+    console.log("response profile redux :>> ", response?.data);
+    dispatch(setProfile(response?.data?.data)); // Dispatch data yang diterima dari API
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error("Axios error:", error.response?.data || error.message);
-      alert(error.response?.data?.message || error.message);
+      console.error("Axios error:", error);
+      alert(error?.message);
       return;
     }
-    console.error("Error:", error.message);
-    alert(error.message);
+    alert(error?.message);
   }
 };
 

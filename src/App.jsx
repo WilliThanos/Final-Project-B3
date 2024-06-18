@@ -9,7 +9,6 @@ import Login from "./pages/Login.jsx";
 import Landing from "./pages/Landing.jsx";
 import Register from "./pages/Register.jsx";
 import Search from "./pages/Search.jsx";
-import Profile from "./pages/Profile.jsx";
 import BookingDetail from "./pages/BookingDetail.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useSelector } from "react-redux";
@@ -39,10 +38,8 @@ export default function App() {
       element: <Payment />,
     },
     {
-
       path: "/login",
       element: <Login />,
-
     },
     {
       path: "/profile",
