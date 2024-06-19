@@ -25,9 +25,12 @@ import {
   getArrivalAirport,
   getSearchTicket,
 } from "../redux/action/dataAction";
+import { clearSelectedTicket } from "../redux/reducers/ticketReducer";
+import { useNavigate } from "react-router-dom";
 
 export default function CariTiketLain() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const departureDate = useSelector((state) => state.data.departureDate);
   const returnDate = useSelector((state) => state.data.returnDate);
   const seatClass = useSelector((state) => state?.data?.class);
@@ -72,32 +75,44 @@ export default function CariTiketLain() {
 
   const kurangJumlahDewasa = () => {
     if (jumlahDewasa > 0) {
+      event.preventDefault();
       dispatch(setJumlahDewasa(jumlahDewasa - 1));
     }
   };
 
   const tambahJumlahDewasa = () => {
-    dispatch(setJumlahDewasa(jumlahDewasa + 1));
+    if (totalPenumpang < 5) {
+      event.preventDefault();
+      dispatch(setJumlahDewasa(jumlahDewasa + 1));
+    }
   };
 
   const kurangJumlahAnak = () => {
     if (jumlahAnak > 0) {
+      event.preventDefault();
       dispatch(setJumlahAnak(jumlahAnak - 1));
     }
   };
 
   const tambahJumlahAnak = () => {
-    dispatch(setJumlahAnak(jumlahAnak + 1));
+    if (totalPenumpang < 5) {
+      event.preventDefault();
+      dispatch(setJumlahAnak(jumlahAnak + 1));
+    }
   };
 
   const kurangJumlahBayi = () => {
     if (jumlahBayi > 0) {
+      event.preventDefault();
       dispatch(setJumlahBayi(jumlahBayi - 1));
     }
   };
 
   const tambahJumlahBayi = () => {
-    dispatch(setJumlahBayi(jumlahBayi + 1));
+    if (totalPenumpang < 5) {
+      event.preventDefault();
+      dispatch(setJumlahBayi(jumlahBayi + 1));
+    }
   };
 
   const handleDropdownToggle = () => {
@@ -185,7 +200,9 @@ export default function CariTiketLain() {
     departureAirport?.id === arrivalAirport?.id ||
     isSameDate ||
     isReturnDateBeforeDeparture ||
-    totalPenumpang === 0
+    totalPenumpang === 0 ||
+    totalPenumpang > 4 ||
+    (jumlahDewasa === 0 && (jumlahAnak === 1 || jumlahBayi === 1))
   );
 
   return (
@@ -457,6 +474,19 @@ export default function CariTiketLain() {
                         <div>Mohon isi jumlah penumpang</div>
                       </div>
                     )}
+                    {totalPenumpang > 4 && (
+                      <div className="flex items-center gap-2 text-red-500  text-sm">
+                        <IoWarning size={20} />
+                        <div>Jumlah penumpang tidak boleh lebih dari 4</div>
+                      </div>
+                    )}
+                    {jumlahDewasa === 0 &&
+                      (jumlahAnak === 1 || jumlahBayi === 1) && (
+                        <div className="flex items-center gap-2 text-red-500 text-sm">
+                          <IoWarning size={20} />
+                          <div>Anak dan bayi harus didampingi orang dewasa</div>
+                        </div>
+                      )}
 
                     {isDropdownOpen3 && (
                       <div className="absolute mt- w-44  bg-white border border-gray-200 rounded-md shadow-lg z-10">
@@ -465,7 +495,11 @@ export default function CariTiketLain() {
                           className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
                         >
                           <div className="flex items-center gap-x-2">
-                            <div className="">Dewasa</div>
+                            <div className="flex flex-col ">
+                              {" "}
+                              <div className="text-md">Dewasa </div>
+                              <div className="text-xs ">12+ </div>
+                            </div>{" "}
                             <div class="flex items-center rounded border border-gray-200 ">
                               <button
                                 type="button"
@@ -500,7 +534,11 @@ export default function CariTiketLain() {
                           className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
                         >
                           <div className="flex items-center gap-x-[27px]">
-                            <div className="font-">Anak</div>
+                            <div className="flex flex-col ">
+                              {" "}
+                              <div className="text-md">Anak </div>
+                              <div className="text-xs ">2-11 </div>
+                            </div>{" "}
                             <div class="flex items-center rounded border border-gray-200  ">
                               <button
                                 type="button"
@@ -535,7 +573,11 @@ export default function CariTiketLain() {
                           className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
                         >
                           <div className="flex items-center gap-x-[18px]">
-                            <div className="font-">Bayi</div>
+                            <div className="flex flex-col ">
+                              {" "}
+                              <div className="text-md">Bayi </div>
+                              <div className="text-xs ">{"<"}2 </div>
+                            </div>{" "}
                             <div class="flex items-center rounded border border-gray-200 ml-4">
                               <button
                                 type="button"
@@ -783,11 +825,24 @@ export default function CariTiketLain() {
                   </div>
                 </div>
                 {totalPenumpang < 1 && (
-                  <div className="flex items-center gap-2 text-red-500  text-sm">
+                  <div className="flex items-center gap-2 text-red-500 text-sm">
                     <IoWarning size={20} />
                     <div>Mohon isi jumlah penumpang</div>
                   </div>
                 )}
+                {totalPenumpang > 4 && (
+                  <div className="flex items-center gap-2 text-red-500 text-sm">
+                    <IoWarning size={20} />
+                    <div>Jumlah penumpang tidak boleh lebih dari 4</div>
+                  </div>
+                )}
+                {jumlahDewasa === 0 &&
+                  (jumlahAnak === 1 || jumlahBayi === 1) && (
+                    <div className="flex items-center gap-2 text-red-500 text-sm">
+                      <IoWarning size={20} />
+                      <div>Anak dan bayi harus didampingi orang dewasa</div>
+                    </div>
+                  )}
               </div>
 
               {isDropdownOpen3 && (
@@ -796,8 +851,12 @@ export default function CariTiketLain() {
                     href="#"
                     className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
                   >
-                    <div className="flex items-center gap-x-2">
-                      <div className="">Dewasa</div>
+                    <div className="flex items-center  gap-x-2">
+                      <div className="flex flex-col ">
+                        {" "}
+                        <div className="text-md">Dewasa </div>
+                        <div className="text-xs ">12+ </div>
+                      </div>
                       <div class="flex items-center rounded border border-gray-200 ">
                         <button
                           type="button"
@@ -832,7 +891,11 @@ export default function CariTiketLain() {
                     className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
                   >
                     <div className="flex items-center gap-x-[27px]">
-                      <div className="font-">Anak</div>
+                      <div className="flex flex-col ">
+                        {" "}
+                        <div className="text-md">Anak </div>
+                        <div className="text-xs ">2-11 </div>
+                      </div>
                       <div class="flex items-center rounded border border-gray-200  ">
                         <button
                           type="button"
@@ -865,7 +928,11 @@ export default function CariTiketLain() {
                     className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
                   >
                     <div className="flex items-center gap-x-[18px]">
-                      <div className="font-">Bayi</div>
+                      <div className="flex flex-col ">
+                        {" "}
+                        <div className="text-md">Bayi </div>
+                        <div className="text-xs "> {"<"}2</div>
+                      </div>{" "}
                       <div class="flex items-center rounded border border-gray-200 ml-4">
                         <button
                           type="button"
@@ -1261,7 +1328,9 @@ export default function CariTiketLain() {
         <button
           onClick={() => {
             if (isButtonEnabled) {
+              navigate("/search");
               dispatch(getSearchTicket());
+              dispatch(clearSelectedTicket());
             }
           }}
           className={`rounded-xl px-5 py-2.5 font-medium text-white hover:shadow ${
