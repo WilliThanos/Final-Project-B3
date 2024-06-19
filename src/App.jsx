@@ -14,6 +14,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useSelector } from "react-redux";
 import Payment from "./pages/Payment.jsx";
 import Profile from "./pages/Profile.jsx";
+import VerifikasiEmail from "./pages/VerifikasiEmail.jsx";
 
 export default function App() {
   const router = createBrowserRouter([
@@ -44,6 +45,10 @@ export default function App() {
     {
       path: "/profile",
       element: <Profile />,
+    },
+    {
+      path: "/verifikasi-email",
+      element: <VerifikasiEmail />,
     },
   ]);
 
