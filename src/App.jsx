@@ -16,6 +16,8 @@ import Payment from "./pages/Payment.jsx";
 import Profile from "./pages/Profile.jsx";
 import VerifikasiEmail from "./pages/VerifikasiEmail.jsx";
 
+export const baseApiURL = "https://expressjs-develop-b4d1.up.railway.app/api";
+
 export default function App() {
   const router = createBrowserRouter([
     {
