@@ -3,12 +3,41 @@ import mascot from "../assets/mascot.png";
 import logo from "../assets/weblogo.png";
 import bg from "../assets/bg.png";
 import bgresp from "../assets/bgresp.png";
+import FlashMessage from "../components/FlashMessage";
+import { useDispatch } from "react-redux";
+import { forgotPassword } from "../redux/action/authAction";
 
 export default function ForgotPassword() {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
+  const [errorEmail, setErrorEmail] = useState("");
 
-  const handleForgotPassword = (event) => {
+  const validateEmail = () => {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(email === "") {
+      setErrorEmail("Email address is required");
+      return false;
+    }
+    else if (!emailPattern.test(email)) {
+      setErrorEmail("Invalid email address");
+      return false;
+    }
+    setErrorEmail("");
+    return true;
+  };
+
+  const handleForgotPassword = async (event) => {
     event.preventDefault();
+    const isInvalidEmail = validateEmail();
+    if(isInvalidEmail) {
+      const result = await dispatch(forgotPassword({email}));
+      if(result) {
+        console.log("Berhasil");
+      }
+      else {
+        console.log("Gagal");
+      }
+    }
     // Handle forgot password logic here
   };
 
@@ -25,6 +54,7 @@ export default function ForgotPassword() {
           </div>
 
           <form onSubmit={handleForgotPassword} className="mt-8 space-y-6">
+            <FlashMessage />
             <div>
               <label
                 htmlFor="email"
@@ -42,7 +72,11 @@ export default function ForgotPassword() {
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                   value={email}
                   onChange={(event) => setEmail(event.target.value)}
+                  onBlur={validateEmail}
                 />
+                {errorEmail && (
+                    <p className="text-red-500 text-xs mt-1">{errorEmail}</p>
+                  )}
               </div>
             </div>
 
@@ -57,7 +91,7 @@ export default function ForgotPassword() {
             <div className="text-center">
               <p className="text-sm text-gray-600">
                 <a
-                  href="#"
+                  href="/login"
                   className="font-medium text-[#2a91e5] hover:text-[#1e73b5]"
                 >
                   Kembali?

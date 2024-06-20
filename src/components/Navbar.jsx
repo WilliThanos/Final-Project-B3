@@ -125,7 +125,7 @@ function NavbarLogoPutih() {
                 <li>
                   <a
                     className="text-white/60 transition hover:text-white font-semibold hover:shadow rounded-xl hover:bg-gray-400 p-3"
-                    href="/search"
+                    href="/"
                   >
                     {" "}
                     Beranda{" "}
