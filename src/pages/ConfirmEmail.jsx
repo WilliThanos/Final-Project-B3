@@ -17,6 +17,8 @@ export default function ConfirmPassword() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
   const [errorConfirmPassword, setErrorConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const validatePassword = () => {
     if (newPassword.length < 6) {
@@ -43,27 +45,34 @@ export default function ConfirmPassword() {
     if (isValidPassword && isValidConfirmPassword) {
       const data = {
         password: newPassword,
-        confirmPassword: confirmPassword
+        confirmPassword: confirmPassword,
       };
-      const result = await dispatch(resetPassword({data, token}))
+      const result = await dispatch(resetPassword({ data, token }));
       // Handling the result based on your redux implementation
-      if(result) {
-
-      }
-      else {
-
+      if (result) {
+        // Handle success
+      } else {
+        // Handle failure
       }
     }
   };
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const tokenParam = params.get('token');
-    if(!tokenParam) {
-      navigate("/forgot-password")
+    const tokenParam = params.get("token");
+    if (!tokenParam) {
+      navigate("/forgot-password");
     }
     setToken(tokenParam);
-  }, [location])
+  }, [location, navigate]);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
   return (
     <div>
@@ -84,40 +93,150 @@ export default function ConfirmPassword() {
             <form onSubmit={handleResetPassword} className="mt-8 space-y-6">
               <FlashMessage />
               <div>
-                <label htmlFor="new-password" className="block text-sm font-medium leading-6 text-gray-700">
+                <label
+                  htmlFor="new-password"
+                  className="block text-sm font-medium leading-6 text-gray-700"
+                >
                   New Password
                 </label>
-                <div className="mt-1">
+                <div className="mt-1 relative rounded-md shadow-sm">
                   <input
                     id="new-password"
                     name="new-password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     required
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     value={newPassword}
                     onChange={(event) => setNewPassword(event.target.value)}
                     onBlur={validatePassword}
                   />
-                  {errorPassword && <p className="text-red-500 text-xs mt-1">{errorPassword}</p>}
+                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                    <button
+                      type="button"
+                      className="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700"
+                      onClick={togglePasswordVisibility}
+                    >
+                      {showPassword ? (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                          />
+                        </svg>
+                      ) : (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M18.364 5.636a6 6 0 00-8.485 0M20.485 9.05a9 9 0 00-12.728 0M2 12h0M22 12h0M18.364 18.364a6 6 0 01-8.485 0M9.05 20.485a9 9 0 01-6.364-6.364M12 22v0"
+                          />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                  {errorPassword && (
+                    <p className="text-red-500 text-xs mt-1">{errorPassword}</p>
+                  )}
                 </div>
               </div>
 
               <div>
-                <label htmlFor="confirm-password" className="block text-sm font-medium leading-6 text-gray-700">
+                <label
+                  htmlFor="confirm-password"
+                  className="block text-sm font-medium leading-6 text-gray-700"
+                >
                   Confirm New Password
                 </label>
-                <div className="mt-1">
+                <div className="mt-1 relative rounded-md shadow-sm">
                   <input
                     id="confirm-password"
                     name="confirm-password"
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     required
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     value={confirmPassword}
                     onChange={(event) => setConfirmPassword(event.target.value)}
                     onBlur={validateConfirmPassword}
                   />
-                  {errorConfirmPassword && <p className="text-red-500 text-xs mt-1">{errorConfirmPassword}</p>}
+                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                    <button
+                      type="button"
+                      className="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700"
+                      onClick={toggleConfirmPasswordVisibility}
+                    >
+                      {showConfirmPassword ? (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                          />
+                        </svg>
+                      ) : (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M18.364 5.636a6 6 0 00-8.485 0M20.485 9.05a9 9 0 00-12.728 0M2 12h0M22 12h0M18.364 18.364a6 6 0 01-8.485 0M9.05 20.485a9 9 0 01-6.364-6.364M12 22v0"
+                          />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
+                  {errorConfirmPassword && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errorConfirmPassword}
+                    </p>
+                  )}
                 </div>
               </div>
 
