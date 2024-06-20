@@ -15,6 +15,9 @@ import { useSelector } from "react-redux";
 import Payment from "./pages/Payment.jsx";
 import Profile from "./pages/Profile.jsx";
 import VerifikasiEmail from "./pages/VerifikasiEmail.jsx";
+import ForgotPassword from "./pages/ForgotPassword.jsx";
+import ConfirmPassword from "./pages/ConfirmEmail.jsx";
+
 
 export const baseApiURL = "https://expressjs-develop-b4d1.up.railway.app/api";
 
@@ -49,9 +52,17 @@ export default function App() {
       element: <Profile />,
     },
     {
+      path: "/forgot-password",
+      element: <ForgotPassword />,
+    },
+    {
+      path: "/mengatur-ulang-kata-sandi",
+      element: <ConfirmPassword />,
+    },
+    {
       path: "/verifikasi-email",
       element: <VerifikasiEmail />,
-    },
+    }
   ]);
 
   return (
