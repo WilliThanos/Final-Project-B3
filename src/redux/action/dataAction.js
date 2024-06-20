@@ -38,6 +38,7 @@ export const updateProfile = () => async (dispatch, getState) => {
 
     const response = await axios.request(config);
     alert("profile telah diperbarui");
+    window.location.reload();
 
     console.log("cek update profile :>> ", response.data);
     // dispatch(setUpdateProfile(response.data.data));
