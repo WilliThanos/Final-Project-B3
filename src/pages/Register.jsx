@@ -25,6 +25,8 @@ export default function Register() {
   const [errorEmail, setErrorEmail] = useState("");
   const [errorPassword, setErrorPassword] = useState("");
   const [errorConfirmPassword, setErrorConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const validateFirstName = () => {
     if (firstName.trim() === "") {
@@ -104,6 +106,14 @@ export default function Register() {
         setConfirmPassword("");
       }
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   return (
@@ -219,7 +229,7 @@ export default function Register() {
                   <input
                     id="password"
                     name="password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     autoComplete="new-password"
                     required
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -227,6 +237,55 @@ export default function Register() {
                     onChange={(event) => setPassword(event.target.value)}
                     onBlur={validatePassword}
                   />
+                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                    <button
+                      type="button"
+                      className="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700"
+                      onClick={togglePasswordVisibility}
+                    >
+                      {showPassword ? (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                          />
+                        </svg>
+                      ) : (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M18.364 5.636a6 6 0 00-8.485 0M20.485 9.05a9 9 0 00-12.728 0M2 12h0M22 12h0M18.364 18.364a6 6 0 01-8.485 0M9.05 20.485a9 9 0 01-6.364-6.364M12 22v0"
+                          />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                   {errorPassword && (
                     <p className="text-red-500 text-xs mt-1">{errorPassword}</p>
                   )}
@@ -244,7 +303,7 @@ export default function Register() {
                   <input
                     id="confirm-password"
                     name="confirm-password"
-                    type="password"
+                    type={showConfirmPassword ? "text" : "password"}
                     autoComplete="new-password"
                     required
                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
@@ -252,6 +311,55 @@ export default function Register() {
                     onChange={(event) => setConfirmPassword(event.target.value)}
                     onBlur={validateConfirmPassword}
                   />
+                  <div className="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5">
+                    <button
+                      type="button"
+                      className="text-gray-500 hover:text-gray-700 focus:outline-none focus:text-gray-700"
+                      onClick={toggleConfirmPasswordVisibility}
+                    >
+                      {showConfirmPassword ? (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                          />
+                        </svg>
+                      ) : (
+                        <svg
+                          className="h-5 w-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M18.364 5.636a6 6 0 00-8.485 0M20.485 9.05a9 9 0 00-12.728 0M2 12h0M22 12h0M18.364 18.364a6 6 0 01-8.485 0M9.05 20.485a9 9 0 01-6.364-6.364M12 22v0"
+                          />
+                        </svg>
+                      )}
+                    </button>
+                  </div>
                   {errorConfirmPassword && (
                     <p className="text-red-500 text-xs mt-1">
                       {errorConfirmPassword}
