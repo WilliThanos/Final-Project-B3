@@ -15,7 +15,7 @@ function NavbarLogoBiru() {
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between max-w-screen-2xl">
           <div className="md:flex md:items-center md:gap-12">
-            <a className="flex w-4/6 md:w-4/5 lg:w-full " href="#">
+            <a className="flex w-4/6 md:w-4/5 lg:w-full " href="/">
               <span className="sr-only">Home</span>
               <svg
                 width="251"
@@ -137,7 +137,7 @@ function NavbarLogoBiru() {
             <div className="hidden md:flex md:gap-4">
               <a
                 className="  px-5 py-2.5 transition text-base font-medium text-[#333333] hover:shadow rounded-xl hover:bg-gray-200"
-                href="/"
+                href="/login"
               >
                 Masuk
               </a>

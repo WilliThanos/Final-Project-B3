@@ -56,7 +56,7 @@ export default function CariTiketLain() {
   const [isDropdownOpen5, setIsDropdownOpen5] = useState(false);
   const [airportQuery, setAirportQuery] = useState("");
 
-  const filteredAirports = allAirport.filter(
+  const filteredAirports = allAirport?.filter(
     (airport) =>
       airport?.city.toLowerCase().includes(airportQuery.toLowerCase()) ||
       airport?.iata_code.toLowerCase().includes(airportQuery.toLowerCase())
@@ -143,19 +143,43 @@ export default function CariTiketLain() {
     updatePenumpang();
   }, [totalPenumpang]);
 
-  const departureDateString = departureDate
-    ? new Date(departureDate).toISOString().split("T")[0]
-    : "";
-  const returnDateString = returnDate
-    ? new Date(returnDate).toISOString().split("T")[0]
-    : "";
+  // Convert to Date object
+  const dateObject = new Date(departureDate);
 
-  const isSameDate = departureDateString === returnDateString && roundTrip;
+  // Extract components
+  const year = dateObject.getFullYear();
+  const month = dateObject.getMonth() + 1; // getMonth() returns zero-based month
+  const day = dateObject.getDate();
+
+  // Format as "YYYY-MM-DD"
+  const formattedDepartureDate = `${year}-${month
+    .toString()
+    .padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
+
+  console.log("formattedDepartureDate:>> ", formattedDepartureDate); // Output: "2024-06-15"
+
+  // Convert to Date object
+  const returnDateObject = new Date(returnDate);
+
+  // Extract components
+  const returnYear = returnDateObject.getFullYear();
+  const returnMonth = returnDateObject.getMonth() + 1; // getMonth() returns zero-based month
+  const returnDay = returnDateObject.getDate();
+
+  // Format as "YYYY-MM-DD"
+  const formattedReturnDate = `${returnYear}-${returnMonth
+    .toString()
+    .padStart(2, "0")}-${returnDay.toString().padStart(2, "0")}`;
+
+  console.log("formattedReturnDate:>> ", formattedReturnDate);
+
+  const isSameDate =
+    formattedDepartureDate === formattedReturnDate && roundTrip;
   const isReturnDateBeforeDeparture =
-    returnDateString &&
-    departureDateString &&
+    formattedReturnDate &&
+    formattedDepartureDate &&
     roundTrip &&
-    returnDateString < departureDateString;
+    formattedReturnDate < formattedDepartureDate;
 
   const isButtonEnabled = !(
     departureAirport?.id === arrivalAirport?.id ||
@@ -303,11 +327,11 @@ export default function CariTiketLain() {
                         />
                         <div
                           className={`overflow-y-auto ${
-                            filteredAirports.length > 5 ? "h-60" : "max-h-auto"
+                            filteredAirports?.length > 5 ? "h-60" : "max-h-auto"
                           }`}
                         >
-                          {filteredAirports.length > 0 ? (
-                            filteredAirports.map((airport) => (
+                          {filteredAirports?.length > 0 ? (
+                            filteredAirports?.map((airport) => (
                               <div
                                 key={airport?.id}
                                 onClick={() => {

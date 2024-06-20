@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import ReactDOM from "react-dom/client";
 import Login from "./pages/Login.jsx";
+import Landing from "./pages/Landing.jsx";
 import Register from "./pages/Register.jsx";
 import Search from "./pages/Search.jsx";
 import BookingDetail from "./pages/BookingDetail.jsx";
@@ -34,6 +35,10 @@ export default function App() {
     {
       path: "/payment",
       element: <Payment />,
+    },
+    {
+      path: "/login",
+      element: <Login />,
     },
   ]);
 

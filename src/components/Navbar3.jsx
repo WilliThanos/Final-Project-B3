@@ -1,11 +1,14 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-function NavbarLogoPutih() {
+function NavbarLogin() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+  const cekState = useSelector((state) => state);
+  console.log("cekState :>> ", cekState);
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 mx-auto max-w-screen-2xl my-4 bg-white/30 rounded-xl shadow-lg max-md:mx-2">
@@ -90,7 +93,7 @@ function NavbarLogoPutih() {
               <ul className="flex items-center gap-6 text-base text-pretty text-center">
                 <li>
                   <a
-                    className="text-white/60 transition hover:text-white font-semibold hover:shadow rounded-xl hover:bg-gray-400 p-3"
+                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold hover:shadow rounded-xl hover:bg-gray-200 p-3"
                     href="/search"
                   >
                     {" "}
@@ -98,18 +101,21 @@ function NavbarLogoPutih() {
                   </a>
                 </li>
 
-                <li
-                  className="flex gap-1 cursor-pointer text-white/60 transition hover:text-white font-semibold hover:shadow rounded-xl hover:bg-gray-400 p-3"
-                  href="#"
-                >
-                  <a> Tujuan</a>
-                  <a> Terbaik </a>
+                <li className="flex gap-1 p-3 cursor-pointer hover:bg-gray-200 hover:text-[#333333] text-[#333333]/60 transition  font-semibold hover:shadow rounded-xl ">
+                  <a href="/booking-detail" className=" ">
+                    {" "}
+                    Tujuan{" "}
+                  </a>
+                  <a href="/booking-detail" className="">
+                    {" "}
+                    Terbaik{" "}
+                  </a>
                 </li>
 
                 <li>
                   <a
-                    className="text-white/60 transition hover:text-white font-semibold hover:shadow rounded-xl hover:bg-gray-400 p-3"
-                    href="#"
+                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold hover:shadow rounded-xl hover:bg-gray-200 p-3"
+                    href="/payment"
                   >
                     {" "}
                     Promo{" "}
@@ -117,11 +123,11 @@ function NavbarLogoPutih() {
                 </li>
 
                 <li
-                  className="flex gap-1 cursor-pointer text-white/60 transition hover:text-white font-semibold hover:shadow rounded-xl hover:bg-gray-400 p-3"
                   href="#"
+                  className="flex gap-1 p-3 cursor-pointer hover:bg-gray-200 hover:text-[#333333] text-[#333333]/60 transition  font-semibold hover:shadow rounded-xl "
                 >
-                  <a> Mengapa</a>
-                  <a> Kami </a>
+                  <a className=" ">Mengapa </a>
+                  <a className=""> Kami </a>
                 </li>
               </ul>
             </nav>
@@ -130,7 +136,7 @@ function NavbarLogoPutih() {
           <div className="flex items-center gap-4">
             <div className="hidden md:flex md:gap-4">
               <a
-                className="  px-5 py-2.5 transition text-base font-medium text-white hover:shadow rounded-xl hover:bg-gray-400"
+                className="  px-5 py-2.5 transition text-base font-medium text-[#333333] hover:shadow rounded-xl hover:bg-gray-200"
                 href="/login"
               >
                 Masuk
@@ -138,7 +144,7 @@ function NavbarLogoPutih() {
 
               <div className="hidden md:flex">
                 <a
-                  className="rounded-xl bg-[#2A91E5] px-5 py-2.5 transition text-base font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow"
+                  className="rounded-xl bg-[#2A91E5] px-5 py-2.5 transition text-base font-medium text-white hover:text-gray-200 hover:bg-sky-700 hover:shadow"
                   href="/register"
                 >
                   Daftar
@@ -214,4 +220,4 @@ function NavbarLogoPutih() {
   );
 }
 
-export default NavbarLogoPutih;
+export default NavbarLogin;
