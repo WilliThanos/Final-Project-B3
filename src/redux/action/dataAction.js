@@ -8,6 +8,36 @@ import {
   setDepartureFlights,
   setReturnFlights,
 } from "../reducers/ticketReducer";
+import { setProfile, setUpdateProfile } from "../reducers/profileReducer";
+
+export const updateProfile = () => async (dispatch) => {
+  try {
+    const token = getState().auth?.token;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      // withCredentials: true, // Mengizinkan pengiriman cookie
+    };
+
+    const response = await axios.put(
+      "https://expressjs-develop-b4d1.up.railway.app/api/v1/profil",
+      config
+    );
+
+    console.log("response profile redux :>> ", response.data);
+    dispatch(setUpdateProfile(response.data.data)); // Dispatch data yang diterima dari API
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error:", error.response?.data || error.message);
+      alert(error.response?.data?.message || error.message);
+      return;
+    }
+    console.error("Error:", error.message);
+    alert(error.message);
+  }
+};
 
 export const getAllAirports = () => async (dispatch, getState) => {
   try {
@@ -22,6 +52,34 @@ export const getAllAirports = () => async (dispatch, getState) => {
       return;
     }
     alert(error.message);
+  }
+};
+
+export const getProfile = () => async (dispatch, getState) => {
+  try {
+    const token = getState().auth?.token;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      // withCredentials: true, // Mengizinkan pengiriman cookie
+    };
+
+    const response = await axios.get(
+      "https://expressjs-develop-b4d1.up.railway.app/api/v1/profil",
+      config
+    );
+
+    console.log("response profile redux :>> ", response?.data);
+    dispatch(setProfile(response?.data?.data)); // Dispatch data yang diterima dari API
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error:", error);
+      alert(error?.message);
+      return;
+    }
+    alert(error?.message);
   }
 };
 
