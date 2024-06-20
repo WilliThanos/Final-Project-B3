@@ -127,7 +127,7 @@ function NavbarLogoBiru() {
                 <li>
                   <a
                     className="text-[#333333]/60 transition hover:text-[#333333] font-semibold hover:shadow rounded-xl hover:bg-gray-200 p-3"
-                    href="/search"
+                    href="/"
                   >
                     {" "}
                     Beranda{" "}
