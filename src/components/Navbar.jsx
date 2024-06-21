@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import PotoProfile from "../assets/profile.png";
 import { logout } from "../redux/reducers/authReducer";
-
+import { getProfile } from "../redux/action/dataAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -20,6 +20,11 @@ function NavbarLogoPutih() {
   const handleDropdownToggle2 = () => {
     setIsDropdownOpen2(!isDropdownOpen2);
   };
+
+  useEffect(() => {
+    dispatch(getProfile());
+  }, []);
+
   const cekState = useSelector((state) => state);
   const token = useSelector((state) => state?.auth?.token);
   const userFirstName = useSelector(

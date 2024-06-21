@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import PotoProfile from "../assets/profile.png";
 import { logout } from "../redux/reducers/authReducer";
-
+import { getProfile } from "../redux/action/dataAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -42,6 +42,10 @@ function NavbarLogoBiru() {
   const cancelLogout = () => {
     setShowConfirmation(false);
   };
+
+  useEffect(() => {
+    dispatch(getProfile());
+  }, []);
 
   console.log("cekState :>> ", cekState);
   console.log("token :>> ", token);
