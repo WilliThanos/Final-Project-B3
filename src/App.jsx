@@ -18,18 +18,18 @@ import VerifikasiEmail from "./pages/VerifikasiEmail.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ConfirmPassword from "./pages/ConfirmEmail.jsx";
 
-
 export const baseApiURL = "https://expressjs-develop-b4d1.up.railway.app/api";
 
 export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    !!useSelector((state) => state.auth.token)
+  );
+  console.log("isLoggedIn :>> ", isLoggedIn);
+
   const router = createBrowserRouter([
     {
       path: "/",
       element: <Landing />,
-    },
-    {
-      path: "/register",
-      element: <Register />,
     },
     {
       path: "/search",
@@ -48,6 +48,10 @@ export default function App() {
       element: <Login />,
     },
     {
+      path: "/register",
+      element: <Register />,
+    },
+    {
       path: "/profile",
       element: <Profile />,
     },
@@ -62,7 +66,7 @@ export default function App() {
     {
       path: "/verifikasi-email",
       element: <VerifikasiEmail />,
-    }
+    },
   ]);
 
   return (

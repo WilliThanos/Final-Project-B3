@@ -28,10 +28,12 @@ import {
 
 import { LiaCircleSolid } from "react-icons/lia";
 
-export default function BookingDetail() {
+export default function BookingDetail({ index }) {
   const dispatch = useDispatch();
   const passengers = useSelector((state) => state.passengers.passengers);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [passengerAge, setPassengerAge] = useState(null);
+
   const [dropdownOpenIndex, setDropdownOpenIndex] = useState(null);
   // const jenisKelamin = useSelector((state) => state?.booking?.jenisKelamin);
   // const tanggalLahir = useSelector((state) => state?.booking?.tanggalLahir);
@@ -60,7 +62,7 @@ export default function BookingDetail() {
 
     if (passengers.length !== totalPenumpang) {
       if (passengers.length < totalPenumpang) {
-        // Add new passengers if needed
+        // Menambahkan penumpang baru jika diperlukan
         let newPassengers = [
           ...passengers,
           ...Array(totalPenumpang - passengers.length).fill({
@@ -70,16 +72,28 @@ export default function BookingDetail() {
             tanggalLahir: null,
             nik: "",
             nomorHP: "",
+            kategori: "", // Menambahkan properti kategori
             isDropdownOpen: false,
           }),
         ];
 
-        // Ensure not exceeding maximum number of passengers
+        // Mengatur kategori untuk setiap penumpang baru
+        for (let i = passengers.length; ; ) {
+          if (i < jumlahDewasa) {
+            newPassengers[i].kategori = "Dewasa";
+          } else if (i >= jumlahDewasa && i < jumlahDewasa + jumlahAnak) {
+            newPassengers[i].kategori = "Anak";
+          } else if (i >= jumlahDewasa + jumlahAnak) {
+            newPassengers[i].kategori = "Bayi";
+          }
+        }
+
+        // Memastikan tidak melebihi jumlah maksimum penumpang
         if (newPassengers.length > maxPassengers) {
           newPassengers = newPassengers.slice(0, maxPassengers);
         }
 
-        // Dispatch the state update only if passengers have changed
+        // Dispatch state hanya jika terdapat perubahan pada penumpang
         if (
           newPassengers.length !== passengers.length ||
           !newPassengers.every((p, index) => p === passengers[index])
@@ -87,7 +101,7 @@ export default function BookingDetail() {
           dispatch(setPassengers(newPassengers));
         }
       } else {
-        // Reduce passengers if needed
+        // Mengurangi penumpang jika diperlukan
         const newPassengers = passengers.slice(0, totalPenumpang);
         dispatch(setPassengers(newPassengers));
       }
@@ -162,6 +176,28 @@ export default function BookingDetail() {
       ...prevState,
       [flightId]: !prevState[flightId], // Toggle the dropdown state for the specific flightId
     }));
+  };
+
+  const calculateAge = (birthDate) => {
+    const today = new Date();
+    const birthDateObj = new Date(birthDate);
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+    const monthDiff = today.getMonth() - birthDateObj.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDateObj.getDate())
+    ) {
+      age--;
+    }
+
+    return age;
+  };
+
+  const handleDateChange = (date, index) => {
+    handleInputChange(index, "tanggalLahir", date);
+    const age = calculateAge(date);
+    setPassengerAge(age);
   };
 
   return (
@@ -583,17 +619,19 @@ export default function BookingDetail() {
               >
                 <div className="w-3/4 pt-10 max-lg:w-full">
                   <div className="font-semibold text-lg max-md:text-base">
-                    Informasi Penumpang {index + 1}
-                    {/* Judul sesuai dengan tipe penumpang */}
-                    {index === 0 && jumlahDewasa > 0 && (
+                    Informasi Penumpang {index + 1}{" "}
+                    {index < jumlahDewasa && (
                       <span className="ml-2 text-sm text-gray-500">
                         (Dewasa)
                       </span>
                     )}
-                    {index === 1 && jumlahAnak > 0 && (
-                      <span className="ml-2 text-sm text-gray-500">(Anak)</span>
-                    )}
-                    {index === 2 && jumlahBayi > 0 && (
+                    {index >= jumlahDewasa &&
+                      index < jumlahDewasa + jumlahAnak && (
+                        <span className="ml-2 text-sm text-gray-500">
+                          (Anak)
+                        </span>
+                      )}
+                    {index >= jumlahDewasa + jumlahAnak && (
                       <span className="ml-2 text-sm text-gray-500">(Bayi)</span>
                     )}
                   </div>
@@ -692,9 +730,7 @@ export default function BookingDetail() {
                       <div className="flex justify-between items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 h-14 w-auto max-md:h-12">
                         <DatePicker
                           selected={passenger.tanggalLahir}
-                          onChange={(date) =>
-                            handleInputChange(index, "tanggalLahir", date)
-                          }
+                          onChange={(date) => handleDateChange(date, index)}
                           dateFormat="EEE, d MMM yyyy"
                           locale={id}
                           placeholderText="Tanggal Lahir"
@@ -702,6 +738,11 @@ export default function BookingDetail() {
                         />
                         <SlCalender size={20} className="cursor-pointer" />
                       </div>
+                      {passengerAge !== null && (
+                        <div className="text-sm mt-2">
+                          Umur Penumpang: {passengerAge} tahun
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

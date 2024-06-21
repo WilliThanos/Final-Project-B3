@@ -36,9 +36,15 @@ export default function Search() {
   const sortHarga = useSelector((state) => state?.filter?.sortHarga);
 
   const filteredAndSortedDepartureFlights = departureFlights
-    ?.filter(
-      (flight) => flight?.class?.toLowerCase() === filterClass?.toLowerCase()
-    )
+    ?.filter((flight) => {
+      // Check if filterClass is not empty
+      if (filterClass !== "") {
+        // Perform case-insensitive comparison using toLowerCase()
+        return flight?.class?.toLowerCase() === filterClass?.toLowerCase();
+      }
+      // If filterClass is empty, do not filter
+      return true;
+    })
 
     .sort((a, b) => {
       if (sortHarga === "asc") {
@@ -50,9 +56,15 @@ export default function Search() {
     });
 
   const filteredAndSortedReturnFlights = returnFlights
-    ?.filter(
-      (flight) => flight?.class?.toLowerCase() === filterClass?.toLowerCase()
-    )
+    ?.filter((flight) => {
+      // Check if filterClass is not empty
+      if (filterClass !== "") {
+        // Perform case-insensitive comparison using toLowerCase()
+        return flight?.class?.toLowerCase() === filterClass?.toLowerCase();
+      }
+      // If filterClass is empty, do not filter
+      return true;
+    })
     .sort((a, b) => {
       if (sortHarga === "asc") {
         return a.price - b.price;
@@ -354,7 +366,7 @@ export default function Search() {
             ) : filteredAndSortedDepartureFlights &&
               filteredAndSortedDepartureFlights.length > 0 ? (
               filteredAndSortedDepartureFlights?.map((flight) => (
-                <div>
+                <div key={flight?.id}>
                   <div
                     key={flight?.id}
                     onClick={() => handleDropdownToggle(flight?.id)}
@@ -760,7 +772,7 @@ export default function Search() {
                 ) : filteredAndSortedReturnFlights &&
                   filteredAndSortedReturnFlights.length > 0 ? (
                   filteredAndSortedReturnFlights.map((flight) => (
-                    <div>
+                    <div key={flight?.id}>
                       <div
                         key={flight?.id}
                         onClick={() => handleDropdownToggle(flight?.id)}

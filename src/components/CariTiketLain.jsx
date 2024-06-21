@@ -537,7 +537,7 @@ export default function CariTiketLain() {
                             <div className="flex flex-col ">
                               {" "}
                               <div className="text-md">Anak </div>
-                              <div className="text-xs ">2-11 </div>
+                              <div className="text-xs ">2-12 </div>
                             </div>{" "}
                             <div class="flex items-center rounded border border-gray-200  ">
                               <button
@@ -615,7 +615,7 @@ export default function CariTiketLain() {
                     className="flex items-center gap-2 cursor-pointer"
                     onClick={handleDropdownToggle2}
                   >
-                    <div>{`${seatClass}`} </div>
+                    <div>{seatClass === "" ? "Semua" : seatClass}</div>
                     <span
                       className={`transition ${
                         isDropdownOpen2 ? "rotate-180" : ""
@@ -894,7 +894,7 @@ export default function CariTiketLain() {
                       <div className="flex flex-col ">
                         {" "}
                         <div className="text-md">Anak </div>
-                        <div className="text-xs ">2-11 </div>
+                        <div className="text-xs ">2-12 </div>
                       </div>
                       <div class="flex items-center rounded border border-gray-200  ">
                         <button
@@ -969,7 +969,7 @@ export default function CariTiketLain() {
                 className="flex items-center gap-2 cursor-pointer"
                 onClick={handleDropdownToggle2}
               >
-                <div>{`${seatClass}`} </div>
+                <div>{seatClass === "" ? "Semua" : seatClass}</div>
                 <span
                   className={`transition ${
                     isDropdownOpen2 ? "rotate-180" : ""
@@ -993,6 +993,18 @@ export default function CariTiketLain() {
               </div>
               {isDropdownOpen2 && (
                 <div className="absolute w-32 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                  <a
+                    href="#"
+                    className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
+                    onClick={() => {
+                      dispatch(setClass(""));
+                      setIsDropdownOpen2(false);
+                    }}
+                  >
+                    <div className="flex items-center gap-x-2">
+                      <div className="font-">Semua</div>
+                    </div>
+                  </a>
                   <a
                     href="#"
                     className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
@@ -1278,10 +1290,22 @@ export default function CariTiketLain() {
                   <div className="text">1 penumpang</div>
                   <div className=""> |</div>
                   <div className="" onClick={handleDropdownToggle2}>
-                    {`${seatClass}`}
+                    <div>{seatClass === "" ? "Semua" : seatClass}</div>
                   </div>
                   {isDropdownOpen2 && (
                     <div className="absolute mt-36 ml-28 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                      <a
+                        href="#"
+                        className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
+                        onClick={() => {
+                          dispatch(setClass(""));
+                          setIsDropdownOpen2(false);
+                        }}
+                      >
+                        <div className="flex items-center gap-x-2">
+                          <div className="font-">Semua</div>
+                        </div>
+                      </a>
                       <a
                         href="#"
                         className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"

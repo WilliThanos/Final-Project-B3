@@ -61,6 +61,7 @@ export const login = createAsyncThunk(
         message: response.message,
       };
       const { data, token } = response.data;
+      const ResponseLogin = response.data;
       const dataState = {
         data: data,
         message: "Login success!",
@@ -115,7 +116,8 @@ export const resetPassword = createAsyncThunk(
     dispatch(resetPasswordRequest());
     try {
       const response = await axios.post(
-        "https://expressjs-develop-b4d1.up.railway.app/api/v1/auth/mengatur-ulang-kata-sandi?token=" + token,
+        "https://expressjs-develop-b4d1.up.railway.app/api/v1/auth/mengatur-ulang-kata-sandi?token=" +
+          token,
         data,
         {
           headers: {

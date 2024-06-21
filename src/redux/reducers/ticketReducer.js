@@ -27,7 +27,6 @@ const ticketSlicer = createSlice({
     clearSelectedTicket: (state) => {
       state.selectedDepartureFlight = null;
       state.selectedReturnFlight = null;
-      window.location.reload();
     },
   },
 });
