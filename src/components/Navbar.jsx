@@ -4,10 +4,11 @@ import PotoProfile from "../assets/profile.png";
 import { logout } from "../redux/reducers/authReducer";
 
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function NavbarLogoPutih() {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -35,6 +36,7 @@ function NavbarLogoPutih() {
   const confirmLogout = () => {
     dispatch(logout());
     setShowConfirmation(false);
+    navigate("/");
   };
 
   const cancelLogout = () => {

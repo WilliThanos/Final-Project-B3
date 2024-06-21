@@ -11,8 +11,18 @@ import { FaSearch } from "react-icons/fa";
 import NavbarLogoPutih from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useDispatch } from "react-redux";
-import { setArrivalAirport, setArrivalAirportId, setClass, setDepartureAirport, setDepartureAirportId, setDepartureDate, setReturnDate, setRoundTrip } from "../redux/reducers/dataReducer";
+import {
+  setArrivalAirport,
+  setArrivalAirportId,
+  setClass,
+  setDepartureAirport,
+  setDepartureAirportId,
+  setDepartureDate,
+  setReturnDate,
+  setRoundTrip,
+} from "../redux/reducers/dataReducer";
 import { useNavigate } from "react-router-dom";
+import CariTiketLanding from "../components/CariTiketLanding";
 
 export default function Landing() {
   const dispatch = useDispatch();
@@ -25,7 +35,7 @@ export default function Landing() {
     tujuanId: "",
     pergi: "",
     kembali: "",
-    kelas: ""
+    kelas: "",
   });
   const [errorAsal, setErrorAsal] = useState("");
   const [errorTujuan, setErrorTujuan] = useState("");
@@ -66,7 +76,9 @@ export default function Landing() {
       const pergiDate = new Date(inputSearch.pergi);
       const kembaliDate = new Date(inputSearch.kembali);
       if (kembaliDate < pergiDate) {
-        setErrorKembali("Waktu Kembali tidak boleh lebih awal dari Waktu Pergi");
+        setErrorKembali(
+          "Waktu Kembali tidak boleh lebih awal dari Waktu Pergi"
+        );
         return false;
       }
     }
@@ -82,18 +94,18 @@ export default function Landing() {
     return true;
   };
   const onChangeValue = (e) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
     if (name === "asal" || name === "tujuan") {
       const [airportName, airportId] = value.split("-");
       setInputSearch({
         ...inputSearch,
         [name]: airportName,
-        [`${name}Id`]: airportId
+        [`${name}Id`]: airportId,
       });
     } else {
       setInputSearch({
         ...inputSearch,
-        [name]: value
+        [name]: value,
       });
     }
   };
@@ -111,13 +123,18 @@ export default function Landing() {
     const isInvalidPergi = validatePergi();
     const isInvalidKembali = validateKembali();
     const isInvalidKelas = validateKelas();
-    if(isInvalidAsal && isInvalidTujuan && isInvalidPergi && isInvalidKembali && isInvalidKelas) {
+    if (
+      isInvalidAsal &&
+      isInvalidTujuan &&
+      isInvalidPergi &&
+      isInvalidKembali &&
+      isInvalidKelas
+    ) {
       dispatch(setDepartureDate(inputSearch.pergi));
-      if(isRoundTrip) {
+      if (isRoundTrip) {
         dispatch(setReturnDate(inputSearch.kembali));
-      }
-      else {
-        dispatch(setReturnDate(new Date));
+      } else {
+        dispatch(setReturnDate(new Date()));
       }
       dispatch(setClass(inputSearch.kelas));
       dispatch(setDepartureAirport(inputSearch.asal));
@@ -127,7 +144,7 @@ export default function Landing() {
       localStorage.setItem("inputSearch", JSON.stringify(inputSearch));
       navigate("/search");
     }
-  }
+  };
 
   useEffect(() => {
     dispatch(setRoundTrip(false));
@@ -155,156 +172,7 @@ export default function Landing() {
             excepturi! Placeat rem quos veniam libero nemo eveniet dicta
             dignissimos fugiat quo.
           </p>
-          <div className="bg-white p-8 rounded-xl mt-14 flex flex-col justify-center items-center gap-6 w-full max-w-7xl shadow-2xl">
-            <div className="flex gap-10">
-              <div>
-                <label className="font-semibold text-lg">
-                  <input
-                    type="radio"
-                    name="option"
-                    value="pergi"
-                    className="mr-2"
-                    checked={!isRoundTrip}
-                    onChange={handleOptionChange}
-                  />
-                  Pergi
-                </label>
-              </div>
-
-              <div>
-                <label className="font-semibold text-lg">
-                  <input
-                    type="radio"
-                    name="option"
-                    value="pulang pergi"
-                    className="mr-2"
-                    checked={isRoundTrip}
-                    onChange={handleOptionChange}
-                  />
-                  Pulang pergi
-                </label>
-              </div>
-            </div>
-            <div className="flex  gap-6 w-full">
-              <div className="flex flex-col  gap-2">
-                <label className="font-semibold text-lg">
-                  <BiSolidPlaneTakeOff className="inline mr-2" />
-                  Asal Bandara
-                </label>
-                <select
-                  name="asal"
-                  className="p-3 rounded-lg outline-none border border-gray-300" value={inputSearch.asal ? `${inputSearch.asal}-${inputSearch.asalId}` : ""} onChange={(e) => onChangeValue(e)} onBlur={validateAsal}
-                >
-                  <option value="" disabled selected>
-                    Pilih
-                  </option>
-                  <option value="Samarinda-1">Samarinda (AAP)</option>
-                  <option value="Malang-2">Malang (MLG)</option>
-                  <option value="Semarang-3">Semarang (SRG)</option>
-                </select>
-                {errorAsal && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errorAsal}
-                      </p>
-                    )}
-              </div>
-              <div className="flex flex-col gap-2">
-                <label className="font-semibold text-lg">
-                  <BiSolidPlaneLand className="inline mr-2" />
-                  Bandara Tujuan
-                </label>
-                <select
-                  name="tujuan"
-                  className="p-3 rounded-lg outline-none border border-gray-300" value={inputSearch.tujuan ? `${inputSearch.tujuan}-${inputSearch.tujuanId}` : ""} onChange={(e) => onChangeValue(e)} onBlur={validateTujuan}
-                >
-                  <option value="" disabled selected>
-                    Pilih
-                  </option>
-                  <option value="Samarinda-1">Samarinda (AAP)</option>
-                  <option value="Malang-2">Malang (MLG)</option>
-                  <option value="Semarang-3">Semarang (SRG)</option>
-                </select>
-                {errorTujuan && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errorTujuan}
-                      </p>
-                    )}
-              </div>
-              <div className="flex flex-col justify-end gap-2">
-                <label className="font-semibold text-lg">
-                  <MdDateRange className="inline mr-2" />
-                  Waktu Pergi
-                </label>
-                <input
-                  type="date"
-                  name="pergi"
-                  className="p-3 rounded-lg outline-none border border-gray-300"
-                  value={inputSearch.pergi}
-                  onChange={(e) => onChangeValue(e)}
-                  onBlur={validatePergi}
-                />
-                {errorPergi && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errorPergi}
-                      </p>
-                    )}
-              </div>
-              <div className="flex flex-col justify-end gap-2">
-                <label
-                  className={`font-semibold text-lg ${
-                    !isRoundTrip && "opacity-50"
-                  }`}
-                >
-                  <MdDateRange className="inline mr-2" />
-                  Waktu Kembali
-                </label>
-                <input
-                  type="date"
-                  name="kembali"
-                  className={`p-3 rounded-lg outline-none border border-gray-300 ${
-                    !isRoundTrip && "opacity-50"
-                  }`}
-                  disabled={!isRoundTrip}
-                  value={inputSearch.kembali}
-                  onChange={(e) => onChangeValue(e)}
-                  onBlur={validateKembali}
-                />
-                {errorKembali && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errorKembali}
-                      </p>
-                    )}
-              </div>
-              <div className="flex flex-col gap-2">
-                <label className="font-semibold text-lg text-nowrap">
-                  <FaPersonCircleCheck className="inline mr-2" />
-                  Kelas Kabin & Penumpang
-                </label>
-                <select
-                  name="kelas"
-                  className="p-3 rounded-lg outline-none border border-gray-300" value={inputSearch.kelas}
-                  onChange={(e) => onChangeValue(e)} onBlur={validateKelas}
-                >
-                  <option value="" disabled selected>
-                    Pilih
-                  </option>
-                  <option value="ekonomi">1 Dewasa, ekonomi</option>
-                  <option value="premium">2 Dewasa, premium</option>
-                  <option value="vip">3 Dewasa, VIP</option>
-                </select>
-                {errorKelas && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {errorKelas}
-                      </p>
-                    )}
-              </div>
-              <div className="flex flex-col gap-2 justify-end">
-                <button className="bg-blue-600 text-white p-3 rounded-lg flex items-center text-lg shadow-md hover:bg-blue-700 transition duration-300" type="submit" onClick={(e) => handleOnClick(e)}>
-                  <FaSearch className="inline mr-2" /> Cari
-                </button>
-              </div>
-            </div>
-          </div>
+          <CariTiketLanding />
         </div>
       </div>
       <div className="flex flex-col md:flex-row items-center mt-16 px-4 lg:px-16">
