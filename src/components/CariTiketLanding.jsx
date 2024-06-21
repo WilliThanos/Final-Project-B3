@@ -25,9 +25,11 @@ import {
   getArrivalAirport,
   getSearchTicket,
 } from "../redux/action/dataAction";
+import { useNavigate } from "react-router-dom";
 
 export default function CariTiketLanding() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const dataSearch = useSelector((state) => state.data);
   const departureDate = useSelector((state) => state.data.departureDate);
   const returnDate = useSelector((state) => state.data.returnDate);
@@ -195,9 +197,9 @@ export default function CariTiketLanding() {
   );
 
   useEffect(() => {
-    console.log("Deparature = ",departureAirport);
-    console.log("Arrival = ",arrivalAirport);
-  }, [])
+    console.log("Deparature = ", departureAirport);
+    console.log("Arrival = ", arrivalAirport);
+  }, []);
 
   return (
     <div className="mx-auto fixed left-0 right-0 z-40 max-w-screen-2xl flex justify-between items-center bg-white rounded-xl shadow-sm max-md:mx-2 max-md:text-sm">
@@ -279,7 +281,11 @@ export default function CariTiketLanding() {
                       </label>
                     </div>
                   </div>
-                  <div className={`flex items-center gap-x-2 ${!roundTrip && 'opacity-50'}`}>
+                  <div
+                    className={`flex items-center gap-x-2 ${
+                      !roundTrip && "opacity-50"
+                    }`}
+                  >
                     <div className="cursor-pointer ">
                       <SlCalender
                         onClick={() => returnDateRef.current.setFocus()}
@@ -1027,43 +1033,47 @@ export default function CariTiketLanding() {
             </div>
           </div>
           <div className="max-md:hidden">
-              <div className="flex gap-4">
+            <div className="flex gap-4">
+              <div
+                className="hidden flex-col  md:flex"
+                style={{ borderRight: "1px", height: "40px" }}
+              >
                 <div
-                  className="hidden flex-col  md:flex"
-                  style={{ borderRight: "1px", height: "40px" }}
+                  className={`flex items-center gap-x-2 ${
+                    !roundTrip && "opacity-50"
+                  }`}
                 >
-                  <div className={`flex items-center gap-x-2 ${!roundTrip && 'opacity-50'}`}>
-                    <div className="cursor-pointer ">
-                      <SlCalender
-                        onClick={() => returnDateRef.current.setFocus()}
-                      />
-                    </div>
-                    <div className="font-medium">Waktu Kembali</div>
+                  <div className="cursor-pointer ">
+                    <SlCalender
+                      onClick={() => returnDateRef.current.setFocus()}
+                    />
                   </div>
-                  <DatePicker
-                    selected={roundTrip ? returnDate : null}
-                    onChange={(date) => dispatch(setReturnDate(date))}
-                    dateFormat="EEE, d MMM yyyy"
-                    locale={id}
-                    className="cursor-pointer text-[#0C68BE]"
-                    ref={returnDateRef}
-                    disabled={!roundTrip}
-                  />
+                  <div className="font-medium">Waktu Kembali</div>
                 </div>
+                <DatePicker
+                  selected={roundTrip ? returnDate : null}
+                  onChange={(date) => dispatch(setReturnDate(date))}
+                  dateFormat="EEE, d MMM yyyy"
+                  locale={id}
+                  className="cursor-pointer text-[#0C68BE]"
+                  ref={returnDateRef}
+                  disabled={!roundTrip}
+                />
+              </div>
 
-                <div>
-                  {isReturnDateBeforeDeparture && (
-                    <div className="flex items-center gap-2 text-red-500 font-normal  text-sm">
-                      <IoWarning size={20} />
-                      <div>
-                        Tanggal kembali tidak boleh lebih awal dari tanggal
-                        keberangkatan
-                      </div>
+              <div>
+                {isReturnDateBeforeDeparture && (
+                  <div className="flex items-center gap-2 text-red-500 font-normal  text-sm">
+                    <IoWarning size={20} />
+                    <div>
+                      Tanggal kembali tidak boleh lebih awal dari tanggal
+                      keberangkatan
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
+          </div>
         </div>
       </div>
       <div className="flex items-center p-8">
@@ -1144,7 +1154,11 @@ export default function CariTiketLanding() {
                       </label>
                     </div>
                   </div>
-                  <div className={`flex items-center gap-x-2 ${!roundTrip && 'opacity-50'}`}>
+                  <div
+                    className={`flex items-center gap-x-2 ${
+                      !roundTrip && "opacity-50"
+                    }`}
+                  >
                     <div className="cursor-pointer ">
                       <SlCalender
                         onClick={() => returnDateRef.current.setFocus()}
@@ -1243,6 +1257,8 @@ export default function CariTiketLanding() {
         <button
           onClick={() => {
             if (isButtonEnabled) {
+              navigate("/search");
+
               dispatch(getSearchTicket());
             }
           }}
