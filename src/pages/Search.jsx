@@ -10,6 +10,7 @@ import { LiaCircleSolid } from "react-icons/lia";
 import {
   setSelectedDepartureFlight,
   setSelectedReturnFlight,
+  clearTicket,
 } from "../redux/reducers/ticketReducer";
 import { FaCircleCheck } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
@@ -19,10 +20,6 @@ import { getSearchTicket } from "../redux/action/dataAction";
 export default function Search() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    dispatch(getSearchTicket());
-  }, []);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState({});
 
@@ -131,6 +128,10 @@ export default function Search() {
     // Return the formatted string
     return `${hours}j ${minutes}m`;
   };
+
+  useEffect(() => {
+    dispatch(getSearchTicket());
+  }, []);
 
   return (
     <div className="max-w-screen-2xl mx-auto  ">
@@ -531,7 +532,9 @@ export default function Search() {
                     {/* END DROPDOWN DETAILS */}
                   </div>
                   <div
-                    onClick={() => dispatch(setSelectedDepartureFlight(flight))}
+                    onClick={() => {
+                      dispatch(setSelectedDepartureFlight(flight));
+                    }}
                     className="bg-[#2A91E5] hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer"
                   >
                     Pilih Tiket

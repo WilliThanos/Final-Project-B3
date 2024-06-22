@@ -28,6 +28,10 @@ const ticketSlicer = createSlice({
       state.selectedDepartureFlight = null;
       state.selectedReturnFlight = null;
     },
+    clearTicket: (state) => {
+      state.departureFlights = [];
+      state.returnFlights = [];
+    },
   },
 });
 
@@ -36,7 +40,7 @@ export const {
   setReturnFlights,
   setSelectedDepartureFlight,
   setSelectedReturnFlight,
-  clearSelectedTicket,
+  clearTicket,
 } = ticketSlicer.actions;
 
 export default ticketSlicer.reducer;

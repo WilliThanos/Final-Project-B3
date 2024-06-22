@@ -221,11 +221,23 @@ export default function CariTiketLanding() {
     roundTrip &&
     formattedReturnDate < formattedDepartureDate;
 
+  const isDateBeforeToday = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time components for accurate comparison
+    return date < today;
+  };
+
+  // Check if the departure date is before today
+  const isDepartureDateBeforeToday =
+    formattedDepartureDate &&
+    isDateBeforeToday(new Date(formattedDepartureDate));
+
   const isButtonEnabled = !(
     departureAirport?.id === arrivalAirport?.id ||
     isSameDate ||
     isReturnDateBeforeDeparture ||
-    totalPenumpang === 0
+    totalPenumpang === 0 ||
+    isDepartureDateBeforeToday
   );
 
   useEffect(() => {
@@ -262,7 +274,7 @@ export default function CariTiketLanding() {
                 href="#"
                 className="block rounded-md  px-4 py-2 text-gray-800/60  hover:text-gray-800 font-semibold"
               >
-                <div className="flex flex-col gap-y-2">
+                <div className="flex flex-col gap-y-">
                   <div className="flex items-center gap-x-2">
                     <div className="cursor-pointer">
                       <SlCalender
@@ -289,6 +301,14 @@ export default function CariTiketLanding() {
                     <IoWarning size={20} />
                     <div>
                       Tanggal keberangkatan dan kembali tidak boleh sama
+                    </div>
+                  </div>
+                )}
+                {isDepartureDateBeforeToday && (
+                  <div className="flex items-center gap-2 text-red-500 font-normal text-sm">
+                    <IoWarning size={20} />
+                    <div>
+                      Tanggal keberangkatan tidak boleh lebih awal dari hari ini
                     </div>
                   </div>
                 )}
@@ -342,6 +362,15 @@ export default function CariTiketLanding() {
                     placeholderText="Pilih tanggal kembali"
                   />
                 </div>
+                {isReturnDateBeforeDeparture && (
+                  <div className="flex items-center gap-2 text-red-500 font-normal  text-sm">
+                    <IoWarning size={20} />
+                    <div>
+                      Tanggal kembali tidak boleh lebih awal dari tanggal
+                      keberangkatan
+                    </div>
+                  </div>
+                )}
               </a>
               <a
                 href="#"
@@ -1073,7 +1102,7 @@ export default function CariTiketLanding() {
           style={{ borderRight: "1px solid", height: "40px" }}
         >
           <div className="flex">
-            <div className="flex flex-col gap-y-2">
+            <div className="flex flex-col gap-y-">
               <div className="flex items-center gap-x-2">
                 <div className="cursor-pointer">
                   <SlCalender
@@ -1170,6 +1199,14 @@ export default function CariTiketLanding() {
                     </div>
                   </div>
                 )}
+                {isDepartureDateBeforeToday && (
+                  <div className="flex items-center gap-2 text-red-500 font-normal text-sm">
+                    <IoWarning size={20} />
+                    <div>
+                      Tanggal keberangkatan tidak boleh lebih awal dari hari ini
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -1202,7 +1239,7 @@ export default function CariTiketLanding() {
                 href="#"
                 className="block rounded-md  px-4 py-2 text-gray-800/60  hover:text-gray-800 font-semibold"
               >
-                <div className="flex flex-col gap-y-2">
+                <div className="flex flex-col gap-y-">
                   <div className="flex items-center gap-x-2">
                     <div className="cursor-pointer">
                       <SlCalender

@@ -78,7 +78,7 @@ export default function BookingDetail({ index }) {
         ];
 
         // Mengatur kategori untuk setiap penumpang baru
-        for (let i = passengers.length; ; ) {
+        for (let i = passengers.length; i < newPassengers.length; i++) {
           if (i < jumlahDewasa) {
             newPassengers[i].kategori = "Dewasa";
           } else if (i >= jumlahDewasa && i < jumlahDewasa + jumlahAnak) {
