@@ -43,6 +43,10 @@ export default function CariTiketLanding() {
     (state) => state?.data?.departureAirport
   );
   const arrivalAirport = useSelector((state) => state?.data?.arrivalAirport);
+  const selectedReturnFlight = useSelector(
+    (state) => state?.ticket?.selectedReturnFlight
+  );
+
   const totalPenumpang = jumlahAnak + jumlahDewasa + jumlahBayi;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);

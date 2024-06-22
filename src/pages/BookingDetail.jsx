@@ -25,8 +25,10 @@ import {
   updatePassenger,
   setPassengers,
 } from "../redux/reducers/passengersReducer";
-
 import { LiaCircleSolid } from "react-icons/lia";
+import DetailPenumpangAnak from "../components/DetailPenumpangAnak";
+import DetailPenumpangBayi from "../components/DetailPenumpangBayi";
+import DetailPenumpangDewasa from "../components/DetailPenumpangDewasa";
 
 export default function BookingDetail({ index }) {
   const dispatch = useDispatch();
@@ -137,9 +139,20 @@ export default function BookingDetail({ index }) {
       : "Date not available";
 
   const calculateTravelTime = (departure, arrival) => {
+    if (!departure || !arrival) {
+      return null; // Handle case where either departure or arrival is undefined or null
+    }
+
     // Parse the time strings
-    const [depHours, depMinutes] = departure?.split(":")?.map(Number);
-    const [arrHours, arrMinutes] = arrival?.split(":")?.map(Number);
+    const depParts = departure.split(":");
+    const arrParts = arrival.split(":");
+
+    if (depParts.length !== 2 || arrParts.length !== 2) {
+      return null; // Handle cases where departure or arrival doesn't have correct format
+    }
+
+    const [depHours, depMinutes] = depParts.map(Number);
+    const [arrHours, arrMinutes] = arrParts.map(Number);
 
     // Convert times to minutes since the start of the day
     const departureInMinutes = depHours * 60 + depMinutes;
@@ -152,12 +165,8 @@ export default function BookingDetail({ index }) {
       differenceInMinutes += 24 * 60;
     }
 
-    // Convert the difference to hours and minutes
-    const hours = Math.floor(differenceInMinutes / 60);
-    const minutes = differenceInMinutes % 60;
-
-    // Return the formatted string
-    return `${hours}j ${minutes}m`;
+    // Return the difference in minutes
+    return differenceInMinutes;
   };
 
   const cekPulangPergi = useSelector((state) => state?.data?.roundtrip);
@@ -237,8 +246,8 @@ export default function BookingDetail({ index }) {
                         {formattedDepartureDate}
                       </div>
                       <div className="font-semibold text-base max-lg:text-sm max-sm:text-xs">
-                        {(departureFlights?.class).charAt(0).toUpperCase() +
-                          (departureFlights?.class).slice(1).toLowerCase()}
+                        {departureFlights?.class?.charAt(0)?.toUpperCase() +
+                          departureFlights?.class?.slice(1)?.toLowerCase()}
                       </div>
                     </div>
                     <div className="flex gap-4 max-sm:flex-col max-sm:gap-2">
@@ -385,12 +394,12 @@ export default function BookingDetail({ index }) {
                               {departureFlights?.airline?.name}
                             </div>
                             <div className="">
-                              {(departureFlights?.class)
-                                .charAt(0)
-                                .toUpperCase() +
-                                (departureFlights?.class)
-                                  .slice(1)
-                                  .toLowerCase()}
+                              {departureFlights?.class
+                                ?.charAt(0)
+                                ?.toUpperCase() +
+                                departureFlights?.class
+                                  ?.slice(1)
+                                  ?.toLowerCase()}
                             </div>
                             <div className="">
                               {departureFlights?.flight_number}
@@ -413,7 +422,7 @@ export default function BookingDetail({ index }) {
                   </div>
                 </div>
                 {/* card KEMBALI */}
-                {cekPulangPergi ? (
+                {cekPulangPergi && returnFlights ? (
                   <div
                     className="border-2 border-gray-200 rounded-xl p-4 hover:border-blue-400 cursor-pointer"
                     key={returnFlights?.id}
@@ -431,8 +440,8 @@ export default function BookingDetail({ index }) {
                           {formattedarrivalDate}
                         </div>
                         <div className="font-semibold text-base max-lg:text-sm max-sm:text-xs">
-                          {(returnFlights?.class).charAt(0).toUpperCase() +
-                            (returnFlights?.class).slice(1).toLowerCase()}
+                          {returnFlights?.class?.charAt(0)?.toUpperCase() +
+                            returnFlights?.class?.slice(1)?.toLowerCase()}
                         </div>
                       </div>
                       <div className="flex gap-4 max-sm:flex-col max-sm:gap-2">
@@ -576,10 +585,10 @@ export default function BookingDetail({ index }) {
                                 {returnFlights?.airline?.name}
                               </div>
                               <div className="">
-                                {(returnFlights?.class)
-                                  .charAt(0)
-                                  .toUpperCase() +
-                                  (returnFlights?.class).slice(1).toLowerCase()}
+                                {returnFlights?.class
+                                  ?.charAt(0)
+                                  ?.toUpperCase() +
+                                  returnFlights?.class?.slice(1)?.toLowerCase()}
                               </div>
                               <div className="">
                                 {returnFlights?.flight_number}
@@ -612,175 +621,42 @@ export default function BookingDetail({ index }) {
             <div className="pb-4 font-bold text-2xl max-lg:text-xl max-sm:text-lg">
               Detail Penumpang
             </div>
-            {passengers.map((passenger, index) => (
-              <div
-                key={index}
-                className="mx-auto w-full bg-white rounded-xl shadow-sm px-6 max-sm:px-4 my-4"
-              >
-                <div className="w-3/4 pt-10 max-lg:w-full">
-                  <div className="font-semibold text-lg max-md:text-base">
-                    Informasi Penumpang {index + 1}{" "}
-                    {index < jumlahDewasa && (
-                      <span className="ml-2 text-sm text-gray-500">
-                        (Dewasa)
-                      </span>
-                    )}
-                    {index >= jumlahDewasa &&
-                      index < jumlahDewasa + jumlahAnak && (
-                        <span className="ml-2 text-sm text-gray-500">
-                          (Anak)
-                        </span>
-                      )}
-                    {index >= jumlahDewasa + jumlahAnak && (
-                      <span className="ml-2 text-sm text-gray-500">(Bayi)</span>
-                    )}
-                  </div>
-                  <div className="flex  gap-4 pt-4 max-sm:flex-col">
-                    <div className="relative">
-                      <div
-                        onClick={() =>
-                          handleInputChange(
-                            index,
-                            "isDropdownOpen",
-                            !passenger.isDropdownOpen
-                          )
-                        }
-                        className="flex flex-col gap-2 w-full"
-                      >
-                        <div className="text-xs">Jenis Kelamin</div>
-                        <div className="flex justify-between items-center gap-2 px-4 rounded border-2 border-gray-300 h-14 w-40 max-md:h-12">
-                          <div className="font-medium text-sm">
-                            {passenger.jenisKelamin}
-                          </div>
-                          <GoTriangleDown
-                            className={`transition ${
-                              passenger.isDropdownOpen ? "rotate-180" : ""
-                            }`}
-                          />
-                        </div>
-                      </div>
-                      {passenger.isDropdownOpen && (
-                        <div className="absolute  w-40 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                          <a
-                            href="#"
-                            className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleInputChange(index, "jenisKelamin", "Pria");
-                              handleInputChange(index, "isDropdownOpen", false);
-                            }}
-                          >
-                            <div className="flex items-center gap-x-2">
-                              <div>Pria</div>
-                            </div>
-                          </a>
-                          <a
-                            href="#"
-                            className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleInputChange(
-                                index,
-                                "jenisKelamin",
-                                "Wanita"
-                              );
-                              handleInputChange(index, "isDropdownOpen", false);
-                            }}
-                          >
-                            <div className="flex items-center gap-x-2">
-                              <div>Wanita</div>
-                            </div>
-                          </a>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex flex-col gap-2 w-full">
-                      <div className="text-xs">Nama Depan</div>
-                      <input
-                        type="text"
-                        required
-                        value={passenger.namaDepan}
-                        onChange={(e) =>
-                          handleInputChange(index, "namaDepan", e.target.value)
-                        }
-                        className="flex font-medium text-sm items-center px-2 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10"
-                        placeholder="Nama Depan"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2 w-full">
-                      <div className="text-xs">Nama Belakang</div>
-                      <input
-                        type="text"
-                        required
-                        value={passenger.namaBelakang}
-                        onChange={(e) =>
-                          handleInputChange(
-                            index,
-                            "namaBelakang",
-                            e.target.value
-                          )
-                        }
-                        className="flex font-medium text-sm items-center px-2 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10"
-                        placeholder="Nama Belakang"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2 w-full">
-                      <div className="text-xs">Tanggal Lahir</div>
-                      <div className="flex justify-between items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 h-14 w-auto max-md:h-12">
-                        <DatePicker
-                          selected={passenger.tanggalLahir}
-                          onChange={(date) => handleDateChange(date, index)}
-                          dateFormat="EEE, d MMM yyyy"
-                          locale={id}
-                          placeholderText="Tanggal Lahir"
-                          className="cursor-pointer font-medium text-sm w-full p-1"
-                        />
-                        <SlCalender size={20} className="cursor-pointer" />
-                      </div>
-                      {passengerAge !== null && (
-                        <div className="text-sm mt-2">
-                          Umur Penumpang: {passengerAge} tahun
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="w-3/4 pt-6 pb-10 max-lg:w-full">
-                  <div className="font-semibold text-lg max-md:text-base">
-                    Detail Kontak
-                  </div>
-                  <div className="flex items-center gap-4 pt-4">
-                    <div className="flex flex-col gap-2 w-full">
-                      <div className="text-xs">NIK</div>
-                      <input
-                        type="text"
-                        required
-                        value={passenger.nik}
-                        onChange={(e) =>
-                          handleInputChange(index, "nik", e.target.value)
-                        }
-                        className="flex justify-between text-sm items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10"
-                        placeholder="NIK"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2 w-full">
-                      <div className="text-xs">No. Handphone</div>
-                      <input
-                        type="text"
-                        required
-                        value={passenger.nomorHP}
-                        onChange={(e) =>
-                          handleInputChange(index, "nomorHP", e.target.value)
-                        }
-                        className="flex justify-between text-sm items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10"
-                        placeholder="+62 8123456789"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+            {passengers.map((passenger, index) => {
+              if (index < jumlahDewasa) {
+                return (
+                  <DetailPenumpangDewasa
+                    key={index}
+                    passenger={passenger}
+                    index={index}
+                    handleInputChange={handleInputChange}
+                    handleDateChange={handleDateChange}
+                  />
+                );
+              } else if (
+                index >= jumlahDewasa &&
+                index < jumlahDewasa + jumlahAnak
+              ) {
+                return (
+                  <DetailPenumpangAnak
+                    key={index}
+                    passenger={passenger}
+                    index={index}
+                    handleInputChange={handleInputChange}
+                    handleDateChange={handleDateChange}
+                  />
+                );
+              } else {
+                return (
+                  <DetailPenumpangBayi
+                    key={index}
+                    passenger={passenger}
+                    index={index}
+                    handleInputChange={handleInputChange}
+                    handleDateChange={handleDateChange}
+                  />
+                );
+              }
+            })}
           </div>
         </div>
 

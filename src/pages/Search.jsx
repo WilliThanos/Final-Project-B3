@@ -244,9 +244,7 @@ export default function Search() {
                     </div>
                     <div className="font-bold text-xl text-[#2A91E5] max-md:text-sm">
                       Rp{" "}
-                      {(
-                        selectedDepartureFlight?.price * totalPenumpang
-                      ).toLocaleString("id-ID")}
+                      {(selectedDepartureFlight?.price).toLocaleString("id-ID")}
                       ,00
                     </div>
                   </div>
@@ -644,9 +642,9 @@ export default function Search() {
                         </div>
                         <div className="font-bold text-xl text-[#2A91E5] max-md:text-sm">
                           Rp{" "}
-                          {(
-                            selectedReturnFlight?.price * totalPenumpang
-                          ).toLocaleString("id-ID")}
+                          {(selectedReturnFlight?.price).toLocaleString(
+                            "id-ID"
+                          )}
                           ,00
                         </div>
                       </div>

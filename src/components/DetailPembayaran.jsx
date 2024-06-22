@@ -17,6 +17,10 @@ export default function DetailPembayaran() {
   );
 
   const jmlPenumpang = useSelector((state) => state?.data?.penumpang);
+  const jmlAnak = useSelector((state) => state?.data?.jumlahAnak);
+  const jmlBayi = useSelector((state) => state?.data?.jumlahBayi);
+  const jmlDewasa = useSelector((state) => state?.data?.jumlahDewasa);
+
   //formating ke bentuk ruupiah
   const formatRupiah = (number) => {
     return new Intl.NumberFormat("id-ID", {
@@ -29,11 +33,31 @@ export default function DetailPembayaran() {
     ((departureFlights?.price || 0) + (returnFlights?.price || 0)) *
     jmlPenumpang;
 
+  const hargaTiketDewasa =
+    ((departureFlights?.price || 0) + (returnFlights?.price || 0)) * jmlDewasa;
+
+  console.log("hargaTiketDewasa :>> ", hargaTiketDewasa);
+  const hargaTiketAnak =
+    ((departureFlights?.price || 0) + (returnFlights?.price || 0)) *
+    jmlAnak *
+    0.75;
+  const hargaTiketBayi =
+    ((departureFlights?.price || 0) + (returnFlights?.price || 0)) *
+    jmlBayi *
+    0.5;
+
+  const totalHargaTiket =
+    (hargaTiketDewasa || 0) + (hargaTiketAnak || 0) + (hargaTiketBayi || 0);
+
   const cekPulangPergi = useSelector((state) => state?.data?.roundtrip);
   // cek harga
   const cekHarga = cekPulangPergi
-    ? hargaTiket
-    : departureFlights?.price * jmlPenumpang;
+    ? totalHargaTiket
+    : departureFlights?.price * jmlDewasa +
+      departureFlights?.price * jmlAnak * 0.75 +
+      departureFlights?.price * jmlBayi * 0.5;
+
+  console.log("cekHarga :>> ", cekHarga);
 
   //pajak
   const pajak = (10 / 100) * cekHarga;
@@ -76,6 +100,38 @@ export default function DetailPembayaran() {
         <div className="pt-10">
           <div className="flex justify-between p-6 text-lg max-lg:text-base max-sm:text-sm">
             <div className="flex flex-col gap-2">
+              {jmlDewasa > 0 && <div>{jmlDewasa} Dewasa</div>}
+              {jmlAnak > 0 && <div>{jmlAnak} Anak</div>}
+              {jmlBayi > 0 && <div>{jmlBayi} Bayi</div>}
+            </div>
+            <div className="flex flex-col gap-2 ">
+              {jmlDewasa > 0 && (
+                <div className="font-semibold">
+                  {cekPulangPergi
+                    ? formatRupiah(hargaTiketDewasa)
+                    : formatRupiah(departureFlights?.price * jmlDewasa)}
+                </div>
+              )}
+              {jmlAnak > 0 && (
+                <div className="font-semibold">
+                  {cekPulangPergi
+                    ? formatRupiah(hargaTiketAnak)
+                    : formatRupiah(departureFlights?.price * jmlAnak * 0.75)}
+                </div>
+              )}
+              {jmlBayi > 0 && (
+                <div className="font-semibold">
+                  {cekPulangPergi
+                    ? formatRupiah(hargaTiketBayi)
+                    : formatRupiah(departureFlights?.price * jmlBayi * 0.5)}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="border-b border-gray-300 pb-10 "></div>
+
+          <div className="flex justify-between p-6 text-lg max-lg:text-base max-sm:text-sm">
+            <div className="flex flex-col gap-2">
               <div className="">Harga Tiket</div>
               <div className="">Biaya Administrasi</div>
               <div className="">Pajak 10%</div>
@@ -83,8 +139,12 @@ export default function DetailPembayaran() {
             <div className="flex flex-col gap-2 ">
               <div className="font-semibold">
                 {cekPulangPergi
-                  ? formatRupiah(hargaTiket)
-                  : formatRupiah(departureFlights?.price * jmlPenumpang)}
+                  ? formatRupiah(totalHargaTiket)
+                  : formatRupiah(
+                      departureFlights?.price * jmlDewasa +
+                        departureFlights?.price * jmlAnak * 0.75 +
+                        departureFlights?.price * jmlBayi * 0.5
+                    )}
               </div>
               <div className="font-semibold">{formatRupiah(biayaAdmin)}</div>
               <div className="font-semibold">{formatRupiah(pajak)}</div>
