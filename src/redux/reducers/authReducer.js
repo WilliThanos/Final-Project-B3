@@ -6,7 +6,7 @@ const initialState = {
   user: {},
   error: false,
   message: null,
-  token: null,
+  token: "",
 };
 
 const authSlice = createSlice({
@@ -80,11 +80,8 @@ const authSlice = createSlice({
       // localStorage.removeItem('flashMessage');
     },
     logout: (state) => {
-      state.loading = true; // Optionally set loading state during logout process
-      state.user = {};
-      state.error = false;
-      state.message = null;
       state.token = null;
+      localStorage.removeItem("persist:root3");
     },
   },
 });

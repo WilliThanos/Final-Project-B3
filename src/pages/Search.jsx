@@ -14,10 +14,15 @@ import {
 import { FaCircleCheck } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
 import { Navigate, useNavigate } from "react-router-dom";
+import { getSearchTicket } from "../redux/action/dataAction";
 
 export default function Search() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(getSearchTicket());
+  }, []);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState({});
 

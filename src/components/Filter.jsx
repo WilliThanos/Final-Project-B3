@@ -82,7 +82,25 @@ export default function Filter() {
 
               <div className="border-t border-gray-300 bg-white">
                 <ul className="flex flex-col space-y-1 border-t border-gray-300 p-4">
-                  
+                  <li>
+                    <label
+                      htmlFor=""
+                      className="inline-flex items-center gap-2"
+                    >
+                      <input
+                        type="checkbox"
+                        id=""
+                        className="size-4 rounded border-gray-300"
+                        onChange={handleCheckboxChange}
+                        checked={filterClass === ""}
+                      />
+                      <span className="text-sm text-gray-700 max-md:text-xs">
+                        {" "}
+                        Semua{" "}
+                      </span>
+                    </label>
+                  </li>
+
                   <li>
                     <label
                       htmlFor="EKONOMI"

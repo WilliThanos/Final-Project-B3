@@ -11,37 +11,25 @@ import Register from "./pages/Register.jsx";
 import Search from "./pages/Search.jsx";
 import BookingDetail from "./pages/BookingDetail.jsx";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { useSelector } from "react-redux";
 import Payment from "./pages/Payment.jsx";
 import Profile from "./pages/Profile.jsx";
 import VerifikasiEmail from "./pages/VerifikasiEmail.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ConfirmPassword from "./pages/ConfirmEmail.jsx";
+import { useSelector } from "react-redux";
+import PrivateRoute from "./routes/PrivateRoutes.jsx";
 
 export const baseApiURL = "https://expressjs-develop-b4d1.up.railway.app/api";
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(
-    !!useSelector((state) => state.auth.token)
-  );
-  console.log("isLoggedIn :>> ", isLoggedIn);
+  // const [isLoggedIn, setIsLoggedIn] = useState(
+  //   !!useSelector((state) => state?.auth?.token)
+  // );
 
   const router = createBrowserRouter([
     {
       path: "/",
       element: <Landing />,
-    },
-    {
-      path: "/search",
-      element: <Search />,
-    },
-    {
-      path: "/booking-detail",
-      element: <BookingDetail />,
-    },
-    {
-      path: "/payment",
-      element: <Payment />,
     },
     {
       path: "/login",
@@ -50,10 +38,6 @@ export default function App() {
     {
       path: "/register",
       element: <Register />,
-    },
-    {
-      path: "/profile",
-      element: <Profile />,
     },
     {
       path: "/forgot-password",
@@ -66,6 +50,27 @@ export default function App() {
     {
       path: "/verifikasi-email",
       element: <VerifikasiEmail />,
+    },
+    {
+      path: "/search",
+      element: <Search />,
+    },
+    {
+      element: <PrivateRoute />, // Protect the following routes
+      children: [
+        {
+          path: "/booking-detail",
+          element: <BookingDetail />,
+        },
+        {
+          path: "/payment",
+          element: <Payment />,
+        },
+        {
+          path: "/profile",
+          element: <Profile />,
+        },
+      ],
     },
   ]);
 

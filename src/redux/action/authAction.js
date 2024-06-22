@@ -61,7 +61,6 @@ export const login = createAsyncThunk(
         message: response.message,
       };
       const { data, token } = response.data;
-      const ResponseLogin = response.data;
       const dataState = {
         data: data,
         message: "Login success!",

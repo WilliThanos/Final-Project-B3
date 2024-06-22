@@ -30,34 +30,65 @@ import { useNavigate } from "react-router-dom";
 export default function CariTiketLanding() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const dataSearch = useSelector((state) => state.data);
-  const departureDate = useSelector((state) => state.data.departureDate);
-  const returnDate = useSelector((state) => state.data.returnDate);
+  const dataSearch = useSelector((state) => state?.data);
+  const departureDate = useSelector((state) => state?.data?.departureDate);
+  const returnDate = useSelector((state) => state?.data?.returnDate);
   const seatClass = useSelector((state) => state?.data?.class);
   const jumlahDewasa = useSelector((state) => state?.data?.jumlahDewasa);
   const jumlahAnak = useSelector((state) => state?.data?.jumlahAnak);
   const jumlahBayi = useSelector((state) => state?.data?.jumlahBayi);
   const allAirport = useSelector((state) => state?.data?.allAirport);
   const roundTrip = useSelector((state) => state?.data?.roundtrip);
-  console.log("roundTrip :>> ", roundTrip);
-
-  useEffect(() => {
-    dispatch(getAllAirports());
-  }, []);
-
   const departureAirport = useSelector(
     (state) => state?.data?.departureAirport
   );
   const arrivalAirport = useSelector((state) => state?.data?.arrivalAirport);
+  console.log("roundTrip :>> ", roundTrip);
+
   const totalPenumpang = jumlahAnak + jumlahDewasa + jumlahBayi;
 
-  // const [departureDate, setDepartureDate] = useState(new Date());
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);
   const [isDropdownOpen3, setIsDropdownOpen3] = useState(false);
   const [isDropdownOpen4, setIsDropdownOpen4] = useState(false);
   const [isDropdownOpen5, setIsDropdownOpen5] = useState(false);
   const [airportQuery, setAirportQuery] = useState("");
+
+  useEffect(() => {
+    if (seatClass === "") {
+      dispatch(setClass(""));
+    }
+  }, [seatClass, dispatch]);
+
+  useEffect(() => {
+    if (departureAirport === null) {
+      dispatch(setDepartureAirportId(37));
+    }
+  }, [departureAirport, dispatch]);
+
+  useEffect(() => {
+    if (arrivalAirport === null) {
+      dispatch(setArrivalAirportId(47));
+    }
+  }, [arrivalAirport, dispatch]);
+
+  useEffect(() => {
+    if (!departureDate) {
+      dispatch(setDepartureDate(new Date())); // Dispatch current date if departureDate is null or undefined
+    }
+  }, [departureDate, dispatch]);
+
+  useEffect(() => {
+    if (!returnDate) {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      dispatch(setReturnDate(tomorrow));
+    }
+  }, [returnDate, dispatch]);
+
+  useEffect(() => {
+    dispatch(getAllAirports());
+  }, []);
 
   const filteredAirports = allAirport?.filter(
     (airport) =>
@@ -196,30 +227,6 @@ export default function CariTiketLanding() {
     console.log("Deparature = ", departureAirport);
     console.log("Arrival = ", arrivalAirport);
   }, []);
-
-  useEffect(() => {
-    if (seatClass === "") {
-      dispatch(setClass(""));
-    }
-  }, [seatClass, dispatch]);
-
-  useEffect(() => {
-    if (departureAirport === null) {
-      dispatch(setDepartureAirportId(1));
-    }
-  }, [departureAirport, dispatch]);
-
-  useEffect(() => {
-    if (arrivalAirport === null) {
-      dispatch(setArrivalAirportId(2));
-    }
-  }, [arrivalAirport, dispatch]);
-
-  useEffect(() => {
-    if (!departureDate) {
-      dispatch(setDepartureDate(new Date())); // Dispatch current date if departureDate is null or undefined
-    }
-  }, [departureDate, dispatch]);
 
   return (
     <div className="mx-auto fixed left-0 right-0 z-40 max-w-screen-2xl flex justify-between items-center bg-white rounded-xl shadow-sm max-md:mx-2 max-md:text-sm">
