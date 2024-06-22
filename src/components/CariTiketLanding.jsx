@@ -43,6 +43,10 @@ export default function CariTiketLanding() {
     (state) => state?.data?.departureAirport
   );
   const arrivalAirport = useSelector((state) => state?.data?.arrivalAirport);
+  const selectedReturnFlight = useSelector(
+    (state) => state?.ticket?.selectedReturnFlight
+  );
+
   const totalPenumpang = jumlahAnak + jumlahDewasa + jumlahBayi;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);
@@ -117,7 +121,9 @@ export default function CariTiketLanding() {
   };
 
   const tambahJumlahDewasa = () => {
-    dispatch(setJumlahDewasa(jumlahDewasa + 1));
+    if (jumlahDewasa < 5) {
+      dispatch(setJumlahDewasa(jumlahDewasa + 1));
+    }
   };
 
   const kurangJumlahAnak = () => {
@@ -127,7 +133,9 @@ export default function CariTiketLanding() {
   };
 
   const tambahJumlahAnak = () => {
-    dispatch(setJumlahAnak(jumlahAnak + 1));
+    if (jumlahDewasa < 5) {
+      dispatch(setJumlahAnak(jumlahAnak + 1));
+    }
   };
 
   const kurangJumlahBayi = () => {
@@ -137,7 +145,9 @@ export default function CariTiketLanding() {
   };
 
   const tambahJumlahBayi = () => {
-    dispatch(setJumlahBayi(jumlahBayi + 1));
+    if (jumlahDewasa < 5) {
+      dispatch(setJumlahBayi(jumlahBayi + 1));
+    }
   };
 
   const handleDropdownToggle = () => {
@@ -237,7 +247,8 @@ export default function CariTiketLanding() {
     isSameDate ||
     isReturnDateBeforeDeparture ||
     totalPenumpang === 0 ||
-    isDepartureDateBeforeToday
+    isDepartureDateBeforeToday ||
+    totalPenumpang > 4
   );
 
   useEffect(() => {
@@ -531,6 +542,12 @@ export default function CariTiketLanding() {
                       <div className="flex items-center gap-2 text-red-500  text-sm">
                         <IoWarning size={20} />
                         <div>Mohon isi jumlah penumpang</div>
+                      </div>
+                    )}
+                    {totalPenumpang > 4 && (
+                      <div className="flex items-center gap-2 text-red-500  text-sm">
+                        <IoWarning size={20} />
+                        <div>Jumlah penumpang tidak boleh lebih dari 4</div>
                       </div>
                     )}
 
@@ -891,6 +908,12 @@ export default function CariTiketLanding() {
                   <div className="flex items-center gap-2 text-red-500  text-sm">
                     <IoWarning size={20} />
                     <div>Mohon isi jumlah penumpang</div>
+                  </div>
+                )}
+                {totalPenumpang > 4 && (
+                  <div className="flex items-center gap-2 text-red-500  text-sm">
+                    <IoWarning size={20} />
+                    <div>Jumlah penumpang tidak boleh lebih dari 4</div>
                   </div>
                 )}
               </div>
