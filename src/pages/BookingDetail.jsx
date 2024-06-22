@@ -164,9 +164,11 @@ export default function BookingDetail({ index }) {
       // If the arrival time is the next day
       differenceInMinutes += 24 * 60;
     }
+    const hours = Math.floor(differenceInMinutes / 60);
+    const minutes = differenceInMinutes % 60;
 
-    // Return the difference in minutes
-    return differenceInMinutes;
+    // Return the formatted string
+    return `${hours}j ${minutes}m`;
   };
 
   const cekPulangPergi = useSelector((state) => state?.data?.roundtrip);
