@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import Payment from "./pages/Payment.jsx";
 import Profile from "./pages/Profile.jsx";
 import VerifikasiEmail from "./pages/VerifikasiEmail.jsx";
+import History from "./pages/History.jsx";
 
 export const baseApiURL = "https://expressjs-develop-b4d1.up.railway.app/api";
 
@@ -51,6 +52,10 @@ export default function App() {
     {
       path: "/verifikasi-email",
       element: <VerifikasiEmail />,
+    },
+    {
+      path: "history",
+      element: <History />,
     },
   ]);
 
