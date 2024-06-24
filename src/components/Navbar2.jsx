@@ -13,6 +13,13 @@ function NavbarLogoBiru() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const token = useSelector((state) => state?.auth?.token);
+
+  useEffect(() => {
+    if (token) {
+      dispatch(getProfile());
+    }
+  }, []);
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -21,7 +28,6 @@ function NavbarLogoBiru() {
     setIsDropdownOpen2(!isDropdownOpen2);
   };
   const cekState = useSelector((state) => state);
-  const token = useSelector((state) => state?.auth?.token);
   const userFirstName = useSelector(
     (state) => state?.profile?.profile?.user?.first_name
   );
@@ -42,10 +48,6 @@ function NavbarLogoBiru() {
   const cancelLogout = () => {
     setShowConfirmation(false);
   };
-
-  useEffect(() => {
-    dispatch(getProfile());
-  }, []);
 
   console.log("cekState :>> ", cekState);
   console.log("token :>> ", token);

@@ -37,10 +37,13 @@ export default function Filter() {
 
   const handleCheckboxChange = (event) => {
     const { id, checked } = event.target;
-    if (checked) {
-      dispatch(setFilterClass(id));
+
+    if (id === "") {
+      // Jika checkbox "Semua" dipilih, atur filterClass menjadi kosong ("")
+      dispatch(setFilterClass(checked ? "" : ""));
     } else {
-      dispatch(setFilterClass("")); // Update according to your action for removing filter
+      // Jika checkbox kelas lain dipilih, atur filterClass sesuai dengan id checkbox
+      dispatch(setFilterClass(checked ? id : ""));
     }
   };
 
@@ -79,6 +82,25 @@ export default function Filter() {
 
               <div className="border-t border-gray-300 bg-white">
                 <ul className="flex flex-col space-y-1 border-t border-gray-300 p-4">
+                  <li>
+                    <label
+                      htmlFor=""
+                      className="inline-flex items-center gap-2"
+                    >
+                      <input
+                        type="checkbox"
+                        id=""
+                        className="size-4 rounded border-gray-300"
+                        onChange={handleCheckboxChange}
+                        checked={filterClass === ""}
+                      />
+                      <span className="text-sm text-gray-700 max-md:text-xs">
+                        {" "}
+                        Semua{" "}
+                      </span>
+                    </label>
+                  </li>
+
                   <li>
                     <label
                       htmlFor="EKONOMI"

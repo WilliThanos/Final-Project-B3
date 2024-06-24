@@ -25,13 +25,21 @@ import {
   updatePassenger,
   setPassengers,
 } from "../redux/reducers/passengersReducer";
-
 import { LiaCircleSolid } from "react-icons/lia";
+import DetailPenumpangAnak from "../components/DetailPenumpangAnak";
+import DetailPenumpangBayi from "../components/DetailPenumpangBayi";
+import DetailPenumpangDewasa from "../components/DetailPenumpangDewasa";
+import { getSearchTicket } from "../redux/action/dataAction";
+import { useNavigate } from "react-router-dom";
 
-export default function BookingDetail() {
+export default function BookingDetail({ index }) {
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const passengers = useSelector((state) => state.passengers.passengers);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [passengerAge, setPassengerAge] = useState(null);
+
   const [dropdownOpenIndex, setDropdownOpenIndex] = useState(null);
   // const jenisKelamin = useSelector((state) => state?.booking?.jenisKelamin);
   // const tanggalLahir = useSelector((state) => state?.booking?.tanggalLahir);
@@ -60,7 +68,7 @@ export default function BookingDetail() {
 
     if (passengers.length !== totalPenumpang) {
       if (passengers.length < totalPenumpang) {
-        // Add new passengers if needed
+        // Menambahkan penumpang baru jika diperlukan
         let newPassengers = [
           ...passengers,
           ...Array(totalPenumpang - passengers.length).fill({
@@ -70,16 +78,28 @@ export default function BookingDetail() {
             tanggalLahir: null,
             nik: "",
             nomorHP: "",
+            kategori: "", // Menambahkan properti kategori
             isDropdownOpen: false,
           }),
         ];
 
-        // Ensure not exceeding maximum number of passengers
+        // Mengatur kategori untuk setiap penumpang baru
+        for (let i = passengers.length; i < newPassengers.length; i++) {
+          if (i < jumlahDewasa) {
+            newPassengers[i].kategori = "Dewasa";
+          } else if (i >= jumlahDewasa && i < jumlahDewasa + jumlahAnak) {
+            newPassengers[i].kategori = "Anak";
+          } else if (i >= jumlahDewasa + jumlahAnak) {
+            newPassengers[i].kategori = "Bayi";
+          }
+        }
+
+        // Memastikan tidak melebihi jumlah maksimum penumpang
         if (newPassengers.length > maxPassengers) {
           newPassengers = newPassengers.slice(0, maxPassengers);
         }
 
-        // Dispatch the state update only if passengers have changed
+        // Dispatch state hanya jika terdapat perubahan pada penumpang
         if (
           newPassengers.length !== passengers.length ||
           !newPassengers.every((p, index) => p === passengers[index])
@@ -87,7 +107,7 @@ export default function BookingDetail() {
           dispatch(setPassengers(newPassengers));
         }
       } else {
-        // Reduce passengers if needed
+        // Mengurangi penumpang jika diperlukan
         const newPassengers = passengers.slice(0, totalPenumpang);
         dispatch(setPassengers(newPassengers));
       }
@@ -105,12 +125,17 @@ export default function BookingDetail() {
     (state) => state?.ticket?.selectedReturnFlight
   );
 
-  const formattedDepartureDate = new Intl.DateTimeFormat("id-ID", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })?.format(new Date(departureFlights?.Date));
+  const formattedDepartureDate = departureFlights?.Date
+    ? new Intl.DateTimeFormat("id-ID", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }).format(new Date(departureFlights.Date))
+    : "Invalid Date";
+
+  console.log("DepartureDate", departureFlights?.Date);
+  console.log("formattedDepartureDate", formattedDepartureDate);
 
   const formattedarrivalDate =
     returnFlights && returnFlights.Date
@@ -123,9 +148,20 @@ export default function BookingDetail() {
       : "Date not available";
 
   const calculateTravelTime = (departure, arrival) => {
+    if (!departure || !arrival) {
+      return null; // Handle case where either departure or arrival is undefined or null
+    }
+
     // Parse the time strings
-    const [depHours, depMinutes] = departure?.split(":")?.map(Number);
-    const [arrHours, arrMinutes] = arrival?.split(":")?.map(Number);
+    const depParts = departure.split(":");
+    const arrParts = arrival.split(":");
+
+    if (depParts.length !== 2 || arrParts.length !== 2) {
+      return null; // Handle cases where departure or arrival doesn't have correct format
+    }
+
+    const [depHours, depMinutes] = depParts.map(Number);
+    const [arrHours, arrMinutes] = arrParts.map(Number);
 
     // Convert times to minutes since the start of the day
     const departureInMinutes = depHours * 60 + depMinutes;
@@ -137,8 +173,6 @@ export default function BookingDetail() {
       // If the arrival time is the next day
       differenceInMinutes += 24 * 60;
     }
-
-    // Convert the difference to hours and minutes
     const hours = Math.floor(differenceInMinutes / 60);
     const minutes = differenceInMinutes % 60;
 
@@ -164,6 +198,38 @@ export default function BookingDetail() {
     }));
   };
 
+  const calculateAge = (birthDate) => {
+    const today = new Date();
+    const birthDateObj = new Date(birthDate);
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+    const monthDiff = today.getMonth() - birthDateObj.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDateObj.getDate())
+    ) {
+      age--;
+    }
+
+    return age;
+  };
+
+  const handleDateChange = (date, index) => {
+    handleInputChange(index, "tanggalLahir", date);
+    const age = calculateAge(date);
+    setPassengerAge(age);
+  };
+
+  useEffect(() => {
+    dispatch(getSearchTicket());
+  }, []);
+
+  useEffect(() => {
+    if (!departureFlights) {
+      navigate("/search");
+    }
+  }, [departureFlights, navigate]);
+
   return (
     <form className="max-w-screen-2xl mx-auto  ">
       <NavbarLogoBiru />
@@ -174,7 +240,7 @@ export default function BookingDetail() {
       <div className="mt-24">
         <CariTiketLain />
       </div>
-      <div className="flex pt-32 gap-8  max-md:mx-2 max-md:gap-3  max-lg:pt-40  max-xl:pt-40 max-xl:flex-col max-xl:mx-2 max-md:pt-32 ">
+      <div className="flex pt-40 gap-8  max-md:mx-2 max-md:gap-3  max-lg:pt-40  max-xl:pt-40 max-xl:flex-col max-xl:mx-2 max-md:pt-32 ">
         <div className="flex flex-col gap-8 w-full">
           <div className="">
             <div className="pb-4 font-bold text-2xl max-lg:text-xl max-sm:text-lg">
@@ -201,8 +267,8 @@ export default function BookingDetail() {
                         {formattedDepartureDate}
                       </div>
                       <div className="font-semibold text-base max-lg:text-sm max-sm:text-xs">
-                        {(departureFlights?.class).charAt(0).toUpperCase() +
-                          (departureFlights?.class).slice(1).toLowerCase()}
+                        {departureFlights?.class?.charAt(0)?.toUpperCase() +
+                          departureFlights?.class?.slice(1)?.toLowerCase()}
                       </div>
                     </div>
                     <div className="flex gap-4 max-sm:flex-col max-sm:gap-2">
@@ -349,12 +415,12 @@ export default function BookingDetail() {
                               {departureFlights?.airline?.name}
                             </div>
                             <div className="">
-                              {(departureFlights?.class)
-                                .charAt(0)
-                                .toUpperCase() +
-                                (departureFlights?.class)
-                                  .slice(1)
-                                  .toLowerCase()}
+                              {departureFlights?.class
+                                ?.charAt(0)
+                                ?.toUpperCase() +
+                                departureFlights?.class
+                                  ?.slice(1)
+                                  ?.toLowerCase()}
                             </div>
                             <div className="">
                               {departureFlights?.flight_number}
@@ -377,7 +443,7 @@ export default function BookingDetail() {
                   </div>
                 </div>
                 {/* card KEMBALI */}
-                {cekPulangPergi ? (
+                {cekPulangPergi && returnFlights ? (
                   <div
                     className="border-2 border-gray-200 rounded-xl p-4 hover:border-blue-400 cursor-pointer"
                     key={returnFlights?.id}
@@ -395,8 +461,8 @@ export default function BookingDetail() {
                           {formattedarrivalDate}
                         </div>
                         <div className="font-semibold text-base max-lg:text-sm max-sm:text-xs">
-                          {(returnFlights?.class).charAt(0).toUpperCase() +
-                            (returnFlights?.class).slice(1).toLowerCase()}
+                          {returnFlights?.class?.charAt(0)?.toUpperCase() +
+                            returnFlights?.class?.slice(1)?.toLowerCase()}
                         </div>
                       </div>
                       <div className="flex gap-4 max-sm:flex-col max-sm:gap-2">
@@ -540,10 +606,10 @@ export default function BookingDetail() {
                                 {returnFlights?.airline?.name}
                               </div>
                               <div className="">
-                                {(returnFlights?.class)
-                                  .charAt(0)
-                                  .toUpperCase() +
-                                  (returnFlights?.class).slice(1).toLowerCase()}
+                                {returnFlights?.class
+                                  ?.charAt(0)
+                                  ?.toUpperCase() +
+                                  returnFlights?.class?.slice(1)?.toLowerCase()}
                               </div>
                               <div className="">
                                 {returnFlights?.flight_number}
@@ -576,170 +642,42 @@ export default function BookingDetail() {
             <div className="pb-4 font-bold text-2xl max-lg:text-xl max-sm:text-lg">
               Detail Penumpang
             </div>
-            {passengers.map((passenger, index) => (
-              <div
-                key={index}
-                className="mx-auto w-full bg-white rounded-xl shadow-sm px-6 max-sm:px-4 my-4"
-              >
-                <div className="w-3/4 pt-10 max-lg:w-full">
-                  <div className="font-semibold text-lg max-md:text-base">
-                    Informasi Penumpang {index + 1}
-                    {/* Judul sesuai dengan tipe penumpang */}
-                    {index === 0 && jumlahDewasa > 0 && (
-                      <span className="ml-2 text-sm text-gray-500">
-                        (Dewasa)
-                      </span>
-                    )}
-                    {index === 1 && jumlahAnak > 0 && (
-                      <span className="ml-2 text-sm text-gray-500">(Anak)</span>
-                    )}
-                    {index === 2 && jumlahBayi > 0 && (
-                      <span className="ml-2 text-sm text-gray-500">(Bayi)</span>
-                    )}
-                  </div>
-                  <div className="flex  gap-4 pt-4 max-sm:flex-col">
-                    <div className="relative">
-                      <div
-                        onClick={() =>
-                          handleInputChange(
-                            index,
-                            "isDropdownOpen",
-                            !passenger.isDropdownOpen
-                          )
-                        }
-                        className="flex flex-col gap-2 w-full"
-                      >
-                        <div className="text-xs">Jenis Kelamin</div>
-                        <div className="flex justify-between items-center gap-2 px-4 rounded border-2 border-gray-300 h-14 w-40 max-md:h-12">
-                          <div className="font-medium text-sm">
-                            {passenger.jenisKelamin}
-                          </div>
-                          <GoTriangleDown
-                            className={`transition ${
-                              passenger.isDropdownOpen ? "rotate-180" : ""
-                            }`}
-                          />
-                        </div>
-                      </div>
-                      {passenger.isDropdownOpen && (
-                        <div className="absolute  w-40 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                          <a
-                            href="#"
-                            className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleInputChange(index, "jenisKelamin", "Pria");
-                              handleInputChange(index, "isDropdownOpen", false);
-                            }}
-                          >
-                            <div className="flex items-center gap-x-2">
-                              <div>Pria</div>
-                            </div>
-                          </a>
-                          <a
-                            href="#"
-                            className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
-                            onClick={(e) => {
-                              e.preventDefault();
-                              handleInputChange(
-                                index,
-                                "jenisKelamin",
-                                "Wanita"
-                              );
-                              handleInputChange(index, "isDropdownOpen", false);
-                            }}
-                          >
-                            <div className="flex items-center gap-x-2">
-                              <div>Wanita</div>
-                            </div>
-                          </a>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex flex-col gap-2 w-full">
-                      <div className="text-xs">Nama Depan</div>
-                      <input
-                        type="text"
-                        required
-                        value={passenger.namaDepan}
-                        onChange={(e) =>
-                          handleInputChange(index, "namaDepan", e.target.value)
-                        }
-                        className="flex font-medium text-sm items-center px-2 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10"
-                        placeholder="Nama Depan"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2 w-full">
-                      <div className="text-xs">Nama Belakang</div>
-                      <input
-                        type="text"
-                        required
-                        value={passenger.namaBelakang}
-                        onChange={(e) =>
-                          handleInputChange(
-                            index,
-                            "namaBelakang",
-                            e.target.value
-                          )
-                        }
-                        className="flex font-medium text-sm items-center px-2 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10"
-                        placeholder="Nama Belakang"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2 w-full">
-                      <div className="text-xs">Tanggal Lahir</div>
-                      <div className="flex justify-between items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 h-14 w-auto max-md:h-12">
-                        <DatePicker
-                          selected={passenger.tanggalLahir}
-                          onChange={(date) =>
-                            handleInputChange(index, "tanggalLahir", date)
-                          }
-                          dateFormat="EEE, d MMM yyyy"
-                          locale={id}
-                          placeholderText="Tanggal Lahir"
-                          className="cursor-pointer font-medium text-sm w-full p-1"
-                        />
-                        <SlCalender size={20} className="cursor-pointer" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="w-3/4 pt-6 pb-10 max-lg:w-full">
-                  <div className="font-semibold text-lg max-md:text-base">
-                    Detail Kontak
-                  </div>
-                  <div className="flex items-center gap-4 pt-4">
-                    <div className="flex flex-col gap-2 w-full">
-                      <div className="text-xs">NIK</div>
-                      <input
-                        type="text"
-                        required
-                        value={passenger.nik}
-                        onChange={(e) =>
-                          handleInputChange(index, "nik", e.target.value)
-                        }
-                        className="flex justify-between text-sm items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10"
-                        placeholder="NIK"
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2 w-full">
-                      <div className="text-xs">No. Handphone</div>
-                      <input
-                        type="text"
-                        required
-                        value={passenger.nomorHP}
-                        onChange={(e) =>
-                          handleInputChange(index, "nomorHP", e.target.value)
-                        }
-                        className="flex justify-between text-sm items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10"
-                        placeholder="+62 8123456789"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+            {passengers.map((passenger, index) => {
+              if (index < jumlahDewasa) {
+                return (
+                  <DetailPenumpangDewasa
+                    key={index}
+                    passenger={passenger}
+                    index={index}
+                    handleInputChange={handleInputChange}
+                    handleDateChange={handleDateChange}
+                  />
+                );
+              } else if (
+                index >= jumlahDewasa &&
+                index < jumlahDewasa + jumlahAnak
+              ) {
+                return (
+                  <DetailPenumpangAnak
+                    key={index}
+                    passenger={passenger}
+                    index={index}
+                    handleInputChange={handleInputChange}
+                    handleDateChange={handleDateChange}
+                  />
+                );
+              } else {
+                return (
+                  <DetailPenumpangBayi
+                    key={index}
+                    passenger={passenger}
+                    index={index}
+                    handleInputChange={handleInputChange}
+                    handleDateChange={handleDateChange}
+                  />
+                );
+              }
+            })}
           </div>
         </div>
 
@@ -747,7 +685,10 @@ export default function BookingDetail() {
           {/* Detail Pembayaran Component */}
           <DetailPembayaran />
           {/* Detail Pembayaran Component */}
-          <button className="rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow">
+          <button
+            onClick={() => navigate("/payment")}
+            className="rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow"
+          >
             Lanjut ke Pembayaran
           </button>
         </div>

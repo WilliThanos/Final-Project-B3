@@ -58,7 +58,6 @@ export const getAllAirports = () => async (dispatch, getState) => {
     const response = await axios.get(
       `https://expressjs-develop-b4d1.up.railway.app/api/v1/bandara`
     );
-    console.log("response airport redux :>> ", response.data);
     dispatch(setAllAirport(response.data.data));
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -145,7 +144,9 @@ export const getSearchTicket = () => async (dispatch, getState) => {
     const returnDate = getState().data?.returnDate;
     const ticketClass = getState().data?.class;
 
-    const passengerClass = ticketClass.toUpperCase();
+    const passengerClass =
+      ticketClass !== null ? ticketClass.toUpperCase() : null;
+
     console.log("passengerClass :>> ", passengerClass);
 
     const formattedDepartureDate = new Intl.DateTimeFormat("id-ID", {
@@ -199,9 +200,9 @@ export const getSearchTicket = () => async (dispatch, getState) => {
     const response = await axios.get(
       `https://expressjs-develop-b4d1.up.railway.app/api/v1/flights?departureAirport=${departureAirportCode}&arrivalAirport=${arrivalAirportCode}&departureDate=${searchingDepartureDate}&returnDate=${searchingReturnDate}&flightClass=${passengerClass}`
     );
-    console.log("REDUX RESPONSE TIKET >>>", response?.data);
     dispatch(setDepartureFlights(response?.data?.departureFlights));
     dispatch(setReturnFlights(response?.data?.returnFlights));
+    console.log("REDUX RESPONSE TIKET >>>", response?.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       dispatch(setDepartureFlights(null));

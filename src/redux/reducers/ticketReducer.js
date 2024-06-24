@@ -4,8 +4,10 @@ import { produce } from "immer";
 const initialState = {
   departureFlights: [],
   returnFlights: [],
-  selectedDepartureFlight: null,
-  selectedReturnFlight: null,
+  selectedDepartureFlight: "",
+  selectedReturnFlight: "",
+  selectedDepartureFlightId: "",
+  selectedReturnFlightId: "",
 };
 
 const ticketSlicer = createSlice({
@@ -24,11 +26,20 @@ const ticketSlicer = createSlice({
     setSelectedReturnFlight: (state, action) => {
       state.selectedReturnFlight = action.payload;
     },
-    clearSelectedTicket: (state) => {
-      state.selectedDepartureFlight = null;
-      state.selectedReturnFlight = null;
-      window.location.reload();
+    setSelectedDepartureFlightId: (state, action) => {
+      state.selectedDepartureFlightId = action.payload;
     },
+    setSelectedReturnFlightId: (state, action) => {
+      state.selectedReturnFlightId = action.payload;
+    },
+    // clearSelectedTicket: (state) => {
+    //   state.selectedDepartureFlight = null;
+    //   state.selectedReturnFlight = null;
+    // },
+    // clearTicket: (state) => {
+    //   state.departureFlights = [];
+    //   state.returnFlights = [];
+    // },
   },
 });
 
@@ -37,7 +48,8 @@ export const {
   setReturnFlights,
   setSelectedDepartureFlight,
   setSelectedReturnFlight,
-  clearSelectedTicket,
+  setSelectedDepartureFlightId,
+  setSelectedReturnFlightId,
 } = ticketSlicer.actions;
 
 export default ticketSlicer.reducer;

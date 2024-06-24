@@ -25,39 +25,75 @@ import {
   getArrivalAirport,
   getSearchTicket,
 } from "../redux/action/dataAction";
-import { clearSelectedTicket } from "../redux/reducers/ticketReducer";
 import { useNavigate } from "react-router-dom";
 
-export default function CariTiketLain() {
+export default function CariTiketLanding() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const departureDate = useSelector((state) => state.data.departureDate);
-  const returnDate = useSelector((state) => state.data.returnDate);
+  const dataSearch = useSelector((state) => state?.data);
+  const departureDate = useSelector((state) => state?.data?.departureDate);
+  const returnDate = useSelector((state) => state?.data?.returnDate);
   const seatClass = useSelector((state) => state?.data?.class);
   const jumlahDewasa = useSelector((state) => state?.data?.jumlahDewasa);
   const jumlahAnak = useSelector((state) => state?.data?.jumlahAnak);
   const jumlahBayi = useSelector((state) => state?.data?.jumlahBayi);
   const allAirport = useSelector((state) => state?.data?.allAirport);
   const roundTrip = useSelector((state) => state?.data?.roundtrip);
-  console.log("roundTrip :>> ", roundTrip);
-
-  useEffect(() => {
-    dispatch(getAllAirports());
-  }, []);
-
   const departureAirport = useSelector(
     (state) => state?.data?.departureAirport
   );
   const arrivalAirport = useSelector((state) => state?.data?.arrivalAirport);
-  const totalPenumpang = jumlahAnak + jumlahDewasa + jumlahBayi;
+  const selectedReturnFlight = useSelector(
+    (state) => state?.ticket?.selectedReturnFlight
+  );
 
-  // const [departureDate, setDepartureDate] = useState(new Date());
+  const totalPenumpang = jumlahAnak + jumlahDewasa + jumlahBayi;
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);
   const [isDropdownOpen3, setIsDropdownOpen3] = useState(false);
   const [isDropdownOpen4, setIsDropdownOpen4] = useState(false);
   const [isDropdownOpen5, setIsDropdownOpen5] = useState(false);
   const [airportQuery, setAirportQuery] = useState("");
+
+  console.log("roundTrip :>> ", roundTrip);
+
+  useEffect(() => {
+    if (seatClass === "") {
+      dispatch(setClass(""));
+    }
+  }, [seatClass, dispatch]);
+
+  useEffect(() => {
+    if (departureAirport === null) {
+      dispatch(setDepartureAirportId(37));
+    }
+  }, [departureAirport, dispatch]);
+
+  useEffect(() => {
+    if (arrivalAirport === null) {
+      dispatch(setArrivalAirportId(47));
+    }
+  }, [arrivalAirport, dispatch]);
+
+  useEffect(() => {
+    if (!departureDate) {
+      dispatch(setDepartureDate(new Date())); // Dispatch current date if departureDate is null or undefined
+    }
+  }, [departureDate, dispatch]);
+
+  useEffect(() => {
+    if (!returnDate) {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      dispatch(setReturnDate(tomorrow));
+    }
+  }, [returnDate, dispatch]);
+
+  useEffect(() => {
+    dispatch(getAllAirports());
+  }, []);
+
+  // const [departureDate, setDepartureDate] = useState(new Date());
 
   const filteredAirports = allAirport?.filter(
     (airport) =>
@@ -66,51 +102,50 @@ export default function CariTiketLain() {
   );
 
   useEffect(() => {
+    console.log(dataSearch);
+  }, [dataSearch]);
+
+  useEffect(() => {
     dispatch(getSearchTicket());
   }, []);
 
   useEffect(() => {
     dispatch(getDepartureAirport());
+    dispatch(getArrivalAirport());
   }, []);
 
   const kurangJumlahDewasa = () => {
     if (jumlahDewasa > 0) {
-      event.preventDefault();
       dispatch(setJumlahDewasa(jumlahDewasa - 1));
     }
   };
 
   const tambahJumlahDewasa = () => {
-    if (totalPenumpang < 5) {
-      event.preventDefault();
+    if (jumlahDewasa < 5) {
       dispatch(setJumlahDewasa(jumlahDewasa + 1));
     }
   };
 
   const kurangJumlahAnak = () => {
     if (jumlahAnak > 0) {
-      event.preventDefault();
       dispatch(setJumlahAnak(jumlahAnak - 1));
     }
   };
 
   const tambahJumlahAnak = () => {
-    if (totalPenumpang < 5) {
-      event.preventDefault();
+    if (jumlahDewasa < 5) {
       dispatch(setJumlahAnak(jumlahAnak + 1));
     }
   };
 
   const kurangJumlahBayi = () => {
     if (jumlahBayi > 0) {
-      event.preventDefault();
       dispatch(setJumlahBayi(jumlahBayi - 1));
     }
   };
 
   const tambahJumlahBayi = () => {
-    if (totalPenumpang < 5) {
-      event.preventDefault();
+    if (jumlahDewasa < 5) {
       dispatch(setJumlahBayi(jumlahBayi + 1));
     }
   };
@@ -196,14 +231,30 @@ export default function CariTiketLain() {
     roundTrip &&
     formattedReturnDate < formattedDepartureDate;
 
+  const isDateBeforeToday = (date) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0); // Reset time components for accurate comparison
+    return date < today;
+  };
+
+  // Check if the departure date is before today
+  const isDepartureDateBeforeToday =
+    formattedDepartureDate &&
+    isDateBeforeToday(new Date(formattedDepartureDate));
+
   const isButtonEnabled = !(
     departureAirport?.id === arrivalAirport?.id ||
     isSameDate ||
     isReturnDateBeforeDeparture ||
     totalPenumpang === 0 ||
-    totalPenumpang > 4 ||
-    (jumlahDewasa === 0 && (jumlahAnak === 1 || jumlahBayi === 1))
+    isDepartureDateBeforeToday ||
+    totalPenumpang > 4
   );
+
+  useEffect(() => {
+    console.log("Deparature = ", departureAirport);
+    console.log("Arrival = ", arrivalAirport);
+  }, []);
 
   return (
     <div className="mx-auto fixed left-0 right-0 z-40 max-w-screen-2xl flex justify-between items-center bg-white rounded-xl shadow-sm max-md:mx-2 max-md:text-sm">
@@ -234,27 +285,41 @@ export default function CariTiketLain() {
                 href="#"
                 className="block rounded-md  px-4 py-2 text-gray-800/60  hover:text-gray-800 font-semibold"
               >
-                <div className="flex items-center gap-x-2 ">
-                  <div className="cursor-pointer">
-                    <SlCalender
-                      onClick={() => departureDateRef.current.setFocus()}
-                    />
+                <div className="flex flex-col gap-y-">
+                  <div className="flex items-center gap-x-2">
+                    <div className="cursor-pointer">
+                      <SlCalender
+                        onClick={() => departureDateRef.current.setFocus()}
+                      />
+                    </div>
+                    <div className="font-medium">Tanggal Keberangkatan</div>
                   </div>
-                  <div className="font-medium">Waktu Keberangkatan</div>
+                  <DatePicker
+                    selected={departureDate}
+                    onChange={(date) => {
+                      dispatch(setDepartureDate(date));
+                      console.log("date :>> ", typeof date);
+                    }}
+                    dateFormat="EEE, d MMM yyyy"
+                    locale={id}
+                    className="cursor-pointer text-[#0C68BE]"
+                    ref={departureDateRef}
+                    placeholderText="Pilih tanggal keberangkatan"
+                  />
                 </div>
-                <DatePicker
-                  selected={departureDate}
-                  onChange={(date) => dispatch(setDepartureDate(date))}
-                  dateFormat="EEE, d MMM yyyy"
-                  locale={id}
-                  className="cursor-pointer text-[#0C68BE]"
-                  ref={departureDateRef}
-                />
                 {isSameDate && (
                   <div className="flex items-center gap-2 mt-1 text-red-500 font-normal  text-sm">
                     <IoWarning size={20} />
                     <div>
                       Tanggal keberangkatan dan kembali tidak boleh sama
+                    </div>
+                  </div>
+                )}
+                {isDepartureDateBeforeToday && (
+                  <div className="flex items-center gap-2 text-red-500 font-normal text-sm">
+                    <IoWarning size={20} />
+                    <div>
+                      Tanggal keberangkatan tidak boleh lebih awal dari hari ini
                     </div>
                   </div>
                 )}
@@ -277,7 +342,7 @@ export default function CariTiketLain() {
                           className="peer sr-only"
                           checked={roundTrip}
                           onChange={() => {
-                            dispatch(setRoundTrip(roundTrip));
+                            dispatch(setRoundTrip(!roundTrip));
                           }}
                         />
 
@@ -285,38 +350,38 @@ export default function CariTiketLain() {
                       </label>
                     </div>
                   </div>
-                  {roundTrip && (
-                    <div className="flex-col items-center gap-x-2 ">
-                      <div className="flex gap-2 items-center">
-                        <div className="cursor-pointer">
-                          <SlCalender
-                            onClick={() => departureDateRef.current.setFocus()}
-                          />
-                        </div>
-                        <div className="font-medium">Waktu Kembali</div>
-                      </div>
-                      <DatePicker
-                        selected={returnDate}
-                        onChange={(date) => dispatch(setReturnDate(date))}
-                        dateFormat="EEE, d MMM yyyy"
-                        locale={id}
-                        className="cursor-pointer text-[#0C68BE]"
-                        ref={returnDateRef}
+                  <div
+                    className={`flex items-center gap-x-2 ${
+                      !roundTrip && "opacity-50"
+                    }`}
+                  >
+                    <div className="cursor-pointer">
+                      <SlCalender
+                        onClick={() => returnDateRef.current.setFocus()}
                       />
-                      <div>
-                        {isReturnDateBeforeDeparture && (
-                          <div className="flex items-center gap-2 mt-1 text-red-500 font-normal  text-sm">
-                            <IoWarning size={20} />
-                            <div>
-                              Tanggal kembali tidak boleh lebih awal dari
-                              tanggal keberangkatan
-                            </div>
-                          </div>
-                        )}
-                      </div>
                     </div>
-                  )}
+                    <div className="font-medium">Tanggal Kembali </div>
+                  </div>
+                  <DatePicker
+                    selected={roundTrip ? returnDate : null}
+                    onChange={(date) => dispatch(setReturnDate(date))}
+                    dateFormat="EEE, d MMM yyyy"
+                    locale={id}
+                    className="cursor-pointer text-[#0C68BE]"
+                    ref={returnDateRef}
+                    disabled={!roundTrip}
+                    placeholderText="Pilih tanggal kembali"
+                  />
                 </div>
+                {isReturnDateBeforeDeparture && (
+                  <div className="flex items-center gap-2 text-red-500 font-normal  text-sm">
+                    <IoWarning size={20} />
+                    <div>
+                      Tanggal kembali tidak boleh lebih awal dari tanggal
+                      keberangkatan
+                    </div>
+                  </div>
+                )}
               </a>
               <a
                 href="#"
@@ -330,7 +395,9 @@ export default function CariTiketLain() {
                     >
                       <GiAirplaneDeparture />
                       <div>
-                        {departureAirport?.city} ({departureAirport?.iata_code})
+                        {departureAirport
+                          ? `${departureAirport.city} (${departureAirport.iata_code})`
+                          : " Keberangkatan"}
                       </div>
                     </div>
                     {isDropdownOpen4 && (
@@ -384,8 +451,9 @@ export default function CariTiketLain() {
                     >
                       <GiAirplaneArrival />
                       <div>
-                        {" "}
-                        {arrivalAirport?.city} ({arrivalAirport?.iata_code})
+                        {arrivalAirport
+                          ? `${arrivalAirport.city} (${arrivalAirport.iata_code})`
+                          : "Tujuan"}
                       </div>
                     </div>
                     {isDropdownOpen5 && (
@@ -427,12 +495,14 @@ export default function CariTiketLain() {
                   </div>
                 </div>
               </a>
-              {departureAirport?.id === arrivalAirport?.id && (
-                <div className="flex items-center gap-2 text-red-500 font-normal  text-sm">
-                  <IoWarning size={20} />
-                  <div>Bandara keberangkatan dan tujuan tidak boleh sama</div>
-                </div>
-              )}
+              {departureAirport &&
+                arrivalAirport &&
+                departureAirport.id === arrivalAirport.id && (
+                  <div className="flex items-center gap-2 text-red-500 font-normal text-sm">
+                    <IoWarning size={20} />
+                    <div>Bandara keberangkatan dan tujuan tidak boleh sama</div>
+                  </div>
+                )}
               <a
                 href="#"
                 className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold sm:hidden"
@@ -480,13 +550,6 @@ export default function CariTiketLain() {
                         <div>Jumlah penumpang tidak boleh lebih dari 4</div>
                       </div>
                     )}
-                    {jumlahDewasa === 0 &&
-                      (jumlahAnak === 1 || jumlahBayi === 1) && (
-                        <div className="flex items-center gap-2 text-red-500 text-sm">
-                          <IoWarning size={20} />
-                          <div>Anak dan bayi harus didampingi orang dewasa</div>
-                        </div>
-                      )}
 
                     {isDropdownOpen3 && (
                       <div className="absolute mt- w-44  bg-white border border-gray-200 rounded-md shadow-lg z-10">
@@ -537,7 +600,7 @@ export default function CariTiketLain() {
                             <div className="flex flex-col ">
                               {" "}
                               <div className="text-md">Anak </div>
-                              <div className="text-xs ">2-11 </div>
+                              <div className="text-xs ">2-12 </div>
                             </div>{" "}
                             <div class="flex items-center rounded border border-gray-200  ">
                               <button
@@ -615,7 +678,7 @@ export default function CariTiketLain() {
                     className="flex items-center gap-2 cursor-pointer"
                     onClick={handleDropdownToggle2}
                   >
-                    <div>{`${seatClass}`} </div>
+                    <div>{seatClass === "" ? "Semua" : seatClass}</div>
                     <span
                       className={`transition ${
                         isDropdownOpen2 ? "rotate-180" : ""
@@ -639,6 +702,18 @@ export default function CariTiketLain() {
                   </div>
                   {isDropdownOpen2 && (
                     <div className="absolute mt-36 ml-28 w-32 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                      <a
+                        href="#"
+                        className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
+                        onClick={() => {
+                          dispatch(setClass(""));
+                          setIsDropdownOpen2(false);
+                        }}
+                      >
+                        <div className="flex items-center gap-x-2">
+                          <div className="font-">Semua</div>
+                        </div>
+                      </a>
                       <a
                         href="#"
                         className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
@@ -695,7 +770,9 @@ export default function CariTiketLain() {
               >
                 <GiAirplaneDeparture />
                 <div>
-                  {departureAirport?.city} ({departureAirport?.iata_code})
+                  {departureAirport
+                    ? `${departureAirport.city} (${departureAirport.iata_code})`
+                    : "Keberangkatan"}
                 </div>
               </div>
               {isDropdownOpen4 && (
@@ -743,8 +820,9 @@ export default function CariTiketLain() {
               >
                 <GiAirplaneArrival />
                 <div>
-                  {" "}
-                  {arrivalAirport?.city} ({arrivalAirport?.iata_code})
+                  {arrivalAirport
+                    ? `${arrivalAirport.city} (${arrivalAirport.iata_code})`
+                    : "Tujuan"}
                 </div>
               </div>
               {isDropdownOpen5 && (
@@ -784,12 +862,14 @@ export default function CariTiketLain() {
                 </div>
               )}
             </div>
-            {departureAirport?.id === arrivalAirport?.id && (
-              <div className="flex items-center gap-2 text-red-500 font-normal  text-sm">
-                <IoWarning size={20} />
-                <div>Bandara keberangkatan dan tujuan tidak boleh sama</div>
-              </div>
-            )}
+            {departureAirport &&
+              arrivalAirport &&
+              departureAirport.id === arrivalAirport.id && (
+                <div className="flex items-center gap-2 text-red-500 font-normal text-sm">
+                  <IoWarning size={20} />
+                  <div>Bandara keberangkatan dan tujuan tidak boleh sama</div>
+                </div>
+              )}
           </div>
 
           <div className="flex items-center gap-x-2 ">
@@ -825,24 +905,17 @@ export default function CariTiketLain() {
                   </div>
                 </div>
                 {totalPenumpang < 1 && (
-                  <div className="flex items-center gap-2 text-red-500 text-sm">
+                  <div className="flex items-center gap-2 text-red-500  text-sm">
                     <IoWarning size={20} />
                     <div>Mohon isi jumlah penumpang</div>
                   </div>
                 )}
                 {totalPenumpang > 4 && (
-                  <div className="flex items-center gap-2 text-red-500 text-sm">
+                  <div className="flex items-center gap-2 text-red-500  text-sm">
                     <IoWarning size={20} />
                     <div>Jumlah penumpang tidak boleh lebih dari 4</div>
                   </div>
                 )}
-                {jumlahDewasa === 0 &&
-                  (jumlahAnak === 1 || jumlahBayi === 1) && (
-                    <div className="flex items-center gap-2 text-red-500 text-sm">
-                      <IoWarning size={20} />
-                      <div>Anak dan bayi harus didampingi orang dewasa</div>
-                    </div>
-                  )}
               </div>
 
               {isDropdownOpen3 && (
@@ -851,12 +924,12 @@ export default function CariTiketLain() {
                     href="#"
                     className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
                   >
-                    <div className="flex items-center  gap-x-2">
+                    <div className="flex items-center gap-x-2">
                       <div className="flex flex-col ">
                         {" "}
                         <div className="text-md">Dewasa </div>
                         <div className="text-xs ">12+ </div>
-                      </div>
+                      </div>{" "}
                       <div class="flex items-center rounded border border-gray-200 ">
                         <button
                           type="button"
@@ -894,8 +967,8 @@ export default function CariTiketLain() {
                       <div className="flex flex-col ">
                         {" "}
                         <div className="text-md">Anak </div>
-                        <div className="text-xs ">2-11 </div>
-                      </div>
+                        <div className="text-xs ">2-12 </div>
+                      </div>{" "}
                       <div class="flex items-center rounded border border-gray-200  ">
                         <button
                           type="button"
@@ -931,7 +1004,7 @@ export default function CariTiketLain() {
                       <div className="flex flex-col ">
                         {" "}
                         <div className="text-md">Bayi </div>
-                        <div className="text-xs "> {"<"}2</div>
+                        <div className="text-xs ">{"<"}2 </div>
                       </div>{" "}
                       <div class="flex items-center rounded border border-gray-200 ml-4">
                         <button
@@ -969,7 +1042,7 @@ export default function CariTiketLain() {
                 className="flex items-center gap-2 cursor-pointer"
                 onClick={handleDropdownToggle2}
               >
-                <div>{`${seatClass}`} </div>
+                <div>{seatClass === "" ? "Semua" : seatClass}</div>
                 <span
                   className={`transition ${
                     isDropdownOpen2 ? "rotate-180" : ""
@@ -993,6 +1066,18 @@ export default function CariTiketLain() {
               </div>
               {isDropdownOpen2 && (
                 <div className="absolute w-32 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                  <a
+                    href="#"
+                    className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
+                    onClick={() => {
+                      dispatch(setClass(""));
+                      setIsDropdownOpen2(false);
+                    }}
+                  >
+                    <div className="flex items-center gap-x-2">
+                      <div className="font-">Semua</div>
+                    </div>
+                  </a>
                   <a
                     href="#"
                     className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
@@ -1040,14 +1125,14 @@ export default function CariTiketLain() {
           style={{ borderRight: "1px solid", height: "40px" }}
         >
           <div className="flex">
-            <div>
-              <div className="flex items-center gap-x-2 ">
+            <div className="flex flex-col gap-y-">
+              <div className="flex items-center gap-x-2">
                 <div className="cursor-pointer">
                   <SlCalender
                     onClick={() => departureDateRef.current.setFocus()}
                   />
                 </div>
-                <div className="font-medium">Waktu Keberangkatan</div>
+                <div className="font-medium">Tanggal Keberangkatan</div>
               </div>
               <DatePicker
                 selected={departureDate}
@@ -1059,15 +1144,19 @@ export default function CariTiketLain() {
                 locale={id}
                 className="cursor-pointer text-[#0C68BE]"
                 ref={departureDateRef}
+                placeholderText="Pilih tanggal keberangkatan"
               />
             </div>
             <div>
-              {isSameDate && (
-                <div className="hidden md:flex items-center gap-2 text-red-500 font-normal  text-sm">
-                  <IoWarning size={20} />
-                  <div>Tanggal keberangkatan dan kembali tidak boleh sama</div>
-                </div>
-              )}
+              {isSameDate &&
+                roundTrip(
+                  <div className="hidden md:flex items-center gap-2 text-red-500 font-normal  text-sm">
+                    <IoWarning size={20} />
+                    <div>
+                      Tanggal keberangkatan dan kembali tidak boleh sama
+                    </div>
+                  </div>
+                )}
             </div>
           </div>
         </div>
@@ -1079,12 +1168,12 @@ export default function CariTiketLain() {
             </div>
             <div className=" items-center gap-x-4 hidden flex-col  md:flex">
               <label
-                htmlFor="AcceptConditions"
+                htmlFor="AcceptConditionsMD"
                 className="relative inline-block h-5 w-9 cursor-pointer rounded-full bg-gray-300 transition [-webkit-tap-highlight-color:_transparent] has-[:checked]:bg-[#2A91E5]"
               >
                 <input
                   type="checkbox"
-                  id="AcceptConditions"
+                  id="AcceptConditionsMD"
                   className="peer sr-only"
                   checked={roundTrip}
                   onChange={() => {
@@ -1096,45 +1185,57 @@ export default function CariTiketLain() {
               </label>
             </div>
           </div>
-          {roundTrip && (
-            <div className="max-md:hidden">
-              <div className="flex gap-4">
+          <div className="max-md:hidden">
+            <div className="flex gap-4">
+              <div
+                className="hidden flex-col md:flex"
+                style={{ borderRight: "1px solid #ccc", height: "40px" }}
+              >
                 <div
-                  className="hidden flex-col  md:flex"
-                  style={{ borderRight: "1px", height: "40px" }}
+                  className={`flex items-center gap-x-2 ${
+                    !roundTrip && "opacity-50"
+                  }`}
                 >
-                  <div className="flex items-center gap-x-2 ">
-                    <div className="cursor-pointer ">
-                      <SlCalender
-                        onClick={() => returnDateRef.current.setFocus()}
-                      />
-                    </div>
-                    <div className="font-medium ">Waktu Kembali</div>
+                  <div className="cursor-pointer">
+                    <SlCalender
+                      onClick={() => returnDateRef.current.setFocus()}
+                    />
                   </div>
-                  <DatePicker
-                    selected={returnDate}
-                    onChange={(date) => dispatch(setReturnDate(date))}
-                    dateFormat="EEE, d MMM yyyy"
-                    locale={id}
-                    className="cursor-pointer text-[#0C68BE]"
-                    ref={returnDateRef}
-                  />
+                  <div className="font-medium">Tanggal Kembali </div>
                 </div>
+                <DatePicker
+                  selected={roundTrip ? returnDate : null}
+                  onChange={(date) => dispatch(setReturnDate(date))}
+                  dateFormat="EEE, d MMM yyyy"
+                  locale={id}
+                  className="cursor-pointer text-[#0C68BE]"
+                  ref={returnDateRef}
+                  disabled={!roundTrip}
+                  placeholderText="Pilih tanggal kembali"
+                />
+              </div>
 
-                <div>
-                  {isReturnDateBeforeDeparture && (
-                    <div className="flex items-center gap-2 text-red-500 font-normal  text-sm">
-                      <IoWarning size={20} />
-                      <div>
-                        Tanggal kembali tidak boleh lebih awal dari tanggal
-                        keberangkatan
-                      </div>
+              <div>
+                {isReturnDateBeforeDeparture && (
+                  <div className="flex items-center gap-2 text-red-500 font-normal  text-sm">
+                    <IoWarning size={20} />
+                    <div>
+                      Tanggal kembali tidak boleh lebih awal dari tanggal
+                      keberangkatan
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
+                {isDepartureDateBeforeToday && (
+                  <div className="flex items-center gap-2 text-red-500 font-normal text-sm">
+                    <IoWarning size={20} />
+                    <div>
+                      Tanggal keberangkatan tidak boleh lebih awal dari hari ini
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
       <div className="flex items-center p-8">
@@ -1164,22 +1265,28 @@ export default function CariTiketLain() {
                 href="#"
                 className="block rounded-md  px-4 py-2 text-gray-800/60  hover:text-gray-800 font-semibold"
               >
-                <div className="flex items-center gap-x-2 ">
-                  <div className="cursor-pointer">
-                    <SlCalender
-                      onClick={() => departureDateRef.current.setFocus()}
-                    />
+                <div className="flex flex-col gap-y-">
+                  <div className="flex items-center gap-x-2">
+                    <div className="cursor-pointer">
+                      <SlCalender
+                        onClick={() => departureDateRef.current.setFocus()}
+                      />
+                    </div>
+                    <div className="font-medium">Tanggal Keberangkatan</div>
                   </div>
-                  <div className="font-medium">Waktu Keberangkatan</div>
+                  <DatePicker
+                    selected={departureDate}
+                    onChange={(date) => {
+                      dispatch(setDepartureDate(date));
+                      console.log("date :>> ", typeof date);
+                    }}
+                    dateFormat="EEE, d MMM yyyy"
+                    locale={id}
+                    className="cursor-pointer text-[#0C68BE]"
+                    ref={departureDateRef}
+                    placeholderText="Pilih tanggal keberangkatan"
+                  />
                 </div>
-                <DatePicker
-                  selected={departureDate}
-                  onChange={(date) => dispatch(setDepartureDate(date))}
-                  dateFormat="EEE, d MMM yyyy"
-                  locale={id}
-                  className="cursor-pointer text-[#0C68BE]"
-                  ref={departureDateRef}
-                />
                 {isSameDate && (
                   <div className="flex items-center gap-2 mt-1 text-red-500 font-normal  text-sm">
                     <IoWarning size={20} />
@@ -1198,12 +1305,12 @@ export default function CariTiketLain() {
                     <div className="font-medium text-sm">Pulang - Pergi</div>
                     <div className=" items-center gap-x-4  flex-col  ">
                       <label
-                        htmlFor="AcceptConditions"
+                        htmlFor="AcceptConditionsSM"
                         className="relative inline-block h-5 w-9 cursor-pointer rounded-full bg-gray-300 transition [-webkit-tap-highlight-color:_transparent] has-[:checked]:bg-[#2A91E5]"
                       >
                         <input
                           type="checkbox"
-                          id="AcceptConditions"
+                          id="AcceptConditionsSM"
                           className="peer sr-only"
                           checked={roundTrip}
                           onChange={() => {
@@ -1215,37 +1322,30 @@ export default function CariTiketLain() {
                       </label>
                     </div>
                   </div>
-                  {roundTrip && (
-                    <div className="flex-col items-center gap-x-2 ">
-                      <div className="flex gap-2 items-center">
-                        <div className="cursor-pointer">
-                          <SlCalender
-                            onClick={() => departureDateRef.current.setFocus()}
-                          />
-                        </div>
-                        <div className="font-medium">Waktu Kembali</div>
+                  <div className="flex flex-col gap-y-2">
+                    <div
+                      className={`flex items-center gap-x-2 ${
+                        !roundTrip && "opacity-50"
+                      }`}
+                    >
+                      <div className="cursor-pointer">
+                        <SlCalender
+                          onClick={() => returnDateRef.current.setFocus()}
+                        />
                       </div>
-                      <DatePicker
-                        selected={returnDate}
-                        onChange={(date) => dispatch(setReturnDate(date))}
-                        dateFormat="EEE, d MMM yyyy"
-                        locale={id}
-                        className="cursor-pointer text-[#0C68BE]"
-                        ref={returnDateRef}
-                      />
-                      <div>
-                        {isReturnDateBeforeDeparture && (
-                          <div className="flex items-center gap-2 mt-1 text-red-500 font-normal  text-sm">
-                            <IoWarning size={20} />
-                            <div>
-                              Tanggal kembali tidak boleh lebih awal dari
-                              tanggal keberangkatan
-                            </div>
-                          </div>
-                        )}
-                      </div>
+                      <div className="font-medium">Tanggal Kembali </div>
                     </div>
-                  )}
+                    <DatePicker
+                      selected={roundTrip ? returnDate : null}
+                      onChange={(date) => dispatch(setReturnDate(date))}
+                      dateFormat="EEE, d MMM yyyy"
+                      locale={id}
+                      className="cursor-pointer text-[#0C68BE]"
+                      ref={returnDateRef}
+                      disabled={!roundTrip}
+                      placeholderText="Pilih tanggal kembali"
+                    />
+                  </div>
                 </div>
               </a>
               <a
@@ -1278,10 +1378,22 @@ export default function CariTiketLain() {
                   <div className="text">1 penumpang</div>
                   <div className=""> |</div>
                   <div className="" onClick={handleDropdownToggle2}>
-                    {`${seatClass}`}
+                    <div>{seatClass === "" ? "Semua" : seatClass}</div>
                   </div>
                   {isDropdownOpen2 && (
                     <div className="absolute mt-36 ml-28 w-48 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                      <a
+                        href="#"
+                        className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
+                        onClick={() => {
+                          dispatch(setClass(""));
+                          setIsDropdownOpen2(false);
+                        }}
+                      >
+                        <div className="flex items-center gap-x-2">
+                          <div className="font-">Semua</div>
+                        </div>
+                      </a>
                       <a
                         href="#"
                         className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
@@ -1329,8 +1441,8 @@ export default function CariTiketLain() {
           onClick={() => {
             if (isButtonEnabled) {
               navigate("/search");
+
               dispatch(getSearchTicket());
-              dispatch(clearSelectedTicket());
             }
           }}
           className={`rounded-xl px-5 py-2.5 font-medium text-white hover:shadow ${

@@ -81,7 +81,7 @@ const authSlice = createSlice({
     },
     logout: (state) => {
       state.token = null;
-      window.location.reload();
+      localStorage.removeItem("persist:root3");
     },
   },
 });
