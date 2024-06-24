@@ -7,6 +7,7 @@ import profileReducer from "./reducers/profileReducer";
 
 import filterReducer from "./reducers/filterReducer";
 import authReducer from "./reducers/authReducer";
+import sessionStorage from "redux-persist/lib/storage/session"; // sessionStorage for web
 
 import { thunk } from "redux-thunk";
 import { persistStore, persistReducer } from "redux-persist";

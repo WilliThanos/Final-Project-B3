@@ -12,32 +12,11 @@ import { FiCreditCard } from "react-icons/fi";
 import { SlCalender } from "react-icons/sl";
 import { id } from "date-fns/locale";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  setJenisKelamin,
-  setNamaDepan,
-  setNamaBelakang,
-  setTanggalLahir,
-  setEmail,
-  setNomorHP,
-} from "../redux/reducers/bookingReducer";
 
 export default function Payment() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const jenisKelamin = useSelector((state) => state?.booking?.jenisKelamin);
-  const tanggalLahir = useSelector((state) => state?.booking?.tanggalLahir);
-  const namaDepan = useSelector((state) => state?.booking?.namaDepan);
-  const namaBelakang = useSelector((state) => state?.booking?.namaBelakang);
-  const email = useSelector((state) => state?.booking?.email);
-  const nomorHP = useSelector((state) => state?.booking?.nomorHP);
 
   const dispatch = useDispatch();
-
-  const formattedDate = new Intl.DateTimeFormat("id-ID", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }).format(new Date(tanggalLahir));
 
   const departureDateRef = useRef(null);
 
@@ -45,16 +24,8 @@ export default function Payment() {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(setNamaDepan(namaDepan));
-    dispatch(setNamaBelakang(namaBelakang));
-    dispatch(setNomorHP(nomorHP));
-    dispatch(setEmail(email));
-  };
-
   return (
-    <form onSubmit={handleSubmit} className="max-w-screen-2xl mx-auto  ">
+    <form className="max-w-screen-2xl mx-auto  ">
       <NavbarLogoBiru />
       {/* <div className="mt-24">
         <NavbarLogoPutih />
@@ -63,7 +34,7 @@ export default function Payment() {
       <div className="mt-24">
         <CariTiketLain />
       </div>
-      <div className="flex pt-32 gap-10  max-md:mx-2 max-md:gap-3  max-lg:pt-40  max-xl:pt-40 max-xl:flex-col max-xl:mx-2 ">
+      <div className="flex pt-40 gap-10  max-md:mx-2 max-md:gap-3  max-lg:pt-40  max-xl:pt-40 max-xl:flex-col max-xl:mx-2 ">
         <div className="flex flex-col w-full">
           <div className="pb-4 font-bold text-2xl max-lg:text-xl max-sm:text-lg">
             Metode Pembayaran

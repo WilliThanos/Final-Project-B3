@@ -12,6 +12,14 @@ function NavbarLogoPutih() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
+  const cekState = useSelector((state) => state);
+  console.log("cekState :>> ", cekState);
+  const token = useSelector((state) => state?.auth?.token);
+  useEffect(() => {
+    if (token) {
+      dispatch(getProfile());
+    }
+  }, []);
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
@@ -21,12 +29,6 @@ function NavbarLogoPutih() {
     setIsDropdownOpen2(!isDropdownOpen2);
   };
 
-  useEffect(() => {
-    dispatch(getProfile());
-  }, []);
-
-  const cekState = useSelector((state) => state);
-  const token = useSelector((state) => state?.auth?.token);
   const userFirstName = useSelector(
     (state) => state?.profile?.profile?.user?.first_name
   );

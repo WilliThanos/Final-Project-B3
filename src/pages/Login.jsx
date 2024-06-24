@@ -16,6 +16,8 @@ export default function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const authState = useSelector((state) => state.auth);
+  const successLogin = useSelector((state) => state?.auth?.message?.type);
+  console.log("successLogin :>> ", successLogin);
   const [error, setError] = useState(true);
   const getError = localStorage.getItem("error");
   const [email, setEmail] = useState("");
@@ -61,7 +63,7 @@ export default function Login() {
         password,
       };
       const result = await dispatch(login(credentials));
-
+      console.log("result LOGIN :>> ", result);
       if (result.payload) {
         //Login berhasil
         navigate("/");

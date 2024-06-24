@@ -10,10 +10,13 @@ import { LiaCircleSolid } from "react-icons/lia";
 import {
   setSelectedDepartureFlight,
   setSelectedReturnFlight,
+  setSelectedDepartureFlightId,
+  setSelectedReturnFlightId,
 } from "../redux/reducers/ticketReducer";
 import { FaCircleCheck } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
 import { Navigate, useNavigate } from "react-router-dom";
+import { getSearchTicket } from "../redux/action/dataAction";
 
 export default function Search() {
   const dispatch = useDispatch();
@@ -32,13 +35,25 @@ export default function Search() {
   const selectedReturnFlight = useSelector(
     (state) => state?.ticket?.selectedReturnFlight
   );
+  const selectedDepartureFlightId = useSelector(
+    (state) => state?.ticket?.selectedDepartureFlightId
+  );
+  const selectedReturnFlightId = useSelector(
+    (state) => state?.ticket?.selectedReturnFlightId
+  );
   const filterClass = useSelector((state) => state?.filter?.filterClass);
   const sortHarga = useSelector((state) => state?.filter?.sortHarga);
 
   const filteredAndSortedDepartureFlights = departureFlights
-    ?.filter(
-      (flight) => flight?.class?.toLowerCase() === filterClass?.toLowerCase()
-    )
+    ?.filter((flight) => {
+      // Check if filterClass is not empty
+      if (filterClass !== "") {
+        // Perform case-insensitive comparison using toLowerCase()
+        return flight?.class?.toLowerCase() === filterClass?.toLowerCase();
+      }
+      // If filterClass is empty, do not filter
+      return true;
+    })
 
     .sort((a, b) => {
       if (sortHarga === "asc") {
@@ -50,9 +65,15 @@ export default function Search() {
     });
 
   const filteredAndSortedReturnFlights = returnFlights
-    ?.filter(
-      (flight) => flight?.class?.toLowerCase() === filterClass?.toLowerCase()
-    )
+    ?.filter((flight) => {
+      // Check if filterClass is not empty
+      if (filterClass !== "") {
+        // Perform case-insensitive comparison using toLowerCase()
+        return flight?.class?.toLowerCase() === filterClass?.toLowerCase();
+      }
+      // If filterClass is empty, do not filter
+      return true;
+    })
     .sort((a, b) => {
       if (sortHarga === "asc") {
         return a.price - b.price;
@@ -93,8 +114,8 @@ export default function Search() {
 
   const calculateTravelTime = (departure, arrival) => {
     // Parse the time strings
-    const [depHours, depMinutes] = departure.split(":").map(Number);
-    const [arrHours, arrMinutes] = arrival.split(":").map(Number);
+    const [depHours, depMinutes] = departure?.split(":")?.map(Number);
+    const [arrHours, arrMinutes] = arrival?.split(":")?.map(Number);
 
     // Convert times to minutes since the start of the day
     const departureInMinutes = depHours * 60 + depMinutes;
@@ -114,6 +135,10 @@ export default function Search() {
     // Return the formatted string
     return `${hours}j ${minutes}m`;
   };
+
+  useEffect(() => {
+    dispatch(getSearchTicket());
+  }, []);
 
   return (
     <div className="max-w-screen-2xl mx-auto  ">
@@ -140,7 +165,7 @@ export default function Search() {
               {arrivalAirport?.city} ({arrivalAirport?.iata_code}) pada{" "}
               {`${formattedDepartureDate}`}
             </div>
-            {selectedDepartureFlight ? (
+            {selectedDepartureFlight && selectedDepartureFlightId ? (
               <div>
                 <div
                   key={selectedDepartureFlight?.id}
@@ -162,12 +187,12 @@ export default function Search() {
                         <div>{selectedDepartureFlight?.airline?.name}</div>{" "}
                         <div>-</div>
                         <div>
-                          {(selectedDepartureFlight?.class)
-                            .charAt(0)
-                            .toUpperCase() +
-                            (selectedDepartureFlight?.class)
-                              .slice(1)
-                              .toLowerCase()}
+                          {selectedDepartureFlight?.class
+                            ?.charAt(0)
+                            ?.toUpperCase() +
+                            selectedDepartureFlight?.class
+                              ?.slice(1)
+                              ?.toLowerCase()}
                         </div>
                       </div>{" "}
                     </div>
@@ -226,9 +251,7 @@ export default function Search() {
                     </div>
                     <div className="font-bold text-xl text-[#2A91E5] max-md:text-sm">
                       Rp{" "}
-                      {(
-                        selectedDepartureFlight?.price * totalPenumpang
-                      ).toLocaleString("id-ID")}
+                      {selectedDepartureFlight?.price?.toLocaleString("id-ID")}
                       ,00
                     </div>
                   </div>
@@ -354,7 +377,7 @@ export default function Search() {
             ) : filteredAndSortedDepartureFlights &&
               filteredAndSortedDepartureFlights.length > 0 ? (
               filteredAndSortedDepartureFlights?.map((flight) => (
-                <div>
+                <div key={flight?.id}>
                   <div
                     key={flight?.id}
                     onClick={() => handleDropdownToggle(flight?.id)}
@@ -514,7 +537,10 @@ export default function Search() {
                     {/* END DROPDOWN DETAILS */}
                   </div>
                   <div
-                    onClick={() => dispatch(setSelectedDepartureFlight(flight))}
+                    onClick={() => {
+                      dispatch(setSelectedDepartureFlight(flight));
+                      dispatch(setSelectedDepartureFlightId(flight.id));
+                    }}
                     className="bg-[#2A91E5] hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer"
                   >
                     Pilih Tiket
@@ -559,12 +585,12 @@ export default function Search() {
                             <div>{selectedReturnFlight?.airline?.name}</div>{" "}
                             <div>-</div>
                             <div>
-                              {(selectedReturnFlight?.class)
-                                .charAt(0)
-                                .toUpperCase() +
-                                (selectedReturnFlight?.class)
-                                  .slice(1)
-                                  .toLowerCase()}
+                              {selectedReturnFlight?.class
+                                ?.charAt(0)
+                                ?.toUpperCase() +
+                                selectedReturnFlight?.class
+                                  ?.slice(1)
+                                  ?.toLowerCase()}
                             </div>
                           </div>{" "}
                         </div>
@@ -624,9 +650,9 @@ export default function Search() {
                         </div>
                         <div className="font-bold text-xl text-[#2A91E5] max-md:text-sm">
                           Rp{" "}
-                          {(
-                            selectedReturnFlight?.price * totalPenumpang
-                          ).toLocaleString("id-ID")}
+                          {(selectedReturnFlight?.price).toLocaleString(
+                            "id-ID"
+                          )}
                           ,00
                         </div>
                       </div>
@@ -760,7 +786,7 @@ export default function Search() {
                 ) : filteredAndSortedReturnFlights &&
                   filteredAndSortedReturnFlights.length > 0 ? (
                   filteredAndSortedReturnFlights.map((flight) => (
-                    <div>
+                    <div key={flight?.id}>
                       <div
                         key={flight?.id}
                         onClick={() => handleDropdownToggle(flight?.id)}
