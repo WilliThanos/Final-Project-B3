@@ -29,8 +29,12 @@ import { LiaCircleSolid } from "react-icons/lia";
 import DetailPenumpangAnak from "../components/DetailPenumpangAnak";
 import DetailPenumpangBayi from "../components/DetailPenumpangBayi";
 import DetailPenumpangDewasa from "../components/DetailPenumpangDewasa";
+import { getSearchTicket } from "../redux/action/dataAction";
+import { useNavigate } from "react-router-dom";
 
 export default function BookingDetail({ index }) {
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const passengers = useSelector((state) => state.passengers.passengers);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -121,12 +125,17 @@ export default function BookingDetail({ index }) {
     (state) => state?.ticket?.selectedReturnFlight
   );
 
-  const formattedDepartureDate = new Intl.DateTimeFormat("id-ID", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })?.format(new Date(departureFlights?.Date));
+  const formattedDepartureDate = departureFlights?.Date
+    ? new Intl.DateTimeFormat("id-ID", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }).format(new Date(departureFlights.Date))
+    : "Invalid Date";
+
+  console.log("DepartureDate", departureFlights?.Date);
+  console.log("formattedDepartureDate", formattedDepartureDate);
 
   const formattedarrivalDate =
     returnFlights && returnFlights.Date
@@ -211,6 +220,16 @@ export default function BookingDetail({ index }) {
     setPassengerAge(age);
   };
 
+  useEffect(() => {
+    dispatch(getSearchTicket());
+  }, []);
+
+  useEffect(() => {
+    if (!departureFlights) {
+      navigate("/search");
+    }
+  }, [departureFlights, navigate]);
+
   return (
     <form className="max-w-screen-2xl mx-auto  ">
       <NavbarLogoBiru />
@@ -221,7 +240,7 @@ export default function BookingDetail({ index }) {
       <div className="mt-24">
         <CariTiketLain />
       </div>
-      <div className="flex pt-32 gap-8  max-md:mx-2 max-md:gap-3  max-lg:pt-40  max-xl:pt-40 max-xl:flex-col max-xl:mx-2 max-md:pt-32 ">
+      <div className="flex pt-40 gap-8  max-md:mx-2 max-md:gap-3  max-lg:pt-40  max-xl:pt-40 max-xl:flex-col max-xl:mx-2 max-md:pt-32 ">
         <div className="flex flex-col gap-8 w-full">
           <div className="">
             <div className="pb-4 font-bold text-2xl max-lg:text-xl max-sm:text-lg">
@@ -666,7 +685,10 @@ export default function BookingDetail({ index }) {
           {/* Detail Pembayaran Component */}
           <DetailPembayaran />
           {/* Detail Pembayaran Component */}
-          <button className="rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow">
+          <button
+            onClick={() => navigate("/payment")}
+            className="rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow"
+          >
             Lanjut ke Pembayaran
           </button>
         </div>

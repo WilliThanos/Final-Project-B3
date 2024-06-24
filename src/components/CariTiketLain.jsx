@@ -1148,12 +1148,15 @@ export default function CariTiketLanding() {
               />
             </div>
             <div>
-              {isSameDate && (
-                <div className="hidden md:flex items-center gap-2 text-red-500 font-normal  text-sm">
-                  <IoWarning size={20} />
-                  <div>Tanggal keberangkatan dan kembali tidak boleh sama</div>
-                </div>
-              )}
+              {isSameDate &&
+                roundTrip(
+                  <div className="hidden md:flex items-center gap-2 text-red-500 font-normal  text-sm">
+                    <IoWarning size={20} />
+                    <div>
+                      Tanggal keberangkatan dan kembali tidak boleh sama
+                    </div>
+                  </div>
+                )}
             </div>
           </div>
         </div>

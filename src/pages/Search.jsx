@@ -10,7 +10,8 @@ import { LiaCircleSolid } from "react-icons/lia";
 import {
   setSelectedDepartureFlight,
   setSelectedReturnFlight,
-  clearTicket,
+  setSelectedDepartureFlightId,
+  setSelectedReturnFlightId,
 } from "../redux/reducers/ticketReducer";
 import { FaCircleCheck } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
@@ -33,6 +34,12 @@ export default function Search() {
   );
   const selectedReturnFlight = useSelector(
     (state) => state?.ticket?.selectedReturnFlight
+  );
+  const selectedDepartureFlightId = useSelector(
+    (state) => state?.ticket?.selectedDepartureFlightId
+  );
+  const selectedReturnFlightId = useSelector(
+    (state) => state?.ticket?.selectedReturnFlightId
   );
   const filterClass = useSelector((state) => state?.filter?.filterClass);
   const sortHarga = useSelector((state) => state?.filter?.sortHarga);
@@ -107,8 +114,8 @@ export default function Search() {
 
   const calculateTravelTime = (departure, arrival) => {
     // Parse the time strings
-    const [depHours, depMinutes] = departure.split(":").map(Number);
-    const [arrHours, arrMinutes] = arrival.split(":").map(Number);
+    const [depHours, depMinutes] = departure?.split(":")?.map(Number);
+    const [arrHours, arrMinutes] = arrival?.split(":")?.map(Number);
 
     // Convert times to minutes since the start of the day
     const departureInMinutes = depHours * 60 + depMinutes;
@@ -158,7 +165,7 @@ export default function Search() {
               {arrivalAirport?.city} ({arrivalAirport?.iata_code}) pada{" "}
               {`${formattedDepartureDate}`}
             </div>
-            {selectedDepartureFlight ? (
+            {selectedDepartureFlight && selectedDepartureFlightId ? (
               <div>
                 <div
                   key={selectedDepartureFlight?.id}
@@ -180,12 +187,12 @@ export default function Search() {
                         <div>{selectedDepartureFlight?.airline?.name}</div>{" "}
                         <div>-</div>
                         <div>
-                          {(selectedDepartureFlight?.class)
-                            .charAt(0)
-                            .toUpperCase() +
-                            (selectedDepartureFlight?.class)
-                              .slice(1)
-                              .toLowerCase()}
+                          {selectedDepartureFlight?.class
+                            ?.charAt(0)
+                            ?.toUpperCase() +
+                            selectedDepartureFlight?.class
+                              ?.slice(1)
+                              ?.toLowerCase()}
                         </div>
                       </div>{" "}
                     </div>
@@ -244,7 +251,7 @@ export default function Search() {
                     </div>
                     <div className="font-bold text-xl text-[#2A91E5] max-md:text-sm">
                       Rp{" "}
-                      {(selectedDepartureFlight?.price).toLocaleString("id-ID")}
+                      {selectedDepartureFlight?.price?.toLocaleString("id-ID")}
                       ,00
                     </div>
                   </div>
@@ -532,6 +539,7 @@ export default function Search() {
                   <div
                     onClick={() => {
                       dispatch(setSelectedDepartureFlight(flight));
+                      dispatch(setSelectedDepartureFlightId(flight.id));
                     }}
                     className="bg-[#2A91E5] hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer"
                   >
@@ -577,12 +585,12 @@ export default function Search() {
                             <div>{selectedReturnFlight?.airline?.name}</div>{" "}
                             <div>-</div>
                             <div>
-                              {(selectedReturnFlight?.class)
-                                .charAt(0)
-                                .toUpperCase() +
-                                (selectedReturnFlight?.class)
-                                  .slice(1)
-                                  .toLowerCase()}
+                              {selectedReturnFlight?.class
+                                ?.charAt(0)
+                                ?.toUpperCase() +
+                                selectedReturnFlight?.class
+                                  ?.slice(1)
+                                  ?.toLowerCase()}
                             </div>
                           </div>{" "}
                         </div>
