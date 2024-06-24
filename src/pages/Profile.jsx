@@ -21,6 +21,10 @@ export default function Profile() {
 
   const data = useSelector((state) => state.profile.profile.user);
 
+  const handledisabled = () => {
+    alert("email tidak bisa dirubah");
+  };
+
   //fungsi handle update data
   const handleUpdateProfile = (e) => {
     e.preventDefault();
@@ -80,7 +84,7 @@ export default function Profile() {
                 <div className="border-2 border-gray-200 rounded-xl px-2 py-1 hover:border-[#2A91E5] text-sm w-1/2">
                   <p className="">Nama</p>
                   <input
-                    className="w-full"
+                    className="w-full border-none focus:outline-none"
                     type="text"
                     placeholder={data?.first_name}
                     value={first_name}
@@ -90,7 +94,7 @@ export default function Profile() {
                 <div className="border-2 border-gray-200 rounded-xl px-2 py-1 hover:border-[#2A91E5] text-sm w-1/2">
                   <p className="">Nama Terahir</p>
                   <input
-                    className="w-full"
+                    className="w-full border-none focus:outline-none"
                     type="text"
                     placeholder={data?.last_name}
                     value={last_name}
@@ -98,10 +102,13 @@ export default function Profile() {
                   />
                 </div>
               </div>
-              <div className="border-2 border-gray-200 rounded-xl px-2 py-1 hover:border-red-500 text-sm">
+              <div
+                className="border-2 border-gray-200 rounded-xl px-2 py-1 hover:border-red-500 text-sm bg-red-100"
+                onClick={() => handledisabled()}
+              >
                 <p className="">Email</p>
                 <input
-                  className="w-full"
+                  className="w-full bg-red-100"
                   type="text"
                   placeholder="slamet"
                   value={data?.email || ""}
@@ -111,8 +118,8 @@ export default function Profile() {
               <div className="border-2 border-gray-200 rounded-xl px-2 py-1 hover:border-[#2A91E5] text-sm">
                 <p className="">Ubah Password</p>
                 <input
-                  className="w-full"
-                  type="text"
+                  className="w-full border-none focus:outline-none"
+                  type="password"
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -121,8 +128,8 @@ export default function Profile() {
               <div className="border-2 border-gray-200 rounded-xl px-2 py-1 hover:border-[#2A91E5] text-sm">
                 <p className="">konfirmasi Password</p>
                 <input
-                  className="w-full"
-                  type="text"
+                  className="w-full border-none focus:outline-none"
+                  type="password"
                   placeholder="Password"
                   value={confirmPassword}
                   onChange={(e) => setconfirmPassword(e.target.value)}

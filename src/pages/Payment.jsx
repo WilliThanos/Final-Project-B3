@@ -23,21 +23,21 @@ import {
 
 export default function Payment() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const jenisKelamin = useSelector((state) => state?.booking?.jenisKelamin);
-  const tanggalLahir = useSelector((state) => state?.booking?.tanggalLahir);
-  const namaDepan = useSelector((state) => state?.booking?.namaDepan);
-  const namaBelakang = useSelector((state) => state?.booking?.namaBelakang);
-  const email = useSelector((state) => state?.booking?.email);
-  const nomorHP = useSelector((state) => state?.booking?.nomorHP);
+  // const jenisKelamin = useSelector((state) => state?.booking?.jenisKelamin);
+  // const tanggalLahir = useSelector((state) => state?.booking?.tanggalLahir);
+  // const namaDepan = useSelector((state) => state?.booking?.namaDepan);
+  // const namaBelakang = useSelector((state) => state?.booking?.namaBelakang);
+  // const email = useSelector((state) => state?.booking?.email);
+  // const nomorHP = useSelector((state) => state?.booking?.nomorHP);
 
   const dispatch = useDispatch();
 
-  const formattedDate = new Intl.DateTimeFormat("id-ID", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }).format(new Date(tanggalLahir));
+  // const formattedDate = new Intl.DateTimeFormat("id-ID", {
+  //   weekday: "long",
+  //   year: "numeric",
+  //   month: "long",
+  //   day: "numeric",
+  // }).format(new Date(tanggalLahir));
 
   const departureDateRef = useRef(null);
 
@@ -45,16 +45,16 @@ export default function Payment() {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(setNamaDepan(namaDepan));
-    dispatch(setNamaBelakang(namaBelakang));
-    dispatch(setNomorHP(nomorHP));
-    dispatch(setEmail(email));
-  };
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   dispatch(setNamaDepan(namaDepan));
+  //   dispatch(setNamaBelakang(namaBelakang));
+  //   dispatch(setNomorHP(nomorHP));
+  //   dispatch(setEmail(email));
+  // };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-screen-2xl mx-auto  ">
+    <form onSubmit="" className="max-w-screen-2xl mx-auto  ">
       <NavbarLogoBiru />
       {/* <div className="mt-24">
         <NavbarLogoPutih />
