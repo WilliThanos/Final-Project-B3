@@ -16,6 +16,7 @@ import Profile from "./pages/Profile.jsx";
 import VerifikasiEmail from "./pages/VerifikasiEmail.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ConfirmPassword from "./pages/ConfirmEmail.jsx";
+import KonfirmasiPembayaran from "./pages/KonfirmasiPembayaran.jsx";
 import { useSelector } from "react-redux";
 import PrivateRoute from "./routes/PrivateRoutes.jsx";
 
@@ -50,6 +51,10 @@ export default function App() {
     {
       path: "/verifikasi-email",
       element: <VerifikasiEmail />,
+    },
+    {
+      path: "/konfirmasi-pembayaran",
+      element: <KonfirmasiPembayaran />,
     },
     {
       path: "/search",
