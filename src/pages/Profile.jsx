@@ -63,8 +63,8 @@ export default function Profile() {
       <div>
         <div className="flex justify-between max-md:flex-col max-md:items-center gap-5 mt-3 max-md:gap-2">
           <div className="bg-white rounded-2xl w-2/3 px-5 py-3 shadow-sm max-md:w-full">
-            <label className="font-bold text-2xl">
-              Transaksi Terahir {data?.first_name}
+            <label className="font-bold text-2xl ">
+              Transaksi Terakhir {data?.first_name}
             </label>
             {/* card perjalanan */}
             <InfoBooking />

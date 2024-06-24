@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import image from "../assets/bg-plane.jpg";
 import {
   BiSolidPlaneAlt,
@@ -10,13 +10,149 @@ import { FaPersonCircleCheck } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa";
 import NavbarLogoPutih from "../components/Navbar";
 import Footer from "../components/Footer";
+import { useDispatch } from "react-redux";
+import {
+  setArrivalAirport,
+  setArrivalAirportId,
+  setClass,
+  setDepartureAirport,
+  setDepartureAirportId,
+  setDepartureDate,
+  setReturnDate,
+  setRoundTrip,
+} from "../redux/reducers/dataReducer";
+import { useNavigate } from "react-router-dom";
+import CariTiketLanding from "../components/CariTiketLanding";
 
 export default function Landing() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [isRoundTrip, setIsRoundTrip] = useState(false);
+  const [inputSearch, setInputSearch] = useState({
+    asal: "",
+    asalId: "",
+    tujuan: "",
+    tujuanId: "",
+    pergi: "",
+    kembali: "",
+    kelas: "",
+  });
+  const [errorAsal, setErrorAsal] = useState("");
+  const [errorTujuan, setErrorTujuan] = useState("");
+  const [errorPergi, setErrorPergi] = useState("");
+  const [errorKembali, setErrorKembali] = useState("");
+  const [errorKelas, setErrorKelas] = useState("");
+
+  const validateAsal = () => {
+    if (inputSearch.asal === "") {
+      setErrorAsal("Asal Bandara is required");
+      return false;
+    }
+    setErrorAsal("");
+    return true;
+  };
+  const validateTujuan = () => {
+    if (inputSearch.tujuan === "") {
+      setErrorTujuan("Bandara Tujuan is required");
+      return false;
+    }
+    setErrorTujuan("");
+    return true;
+  };
+  const validatePergi = () => {
+    if (inputSearch.pergi === "") {
+      setErrorPergi("Waktu Pergi is required");
+      return false;
+    }
+    setErrorPergi("");
+    return true;
+  };
+  const validateKembali = () => {
+    if (isRoundTrip) {
+      if (inputSearch.kembali === "") {
+        setErrorKembali("Waktu Kembali is required");
+        return false;
+      }
+      const pergiDate = new Date(inputSearch.pergi);
+      const kembaliDate = new Date(inputSearch.kembali);
+      if (kembaliDate < pergiDate) {
+        setErrorKembali(
+          "Waktu Kembali tidak boleh lebih awal dari Waktu Pergi"
+        );
+        return false;
+      }
+    }
+    setErrorKembali("");
+    return true;
+  };
+  const validateKelas = () => {
+    if (inputSearch.kelas === "") {
+      setErrorKelas("Kelas is required");
+      return false;
+    }
+    setErrorKelas("");
+    return true;
+  };
+  const onChangeValue = (e) => {
+    const { name, value } = e.target;
+    if (name === "asal" || name === "tujuan") {
+      const [airportName, airportId] = value.split("-");
+      setInputSearch({
+        ...inputSearch,
+        [name]: airportName,
+        [`${name}Id`]: airportId,
+      });
+    } else {
+      setInputSearch({
+        ...inputSearch,
+        [name]: value,
+      });
+    }
+  };
 
   const handleOptionChange = (event) => {
     setIsRoundTrip(event.target.value === "pulang pergi");
+    dispatch(setRoundTrip(event.target.value === "pulang pergi"));
+    setErrorKembali("");
   };
+
+  const handleOnClick = (e) => {
+    e.preventDefault();
+    const isInvalidAsal = validateAsal();
+    const isInvalidTujuan = validateTujuan();
+    const isInvalidPergi = validatePergi();
+    const isInvalidKembali = validateKembali();
+    const isInvalidKelas = validateKelas();
+    if (
+      isInvalidAsal &&
+      isInvalidTujuan &&
+      isInvalidPergi &&
+      isInvalidKembali &&
+      isInvalidKelas
+    ) {
+      dispatch(setDepartureDate(inputSearch.pergi));
+      if (isRoundTrip) {
+        dispatch(setReturnDate(inputSearch.kembali));
+      } else {
+        dispatch(setReturnDate(new Date()));
+      }
+      dispatch(setClass(inputSearch.kelas));
+      dispatch(setDepartureAirport(inputSearch.asal));
+      dispatch(setDepartureAirportId(inputSearch.asalId));
+      dispatch(setArrivalAirport(inputSearch.tujuan));
+      dispatch(setArrivalAirportId(inputSearch.tujuanId));
+      localStorage.setItem("inputSearch", JSON.stringify(inputSearch));
+      navigate("/search");
+    }
+  };
+
+  useEffect(() => {
+    dispatch(setRoundTrip(false));
+  }, [dispatch]);
+
+  useEffect(() => {
+    console.log(inputSearch);
+  }, [inputSearch]);
 
   return (
     <div>
@@ -36,124 +172,7 @@ export default function Landing() {
             excepturi! Placeat rem quos veniam libero nemo eveniet dicta
             dignissimos fugiat quo.
           </p>
-          <div className="bg-white p-8 rounded-xl mt-14 flex flex-col justify-center items-center gap-6 w-full max-w-5xl shadow-2xl">
-            <div className="flex gap-10">
-              <div>
-                <label className="font-semibold text-lg">
-                  <input
-                    type="radio"
-                    name="option"
-                    value="pergi"
-                    className="mr-2"
-                    checked={!isRoundTrip}
-                    onChange={handleOptionChange}
-                  />
-                  Pergi
-                </label>
-              </div>
-
-              <div>
-                <label className="font-semibold text-lg">
-                  <input
-                    type="radio"
-                    name="option"
-                    value="pulang pergi"
-                    className="mr-2"
-                    checked={isRoundTrip}
-                    onChange={handleOptionChange}
-                  />
-                  Pulang pergi
-                </label>
-              </div>
-            </div>
-            <div className="flex  gap-6 w-full">
-              <div className="flex flex-col  gap-2">
-                <label className="font-semibold text-lg">
-                  <BiSolidPlaneTakeOff className="inline mr-2" />
-                  Asal Bandara
-                </label>
-                <select
-                  name="asal"
-                  className="p-3 rounded-lg outline-none border border-gray-300"
-                >
-                  <option value="" disabled selected>
-                    Pilih
-                  </option>
-                  <option value="bandara1">Bandara 1</option>
-                  <option value="bandara2">Bandara 2</option>
-                  <option value="bandara3">Bandara 3</option>
-                </select>
-              </div>
-              <div className="flex flex-col gap-2">
-                <label className="font-semibold text-lg">
-                  <BiSolidPlaneLand className="inline mr-2" />
-                  Bandara Tujuan
-                </label>
-                <select
-                  name="tujuan"
-                  className="p-3 rounded-lg outline-none border border-gray-300"
-                >
-                  <option value="" disabled selected>
-                    Pilih
-                  </option>
-                  <option value="bandara1">Bandara 1</option>
-                  <option value="bandara2">Bandara 2</option>
-                  <option value="bandara3">Bandara 3</option>
-                </select>
-              </div>
-              <div className="flex flex-col justify-end gap-2">
-                <label className="font-semibold text-lg">
-                  <MdDateRange className="inline mr-2" />
-                  Waktu Pergi
-                </label>
-                <input
-                  type="date"
-                  name="pergi"
-                  className="p-3 rounded-lg outline-none border border-gray-300"
-                />
-              </div>
-              <div className="flex flex-col justify-end gap-2">
-                <label
-                  className={`font-semibold text-lg ${
-                    !isRoundTrip && "opacity-50"
-                  }`}
-                >
-                  <MdDateRange className="inline mr-2" />
-                  Waktu Kembali
-                </label>
-                <input
-                  type="date"
-                  name="kembali"
-                  className={`p-3 rounded-lg outline-none border border-gray-300 ${
-                    !isRoundTrip && "opacity-50"
-                  }`}
-                  disabled={!isRoundTrip}
-                />
-              </div>
-              <div className="flex flex-col gap-2">
-                <label className="font-semibold text-lg">
-                  <FaPersonCircleCheck className="inline mr-2" />
-                  Kelas Kabin & Penumpang
-                </label>
-                <select
-                  name="kelas"
-                  className="p-3 rounded-lg outline-none border border-gray-300"
-                >
-                  <option value="" disabled selected>
-                    Pilih
-                  </option>
-                  <option value="ekonomi">1 Dewasa, ekonomi</option>
-                  <option value="premium">2 Dewasa, premium</option>
-                  <option value="vip">3 Dewasa, VIP</option>
-                </select>
-              </div>
-              <div className="flex flex-col gap-2 justify-end">
-                <button className="bg-blue-600 text-white p-3 rounded-lg flex items-center text-lg shadow-md hover:bg-blue-700 transition duration-300">
-                  <FaSearch className="inline mr-2" /> Cari
-                </button>
-              </div>
-            </div>
-          </div>
+          <CariTiketLanding />
         </div>
       </div>
       <div className="flex flex-col md:flex-row items-center mt-16 px-4 lg:px-16">

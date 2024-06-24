@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import NavbarLogoBiru from "../components/Navbar2";
@@ -21,18 +21,82 @@ import {
   setNomorHP,
 } from "../redux/reducers/bookingReducer";
 
+import {
+  updatePassenger,
+  setPassengers,
+} from "../redux/reducers/passengersReducer";
+
 import { LiaCircleSolid } from "react-icons/lia";
 
 export default function BookingDetail() {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const jenisKelamin = useSelector((state) => state?.booking?.jenisKelamin);
-  const tanggalLahir = useSelector((state) => state?.booking?.tanggalLahir);
-  const namaDepan = useSelector((state) => state?.booking?.namaDepan);
-  const namaBelakang = useSelector((state) => state?.booking?.namaBelakang);
-  const email = useSelector((state) => state?.booking?.email);
-  const nomorHP = useSelector((state) => state?.booking?.nomorHP);
-
   const dispatch = useDispatch();
+  const passengers = useSelector((state) => state.passengers.passengers);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [dropdownOpenIndex, setDropdownOpenIndex] = useState(null);
+  // const jenisKelamin = useSelector((state) => state?.booking?.jenisKelamin);
+  // const tanggalLahir = useSelector((state) => state?.booking?.tanggalLahir);
+  // const namaDepan = useSelector((state) => state?.booking?.namaDepan);
+  // const namaBelakang = useSelector((state) => state?.booking?.namaBelakang);
+  // const email = useSelector((state) => state?.booking?.email);
+  // const nomorHP = useSelector((state) => state?.booking?.nomorHP);
+  const jumlahDewasa = useSelector((state) => state?.data?.jumlahDewasa);
+  const jumlahAnak = useSelector((state) => state?.data?.jumlahAnak);
+  const jumlahBayi = useSelector((state) => state?.data?.jumlahBayi);
+
+  const totalPenumpang = jumlahDewasa + jumlahAnak + jumlahBayi;
+
+  const handleInputGender = (index, field, value) => {
+    const newPassengers = [...passengers];
+    newPassengers[index][field] = value;
+    setPassengers(newPassengers);
+  };
+
+  const toggleDropdown = (index) => {
+    setDropdownOpenIndex(index === dropdownOpenIndex ? null : index);
+  };
+
+  useEffect(() => {
+    const maxPassengers = 4; // Maximum number of passengers allowed
+
+    if (passengers.length !== totalPenumpang) {
+      if (passengers.length < totalPenumpang) {
+        // Add new passengers if needed
+        let newPassengers = [
+          ...passengers,
+          ...Array(totalPenumpang - passengers.length).fill({
+            jenisKelamin: "",
+            namaDepan: "",
+            namaBelakang: "",
+            tanggalLahir: null,
+            nik: "",
+            nomorHP: "",
+            isDropdownOpen: false,
+          }),
+        ];
+
+        // Ensure not exceeding maximum number of passengers
+        if (newPassengers.length > maxPassengers) {
+          newPassengers = newPassengers.slice(0, maxPassengers);
+        }
+
+        // Dispatch the state update only if passengers have changed
+        if (
+          newPassengers.length !== passengers.length ||
+          !newPassengers.every((p, index) => p === passengers[index])
+        ) {
+          dispatch(setPassengers(newPassengers));
+        }
+      } else {
+        // Reduce passengers if needed
+        const newPassengers = passengers.slice(0, totalPenumpang);
+        dispatch(setPassengers(newPassengers));
+      }
+    }
+  }, [totalPenumpang, dispatch, passengers]);
+
+  const handleInputChange = (index, field, value) => {
+    dispatch(updatePassenger({ index, field, value }));
+  };
 
   const departureFlights = useSelector(
     (state) => state?.ticket?.selectedDepartureFlight
@@ -58,7 +122,6 @@ export default function BookingDetail() {
         }).format(new Date(returnFlights.Date))
       : "Date not available";
 
-  console.log("roundTrip :>> ", departureFlights);
   const calculateTravelTime = (departure, arrival) => {
     // Parse the time strings
     const [depHours, depMinutes] = departure?.split(":")?.map(Number);
@@ -85,12 +148,12 @@ export default function BookingDetail() {
 
   const cekPulangPergi = useSelector((state) => state?.data?.roundtrip);
 
-  const formattedDate = new Intl.DateTimeFormat("id-ID", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })?.format(new Date(tanggalLahir));
+  // const formattedDate = new Intl.DateTimeFormat("id-ID", {
+  //   weekday: "long",
+  //   year: "numeric",
+  //   month: "long",
+  //   day: "numeric",
+  // })?.format(new Date(tanggalLahir));
 
   const departureDateRef = useRef(null);
 
@@ -101,16 +164,8 @@ export default function BookingDetail() {
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    dispatch(setNamaDepan(namaDepan));
-    dispatch(setNamaBelakang(namaBelakang));
-    dispatch(setNomorHP(nomorHP));
-    dispatch(setEmail(email));
-  };
-
   return (
-    <form onSubmit={handleSubmit} className="max-w-screen-2xl mx-auto  ">
+    <form className="max-w-screen-2xl mx-auto  ">
       <NavbarLogoBiru />
       {/* <div className="mt-24">
         <NavbarLogoPutih />
@@ -521,136 +576,170 @@ export default function BookingDetail() {
             <div className="pb-4 font-bold text-2xl max-lg:text-xl max-sm:text-lg">
               Detail Penumpang
             </div>
-            <div className=" mx-auto w-full bg-white rounded-xl shadow-sm px-6 max-sm:px-4 ">
-              <div className="w-3/4 pt-10 max-lg:w-full ">
-                <div className="font-semibold text-lg max-md:text-base">
-                  Informasi Penumpang
-                </div>
-                <div className="flex items-center gap-4 pt-4 max-sm:flex-col">
-                  <div
-                    onClick={handleDropdownToggle}
-                    className="flex flex-col gap-2 w-full "
-                  >
-                    <div className=" text-xs">Jenis Kelamin</div>
-                    <div className="flex  justify-between items-center gap-2 px-4 rounded border-2  border-gray-300  h-14 w-auto max-md:h-12">
-                      <div className="font-medium text-sm  ">
-                        {jenisKelamin}
+            {passengers.map((passenger, index) => (
+              <div
+                key={index}
+                className="mx-auto w-full bg-white rounded-xl shadow-sm px-6 max-sm:px-4 my-4"
+              >
+                <div className="w-3/4 pt-10 max-lg:w-full">
+                  <div className="font-semibold text-lg max-md:text-base">
+                    Informasi Penumpang {index + 1}
+                    {/* Judul sesuai dengan tipe penumpang */}
+                    {index === 0 && jumlahDewasa > 0 && (
+                      <span className="ml-2 text-sm text-gray-500">
+                        (Dewasa)
+                      </span>
+                    )}
+                    {index === 1 && jumlahAnak > 0 && (
+                      <span className="ml-2 text-sm text-gray-500">(Anak)</span>
+                    )}
+                    {index === 2 && jumlahBayi > 0 && (
+                      <span className="ml-2 text-sm text-gray-500">(Bayi)</span>
+                    )}
+                  </div>
+                  <div className="flex  gap-4 pt-4 max-sm:flex-col">
+                    <div className="relative">
+                      <div
+                        onClick={() =>
+                          handleInputChange(
+                            index,
+                            "isDropdownOpen",
+                            !passenger.isDropdownOpen
+                          )
+                        }
+                        className="flex flex-col gap-2 w-full"
+                      >
+                        <div className="text-xs">Jenis Kelamin</div>
+                        <div className="flex justify-between items-center gap-2 px-4 rounded border-2 border-gray-300 h-14 w-40 max-md:h-12">
+                          <div className="font-medium text-sm">
+                            {passenger.jenisKelamin}
+                          </div>
+                          <GoTriangleDown
+                            className={`transition ${
+                              passenger.isDropdownOpen ? "rotate-180" : ""
+                            }`}
+                          />
+                        </div>
                       </div>
-                      <GoTriangleDown
-                        className={`transition ${
-                          isDropdownOpen ? "rotate-180" : ""
-                        }`}
+                      {passenger.isDropdownOpen && (
+                        <div className="absolute  w-40 bg-white border border-gray-200 rounded-md shadow-lg z-10">
+                          <a
+                            href="#"
+                            className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleInputChange(index, "jenisKelamin", "Pria");
+                              handleInputChange(index, "isDropdownOpen", false);
+                            }}
+                          >
+                            <div className="flex items-center gap-x-2">
+                              <div>Pria</div>
+                            </div>
+                          </a>
+                          <a
+                            href="#"
+                            className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleInputChange(
+                                index,
+                                "jenisKelamin",
+                                "Wanita"
+                              );
+                              handleInputChange(index, "isDropdownOpen", false);
+                            }}
+                          >
+                            <div className="flex items-center gap-x-2">
+                              <div>Wanita</div>
+                            </div>
+                          </a>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex flex-col gap-2 w-full">
+                      <div className="text-xs">Nama Depan</div>
+                      <input
+                        type="text"
+                        required
+                        value={passenger.namaDepan}
+                        onChange={(e) =>
+                          handleInputChange(index, "namaDepan", e.target.value)
+                        }
+                        className="flex font-medium text-sm items-center px-2 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10"
+                        placeholder="Nama Depan"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2 w-full">
+                      <div className="text-xs">Nama Belakang</div>
+                      <input
+                        type="text"
+                        required
+                        value={passenger.namaBelakang}
+                        onChange={(e) =>
+                          handleInputChange(
+                            index,
+                            "namaBelakang",
+                            e.target.value
+                          )
+                        }
+                        className="flex font-medium text-sm items-center px-2 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10"
+                        placeholder="Nama Belakang"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2 w-full">
+                      <div className="text-xs">Tanggal Lahir</div>
+                      <div className="flex justify-between items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 h-14 w-auto max-md:h-12">
+                        <DatePicker
+                          selected={passenger.tanggalLahir}
+                          onChange={(date) =>
+                            handleInputChange(index, "tanggalLahir", date)
+                          }
+                          dateFormat="EEE, d MMM yyyy"
+                          locale={id}
+                          placeholderText="Tanggal Lahir"
+                          className="cursor-pointer font-medium text-sm w-full p-1"
+                        />
+                        <SlCalender size={20} className="cursor-pointer" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="w-3/4 pt-6 pb-10 max-lg:w-full">
+                  <div className="font-semibold text-lg max-md:text-base">
+                    Detail Kontak
+                  </div>
+                  <div className="flex items-center gap-4 pt-4">
+                    <div className="flex flex-col gap-2 w-full">
+                      <div className="text-xs">NIK</div>
+                      <input
+                        type="text"
+                        required
+                        value={passenger.nik}
+                        onChange={(e) =>
+                          handleInputChange(index, "nik", e.target.value)
+                        }
+                        className="flex justify-between text-sm items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10"
+                        placeholder="NIK"
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2 w-full">
+                      <div className="text-xs">No. Handphone</div>
+                      <input
+                        type="text"
+                        required
+                        value={passenger.nomorHP}
+                        onChange={(e) =>
+                          handleInputChange(index, "nomorHP", e.target.value)
+                        }
+                        className="flex justify-between text-sm items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10"
+                        placeholder="+62 8123456789"
                       />
                     </div>
                   </div>
-
-                  {isDropdownOpen && (
-                    <div className="absolute mt-44  w-40 bg-white border border-gray-200 rounded-md shadow-lg z-10">
-                      <a
-                        href="#"
-                        className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
-                        onClick={() => {
-                          dispatch(setJenisKelamin("Pria"));
-                          setIsDropdownOpen(false);
-                        }}
-                      >
-                        <div className="flex items-center gap-x-2">
-                          <div className="font-">Pria</div>
-                        </div>
-                      </a>
-                      <a
-                        href="#"
-                        className="block rounded-md px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800"
-                        onClick={() => {
-                          dispatch(setJenisKelamin("Wanita"));
-                          setIsDropdownOpen(false);
-                        }}
-                      >
-                        <div className="flex items-center gap-x-2">
-                          <div className="font-">Wanita</div>
-                        </div>
-                      </a>
-                    </div>
-                  )}
-                  <div className="flex flex-col gap-2 w-full">
-                    <div className="text-xs">Nama Depan</div>
-                    <input
-                      type="text"
-                      required
-                      value={namaDepan}
-                      onChange={(e) => dispatch(setNamaDepan(e.target.value))}
-                      className="flex  font-medium text-sm items-center  px-2 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10 "
-                      placeholder="Nama Depan"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2 w-full">
-                    <div className=" text-xs">Nama Belakang</div>
-                    <input
-                      type="text"
-                      required
-                      value={namaBelakang}
-                      onChange={(e) =>
-                        dispatch(setNamaBelakang(e.target.value))
-                      }
-                      className="flex  font-medium text-sm items-center  px-2 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10 "
-                      placeholder="Nama Belakang"
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2 w-full">
-                    <div className=" text-xs">Tanggal Lahir</div>
-                    <div className="flex  justify-between items-center gap-2 px-2 rounded border-2 border-gray-300 focus:border-sk h-14 w-auto max-md:h-12 ">
-                      <div>
-                        <DatePicker
-                          selected={tanggalLahir}
-                          onChange={(date) => {
-                            dispatch(setTanggalLahir(date));
-                            console.log("date :>> ", typeof date);
-                          }}
-                          dateFormat="EEE, d MMM yyyy"
-                          locale={id}
-                          placeholderText="y/MM/dd"
-                          className="cursor-pointer  font-medium text-sm w-full"
-                          ref={departureDateRef}
-                        />
-                      </div>
-                      <SlCalender
-                        className="cursor-pointer"
-                        onClick={() => departureDateRef.current.setFocus()}
-                      />{" "}
-                    </div>
-                  </div>
                 </div>
               </div>
-              <div className="w-3/4 pt-6 pb-10 max-lg:w-full">
-                <div className="font-semibold text-lg max-md:text-base">
-                  Detail Kontak
-                </div>
-                <div className="flex items-center gap-4 pt-4">
-                  <div className="flex flex-col gap-2 w-full">
-                    <div className=" text-xs">Email</div>
-                    <input
-                      type="text"
-                      required
-                      value={email}
-                      onChange={(e) => dispatch(setEmail(e.target.value))}
-                      className="flex justify-between text-sm items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full  max-md:h-10"
-                      placeholder="abc@gmail.com"
-                    />{" "}
-                  </div>
-                  <div className="flex flex-col gap-2 w-full">
-                    <div className=" text-xs">No. Handphone</div>
-                    <input
-                      type="text"
-                      required
-                      value={nomorHP}
-                      onChange={(e) => dispatch(setNomorHP(e.target.value))}
-                      className="flex justify-between text-sm items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full pr-10 max-md:h-10"
-                      placeholder="+62 8123456789"
-                    />{" "}
-                  </div>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
 

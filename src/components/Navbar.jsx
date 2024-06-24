@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import PotoProfile from "../assets/profile.png";
 import { logout } from "../redux/reducers/authReducer";
-
+import { getProfile } from "../redux/action/dataAction";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function NavbarLogoPutih() {
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
@@ -19,6 +20,11 @@ function NavbarLogoPutih() {
   const handleDropdownToggle2 = () => {
     setIsDropdownOpen2(!isDropdownOpen2);
   };
+
+  useEffect(() => {
+    dispatch(getProfile());
+  }, []);
+
   const cekState = useSelector((state) => state);
   const token = useSelector((state) => state?.auth?.token);
   const userFirstName = useSelector(
@@ -35,6 +41,7 @@ function NavbarLogoPutih() {
   const confirmLogout = () => {
     dispatch(logout());
     setShowConfirmation(false);
+    navigate("/");
   };
 
   const cancelLogout = () => {
@@ -125,7 +132,7 @@ function NavbarLogoPutih() {
                 <li>
                   <a
                     className="text-white/60 transition hover:text-white font-semibold hover:shadow rounded-xl hover:bg-gray-400 p-3"
-                    href="/search"
+                    href="/"
                   >
                     {" "}
                     Beranda{" "}

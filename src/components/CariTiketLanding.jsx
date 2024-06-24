@@ -25,12 +25,12 @@ import {
   getArrivalAirport,
   getSearchTicket,
 } from "../redux/action/dataAction";
-import { clearSelectedTicket } from "../redux/reducers/ticketReducer";
 import { useNavigate } from "react-router-dom";
 
-export default function CariTiketLain() {
+export default function CariTiketLanding() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const dataSearch = useSelector((state) => state.data);
   const departureDate = useSelector((state) => state.data.departureDate);
   const returnDate = useSelector((state) => state.data.returnDate);
   const seatClass = useSelector((state) => state?.data?.class);
@@ -66,53 +66,46 @@ export default function CariTiketLain() {
   );
 
   useEffect(() => {
+    console.log(dataSearch);
+  }, [dataSearch]);
+
+  useEffect(() => {
     dispatch(getSearchTicket());
   }, []);
 
   useEffect(() => {
     dispatch(getDepartureAirport());
+    dispatch(getArrivalAirport());
   }, []);
 
   const kurangJumlahDewasa = () => {
     if (jumlahDewasa > 0) {
-      event.preventDefault();
       dispatch(setJumlahDewasa(jumlahDewasa - 1));
     }
   };
 
   const tambahJumlahDewasa = () => {
-    if (totalPenumpang < 5) {
-      event.preventDefault();
-      dispatch(setJumlahDewasa(jumlahDewasa + 1));
-    }
+    dispatch(setJumlahDewasa(jumlahDewasa + 1));
   };
 
   const kurangJumlahAnak = () => {
     if (jumlahAnak > 0) {
-      event.preventDefault();
       dispatch(setJumlahAnak(jumlahAnak - 1));
     }
   };
 
   const tambahJumlahAnak = () => {
-    if (totalPenumpang < 5) {
-      event.preventDefault();
-      dispatch(setJumlahAnak(jumlahAnak + 1));
-    }
+    dispatch(setJumlahAnak(jumlahAnak + 1));
   };
 
   const kurangJumlahBayi = () => {
     if (jumlahBayi > 0) {
-      event.preventDefault();
       dispatch(setJumlahBayi(jumlahBayi - 1));
     }
   };
 
   const tambahJumlahBayi = () => {
-    if (totalPenumpang < 5) {
-      event.preventDefault();
-      dispatch(setJumlahBayi(jumlahBayi + 1));
-    }
+    dispatch(setJumlahBayi(jumlahBayi + 1));
   };
 
   const handleDropdownToggle = () => {
@@ -200,10 +193,13 @@ export default function CariTiketLain() {
     departureAirport?.id === arrivalAirport?.id ||
     isSameDate ||
     isReturnDateBeforeDeparture ||
-    totalPenumpang === 0 ||
-    totalPenumpang > 4 ||
-    (jumlahDewasa === 0 && (jumlahAnak === 1 || jumlahBayi === 1))
+    totalPenumpang === 0
   );
+
+  useEffect(() => {
+    console.log("Deparature = ", departureAirport);
+    console.log("Arrival = ", arrivalAirport);
+  }, []);
 
   return (
     <div className="mx-auto fixed left-0 right-0 z-40 max-w-screen-2xl flex justify-between items-center bg-white rounded-xl shadow-sm max-md:mx-2 max-md:text-sm">
@@ -277,7 +273,7 @@ export default function CariTiketLain() {
                           className="peer sr-only"
                           checked={roundTrip}
                           onChange={() => {
-                            dispatch(setRoundTrip(roundTrip));
+                            dispatch(setRoundTrip(!roundTrip));
                           }}
                         />
 
@@ -285,37 +281,27 @@ export default function CariTiketLain() {
                       </label>
                     </div>
                   </div>
-                  {roundTrip && (
-                    <div className="flex-col items-center gap-x-2 ">
-                      <div className="flex gap-2 items-center">
-                        <div className="cursor-pointer">
-                          <SlCalender
-                            onClick={() => departureDateRef.current.setFocus()}
-                          />
-                        </div>
-                        <div className="font-medium">Waktu Kembali</div>
-                      </div>
-                      <DatePicker
-                        selected={returnDate}
-                        onChange={(date) => dispatch(setReturnDate(date))}
-                        dateFormat="EEE, d MMM yyyy"
-                        locale={id}
-                        className="cursor-pointer text-[#0C68BE]"
-                        ref={returnDateRef}
+                  <div
+                    className={`flex items-center gap-x-2 ${
+                      !roundTrip && "opacity-50"
+                    }`}
+                  >
+                    <div className="cursor-pointer ">
+                      <SlCalender
+                        onClick={() => returnDateRef.current.setFocus()}
                       />
-                      <div>
-                        {isReturnDateBeforeDeparture && (
-                          <div className="flex items-center gap-2 mt-1 text-red-500 font-normal  text-sm">
-                            <IoWarning size={20} />
-                            <div>
-                              Tanggal kembali tidak boleh lebih awal dari
-                              tanggal keberangkatan
-                            </div>
-                          </div>
-                        )}
-                      </div>
                     </div>
-                  )}
+                    <div className="font-medium">Waktu Kembali</div>
+                  </div>
+                  <DatePicker
+                    selected={roundTrip ? returnDate : null}
+                    onChange={(date) => dispatch(setReturnDate(date))}
+                    dateFormat="EEE, d MMM yyyy"
+                    locale={id}
+                    className="cursor-pointer text-[#0C68BE]"
+                    ref={returnDateRef}
+                    disabled={!roundTrip}
+                  />
                 </div>
               </a>
               <a
@@ -474,19 +460,6 @@ export default function CariTiketLain() {
                         <div>Mohon isi jumlah penumpang</div>
                       </div>
                     )}
-                    {totalPenumpang > 4 && (
-                      <div className="flex items-center gap-2 text-red-500  text-sm">
-                        <IoWarning size={20} />
-                        <div>Jumlah penumpang tidak boleh lebih dari 4</div>
-                      </div>
-                    )}
-                    {jumlahDewasa === 0 &&
-                      (jumlahAnak === 1 || jumlahBayi === 1) && (
-                        <div className="flex items-center gap-2 text-red-500 text-sm">
-                          <IoWarning size={20} />
-                          <div>Anak dan bayi harus didampingi orang dewasa</div>
-                        </div>
-                      )}
 
                     {isDropdownOpen3 && (
                       <div className="absolute mt- w-44  bg-white border border-gray-200 rounded-md shadow-lg z-10">
@@ -495,11 +468,7 @@ export default function CariTiketLain() {
                           className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
                         >
                           <div className="flex items-center gap-x-2">
-                            <div className="flex flex-col ">
-                              {" "}
-                              <div className="text-md">Dewasa </div>
-                              <div className="text-xs ">12+ </div>
-                            </div>{" "}
+                            <div className="">Dewasa</div>
                             <div class="flex items-center rounded border border-gray-200 ">
                               <button
                                 type="button"
@@ -534,11 +503,7 @@ export default function CariTiketLain() {
                           className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
                         >
                           <div className="flex items-center gap-x-[27px]">
-                            <div className="flex flex-col ">
-                              {" "}
-                              <div className="text-md">Anak </div>
-                              <div className="text-xs ">2-11 </div>
-                            </div>{" "}
+                            <div className="font-">Anak</div>
                             <div class="flex items-center rounded border border-gray-200  ">
                               <button
                                 type="button"
@@ -573,11 +538,7 @@ export default function CariTiketLain() {
                           className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
                         >
                           <div className="flex items-center gap-x-[18px]">
-                            <div className="flex flex-col ">
-                              {" "}
-                              <div className="text-md">Bayi </div>
-                              <div className="text-xs ">{"<"}2 </div>
-                            </div>{" "}
+                            <div className="font-">Bayi</div>
                             <div class="flex items-center rounded border border-gray-200 ml-4">
                               <button
                                 type="button"
@@ -825,24 +786,11 @@ export default function CariTiketLain() {
                   </div>
                 </div>
                 {totalPenumpang < 1 && (
-                  <div className="flex items-center gap-2 text-red-500 text-sm">
+                  <div className="flex items-center gap-2 text-red-500  text-sm">
                     <IoWarning size={20} />
                     <div>Mohon isi jumlah penumpang</div>
                   </div>
                 )}
-                {totalPenumpang > 4 && (
-                  <div className="flex items-center gap-2 text-red-500 text-sm">
-                    <IoWarning size={20} />
-                    <div>Jumlah penumpang tidak boleh lebih dari 4</div>
-                  </div>
-                )}
-                {jumlahDewasa === 0 &&
-                  (jumlahAnak === 1 || jumlahBayi === 1) && (
-                    <div className="flex items-center gap-2 text-red-500 text-sm">
-                      <IoWarning size={20} />
-                      <div>Anak dan bayi harus didampingi orang dewasa</div>
-                    </div>
-                  )}
               </div>
 
               {isDropdownOpen3 && (
@@ -851,12 +799,8 @@ export default function CariTiketLain() {
                     href="#"
                     className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
                   >
-                    <div className="flex items-center  gap-x-2">
-                      <div className="flex flex-col ">
-                        {" "}
-                        <div className="text-md">Dewasa </div>
-                        <div className="text-xs ">12+ </div>
-                      </div>
+                    <div className="flex items-center gap-x-2">
+                      <div className="">Dewasa</div>
                       <div class="flex items-center rounded border border-gray-200 ">
                         <button
                           type="button"
@@ -891,11 +835,7 @@ export default function CariTiketLain() {
                     className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
                   >
                     <div className="flex items-center gap-x-[27px]">
-                      <div className="flex flex-col ">
-                        {" "}
-                        <div className="text-md">Anak </div>
-                        <div className="text-xs ">2-11 </div>
-                      </div>
+                      <div className="font-">Anak</div>
                       <div class="flex items-center rounded border border-gray-200  ">
                         <button
                           type="button"
@@ -928,11 +868,7 @@ export default function CariTiketLain() {
                     className="block rounded-md px-4 py-2 text-gray-800/60  hover:text-gray-800"
                   >
                     <div className="flex items-center gap-x-[18px]">
-                      <div className="flex flex-col ">
-                        {" "}
-                        <div className="text-md">Bayi </div>
-                        <div className="text-xs "> {"<"}2</div>
-                      </div>{" "}
+                      <div className="font-">Bayi</div>
                       <div class="flex items-center rounded border border-gray-200 ml-4">
                         <button
                           type="button"
@@ -1079,12 +1015,12 @@ export default function CariTiketLain() {
             </div>
             <div className=" items-center gap-x-4 hidden flex-col  md:flex">
               <label
-                htmlFor="AcceptConditions"
+                htmlFor="AcceptConditionsMD"
                 className="relative inline-block h-5 w-9 cursor-pointer rounded-full bg-gray-300 transition [-webkit-tap-highlight-color:_transparent] has-[:checked]:bg-[#2A91E5]"
               >
                 <input
                   type="checkbox"
-                  id="AcceptConditions"
+                  id="AcceptConditionsMD"
                   className="peer sr-only"
                   checked={roundTrip}
                   onChange={() => {
@@ -1096,45 +1032,48 @@ export default function CariTiketLain() {
               </label>
             </div>
           </div>
-          {roundTrip && (
-            <div className="max-md:hidden">
-              <div className="flex gap-4">
+          <div className="max-md:hidden">
+            <div className="flex gap-4">
+              <div
+                className="hidden flex-col  md:flex"
+                style={{ borderRight: "1px", height: "40px" }}
+              >
                 <div
-                  className="hidden flex-col  md:flex"
-                  style={{ borderRight: "1px", height: "40px" }}
+                  className={`flex items-center gap-x-2 ${
+                    !roundTrip && "opacity-50"
+                  }`}
                 >
-                  <div className="flex items-center gap-x-2 ">
-                    <div className="cursor-pointer ">
-                      <SlCalender
-                        onClick={() => returnDateRef.current.setFocus()}
-                      />
-                    </div>
-                    <div className="font-medium ">Waktu Kembali</div>
+                  <div className="cursor-pointer ">
+                    <SlCalender
+                      onClick={() => returnDateRef.current.setFocus()}
+                    />
                   </div>
-                  <DatePicker
-                    selected={returnDate}
-                    onChange={(date) => dispatch(setReturnDate(date))}
-                    dateFormat="EEE, d MMM yyyy"
-                    locale={id}
-                    className="cursor-pointer text-[#0C68BE]"
-                    ref={returnDateRef}
-                  />
+                  <div className="font-medium">Waktu Kembali</div>
                 </div>
+                <DatePicker
+                  selected={roundTrip ? returnDate : null}
+                  onChange={(date) => dispatch(setReturnDate(date))}
+                  dateFormat="EEE, d MMM yyyy"
+                  locale={id}
+                  className="cursor-pointer text-[#0C68BE]"
+                  ref={returnDateRef}
+                  disabled={!roundTrip}
+                />
+              </div>
 
-                <div>
-                  {isReturnDateBeforeDeparture && (
-                    <div className="flex items-center gap-2 text-red-500 font-normal  text-sm">
-                      <IoWarning size={20} />
-                      <div>
-                        Tanggal kembali tidak boleh lebih awal dari tanggal
-                        keberangkatan
-                      </div>
+              <div>
+                {isReturnDateBeforeDeparture && (
+                  <div className="flex items-center gap-2 text-red-500 font-normal  text-sm">
+                    <IoWarning size={20} />
+                    <div>
+                      Tanggal kembali tidak boleh lebih awal dari tanggal
+                      keberangkatan
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
       <div className="flex items-center p-8">
@@ -1198,12 +1137,12 @@ export default function CariTiketLain() {
                     <div className="font-medium text-sm">Pulang - Pergi</div>
                     <div className=" items-center gap-x-4  flex-col  ">
                       <label
-                        htmlFor="AcceptConditions"
+                        htmlFor="AcceptConditionsSM"
                         className="relative inline-block h-5 w-9 cursor-pointer rounded-full bg-gray-300 transition [-webkit-tap-highlight-color:_transparent] has-[:checked]:bg-[#2A91E5]"
                       >
                         <input
                           type="checkbox"
-                          id="AcceptConditions"
+                          id="AcceptConditionsSM"
                           className="peer sr-only"
                           checked={roundTrip}
                           onChange={() => {
@@ -1215,37 +1154,27 @@ export default function CariTiketLain() {
                       </label>
                     </div>
                   </div>
-                  {roundTrip && (
-                    <div className="flex-col items-center gap-x-2 ">
-                      <div className="flex gap-2 items-center">
-                        <div className="cursor-pointer">
-                          <SlCalender
-                            onClick={() => departureDateRef.current.setFocus()}
-                          />
-                        </div>
-                        <div className="font-medium">Waktu Kembali</div>
-                      </div>
-                      <DatePicker
-                        selected={returnDate}
-                        onChange={(date) => dispatch(setReturnDate(date))}
-                        dateFormat="EEE, d MMM yyyy"
-                        locale={id}
-                        className="cursor-pointer text-[#0C68BE]"
-                        ref={returnDateRef}
+                  <div
+                    className={`flex items-center gap-x-2 ${
+                      !roundTrip && "opacity-50"
+                    }`}
+                  >
+                    <div className="cursor-pointer ">
+                      <SlCalender
+                        onClick={() => returnDateRef.current.setFocus()}
                       />
-                      <div>
-                        {isReturnDateBeforeDeparture && (
-                          <div className="flex items-center gap-2 mt-1 text-red-500 font-normal  text-sm">
-                            <IoWarning size={20} />
-                            <div>
-                              Tanggal kembali tidak boleh lebih awal dari
-                              tanggal keberangkatan
-                            </div>
-                          </div>
-                        )}
-                      </div>
                     </div>
-                  )}
+                    <div className="font-medium">Waktu Kembali</div>
+                  </div>
+                  <DatePicker
+                    selected={roundTrip ? returnDate : null}
+                    onChange={(date) => dispatch(setReturnDate(date))}
+                    dateFormat="EEE, d MMM yyyy"
+                    locale={id}
+                    className="cursor-pointer text-[#0C68BE]"
+                    ref={returnDateRef}
+                    disabled={!roundTrip}
+                  />
                 </div>
               </a>
               <a
@@ -1329,8 +1258,8 @@ export default function CariTiketLain() {
           onClick={() => {
             if (isButtonEnabled) {
               navigate("/search");
+
               dispatch(getSearchTicket());
-              dispatch(clearSelectedTicket());
             }
           }}
           className={`rounded-xl px-5 py-2.5 font-medium text-white hover:shadow ${

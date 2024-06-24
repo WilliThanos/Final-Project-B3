@@ -7,6 +7,12 @@ import {
   loginSuccess,
   loginFailure,
   setToken,
+  forgotPasswordRequest,
+  forgotPasswordSuccess,
+  forgotPasswordFailure,
+  resetPasswordRequest,
+  resetPasswordSuccess,
+  resetPasswordFailure,
 } from "../reducers/authReducer";
 import axios from "axios";
 import Cookies from "js-cookie";
@@ -65,6 +71,67 @@ export const login = createAsyncThunk(
       return true;
     } catch (error) {
       dispatch(loginFailure(error.response.data.message));
+      const message = {
+        type: "error",
+        message: error.response.data.message,
+      };
+      Cookies.set("flashMessage", JSON.stringify(message));
+      return false;
+    }
+  }
+);
+
+export const forgotPassword = createAsyncThunk(
+  "auth/forgotPassword",
+  async (email, { dispatch }) => {
+    dispatch(forgotPasswordRequest());
+    try {
+      const response = await axios.post(
+        "https://expressjs-develop-b4d1.up.railway.app/api/v1/auth/lupa-kata-sandi",
+        email
+      );
+      const message = {
+        type: "success",
+        message: response.data.message,
+      };
+      dispatch(forgotPasswordSuccess(response.data));
+      Cookies.set("flashMessage", JSON.stringify(message));
+      return true;
+    } catch (error) {
+      dispatch(forgotPasswordFailure(error.response.data.message));
+      const message = {
+        type: "error",
+        message: error.response.data.message,
+      };
+      Cookies.set("flashMessage", JSON.stringify(message));
+      return false;
+    }
+  }
+);
+
+export const resetPassword = createAsyncThunk(
+  "auth/resetPassword",
+  async ({ data, token }, { dispatch }) => {
+    dispatch(resetPasswordRequest());
+    try {
+      const response = await axios.post(
+        "https://expressjs-develop-b4d1.up.railway.app/api/v1/auth/mengatur-ulang-kata-sandi?token=" + token,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const message = {
+        type: "success",
+        message: response.data.message,
+      };
+      dispatch(resetPasswordSuccess(response.data));
+      Cookies.set("flashMessage", JSON.stringify(message));
+      return true;
+    } catch (error) {
+      dispatch(resetPasswordFailure(error.response.data.message));
       const message = {
         type: "error",
         message: error.response.data.message,

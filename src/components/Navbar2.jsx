@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import PotoProfile from "../assets/profile.png";
 import { logout } from "../redux/reducers/authReducer";
-
+import { getProfile } from "../redux/action/dataAction";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function NavbarLogoBiru() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);
@@ -34,11 +36,16 @@ function NavbarLogoBiru() {
   const confirmLogout = () => {
     dispatch(logout());
     setShowConfirmation(false);
+    navigate("/");
   };
 
   const cancelLogout = () => {
     setShowConfirmation(false);
   };
+
+  useEffect(() => {
+    dispatch(getProfile());
+  }, []);
 
   console.log("cekState :>> ", cekState);
   console.log("token :>> ", token);
@@ -127,7 +134,7 @@ function NavbarLogoBiru() {
                 <li>
                   <a
                     className="text-[#333333]/60 transition hover:text-[#333333] font-semibold hover:shadow rounded-xl hover:bg-gray-200 p-3"
-                    href="/search"
+                    href="/"
                   >
                     {" "}
                     Beranda{" "}
