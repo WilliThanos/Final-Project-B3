@@ -13,7 +13,7 @@ const KonfirmasiPembayaran = () => {
         <p className="text-gray-700 mb-4">
           Pembayaran Anda sudah diterima oleh sistem.
         </p>
-        <p className="text-gray-700 mb-6">
+        <p className="text-gray-700 mb-8">
           Detail pemesanan tiket telah dikirimkan ke email Anda.
         </p>
         <a
