@@ -9,6 +9,7 @@ import {
   setReturnFlights,
 } from "../reducers/ticketReducer";
 import { setProfile, setUpdateProfile } from "../reducers/profileReducer";
+import { logout } from "../reducers/authReducer";
 
 export const updateProfile = () => async (dispatch) => {
   try {
@@ -75,9 +76,11 @@ export const getProfile = () => async (dispatch, getState) => {
     if (axios.isAxiosError(error)) {
       console.error("Axios error:", error);
       alert(error?.message);
+      dispatch(logout()); // Tambahkan ini untuk logout ketika error terjadi
       return;
     }
     alert(error?.message);
+    dispatch(logout()); // Tambahkan ini untuk logout ketika error terjadi
   }
 };
 

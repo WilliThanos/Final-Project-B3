@@ -64,7 +64,9 @@ export default function Landing() {
             excepturi! Placeat rem quos veniam libero nemo eveniet dicta
             dignissimos fugiat quo.
           </p>
-          <CariTiketLanding />
+          <div className="flex justify-center mt-10">
+            <CariTiketLanding />
+          </div>
         </div>
       </div>
       <div className="flex flex-col md:flex-row items-center mt-16 px-4 lg:px-16">
