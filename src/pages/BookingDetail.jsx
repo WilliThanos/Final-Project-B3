@@ -24,6 +24,8 @@ import DetailBooking from "../components/DetailBooking";
 export default function BookingDetail({ index }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [passengerAge, setPassengerAge] = useState(null);
+
   const passengers = useSelector((state) => state.passengers.passengers);
   const jumlahDewasa = useSelector((state) => state?.data?.jumlahDewasa);
   const jumlahAnak = useSelector((state) => state?.data?.jumlahAnak);
@@ -106,11 +108,88 @@ export default function BookingDetail({ index }) {
     return age;
   };
 
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero indexed
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   const handleDateChange = (date, index) => {
-    handleInputChange(index, "tanggalLahir", date);
+    const formattedDate = formatDate(date);
+
+    handleInputChange(index, "tanggalLahir", formattedDate);
     const age = calculateAge(date);
     setPassengerAge(age);
   };
+
+  const validateAgeAnak = () => {
+    const anakPassengers = passengers.filter(
+      (passenger) => passenger.kategori === "Anak"
+    );
+
+    for (let passenger of anakPassengers) {
+      if (!passenger.tanggalLahir) {
+        return false; // Return false if tanggalLahir is null
+      }
+
+      const age = calculateAge(passenger.tanggalLahir);
+
+      if (age < 2 || age > 12) {
+        return false; // Tidak sesuai kategori
+      }
+    }
+
+    return true; // Semua penumpang anak valid
+  };
+
+  // Fungsi validasi untuk bayi
+  const validateAgeBayi = () => {
+    const bayiPassengers = passengers.filter(
+      (passenger) => passenger.kategori === "Bayi"
+    );
+
+    for (let passenger of bayiPassengers) {
+      if (!passenger.tanggalLahir) {
+        return false; // Return false if tanggalLahir is null
+      }
+
+      const age = calculateAge(passenger.tanggalLahir);
+
+      if (age >= 2) {
+        return false; // Tidak sesuai kategori
+      }
+    }
+
+    return true; // Semua penumpang bayi valid
+  };
+
+  // Fungsi validasi untuk dewasa
+  const validateAgeDewasa = () => {
+    const dewasaPassengers = passengers.filter(
+      (passenger) => passenger.kategori === "Dewasa"
+    );
+
+    for (let passenger of dewasaPassengers) {
+      if (!passenger.tanggalLahir) {
+        return false; // Return false if tanggalLahir is null
+      }
+
+      const age = calculateAge(passenger.tanggalLahir);
+
+      if (age < 12 || age > 100) {
+        return false; // Tidak sesuai kategori
+      }
+    }
+
+    return true; // Semua penumpang dewasa valid
+  };
+
+  const isButtonDisabled = !(
+    validateAgeAnak() &&
+    validateAgeBayi() &&
+    validateAgeDewasa()
+  );
 
   useEffect(() => {
     dispatch(getSearchTicket());
@@ -121,6 +200,12 @@ export default function BookingDetail({ index }) {
       navigate("/search");
     }
   }, [departureFlights, navigate]);
+
+  const handleButtonBooking = (e) => {
+    e.preventDefault();
+    navigate("/payment");
+    dispatch(getBooking());
+  };
 
   return (
     <form className="max-w-screen-2xl mx-auto  ">
@@ -190,10 +275,13 @@ export default function BookingDetail({ index }) {
         <div>
           {/* Detail Pembayaran Component */}
           <DetailPembayaran />
-          {/* Detail Pembayaran Component */}
+          {/* Detail Pembayaran Component */}.
           <button
-            onClick={() => navigate("/payment")}
-            className="rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow"
+            onClick={handleButtonBooking}
+            className={`rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow ${
+              isButtonDisabled ? "bg-gray-400 cursor-not-allowed" : ""
+            }`}
+            disabled={isButtonDisabled}
           >
             Lanjut ke Pembayaran
           </button>
