@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   passengers: [],
+  bookedPassengers: null,
 };
 
 const passengersSlice = createSlice({
@@ -18,10 +19,17 @@ const passengersSlice = createSlice({
     setPassengers: (state, action) => {
       state.passengers = action.payload;
     },
+    setBookedPassengers: (state, action) => {
+      state.bookedPassengers = action.payload;
+    },
   },
 });
 
-export const { addPassenger, updatePassenger, setPassengers } =
-  passengersSlice.actions;
+export const {
+  addPassenger,
+  updatePassenger,
+  setPassengers,
+  setBookedPassengers,
+} = passengersSlice.actions;
 
 export default passengersSlice.reducer;

@@ -43,6 +43,7 @@ export default function DetailPenumpangBayi({
       return false; // Tidak sesuai kategori
     }
   };
+  
   useEffect(() => {
     handleInputChange(index, "kategori", "Bayi");
   }, [handleInputChange, index]);
