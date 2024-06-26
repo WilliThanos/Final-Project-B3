@@ -265,7 +265,7 @@ export default function DetailBooking() {
       </div>
 
       {/* DROPDOWN KEMBALI */}
-      <div>
+      <div className="mt-4">
         {cekPulangPergi && returnFlights ? (
           <div>
             <div className="flex flex-row items-center gap-3">

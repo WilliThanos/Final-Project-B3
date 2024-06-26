@@ -1,32 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import DatePicker from "react-datepicker";
+
 import "react-datepicker/dist/react-datepicker.css";
 import NavbarLogoBiru from "../components/Navbar2";
-import NavbarLogoPutih from "../components/Navbar";
-import CariTiketLain from "../components/CariTiketLain";
-import { FaAngleDown } from "react-icons/fa";
-import DetailPembayaran from "../components/DetailPembayaran";
-import { CgInfo } from "react-icons/cg";
-import AirAsiaLogo from "../assets/AirAsia.png";
-import { FiCreditCard } from "react-icons/fi";
-import { SlCalender } from "react-icons/sl";
-import { id } from "date-fns/locale";
 import { useDispatch, useSelector } from "react-redux";
 import { getMethodPayment } from "../redux/action/bookingAction";
 import DetailBooking from "../components/DetailBooking";
-import { GiAirplaneDeparture, GiAirplaneArrival } from "react-icons/gi";
-import { SlPlane } from "react-icons/sl";
-import { LiaCircleSolid } from "react-icons/lia";
 import { setMetode } from "../redux/reducers/paymentReducer";
 import { payment } from "../redux/action/paymentAction";
-
 import PaymentMethodCard from "../components/MetodePembayaran";
-
 import { useNavigate } from "react-router-dom";
 
 export default function Payment() {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -35,12 +19,6 @@ export default function Payment() {
   }, [dispatch]);
 
   const dataMethod = useSelector((state) => state?.payment?.Method);
-
-  const handleMethod = (e) => {
-    const selectedCode = e.target.value;
-    dispatch(setMetode(selectedCode));
-  };
-
   const dataCek = useSelector((state) => state?.payment?.Metode);
 
   const isButtonDisabled = dataCek === "";
@@ -80,7 +58,7 @@ export default function Payment() {
               </div>
               <div className="mt-2">
                 <div className="flex flex-col gap-2">
-                  {dataMethod.map((e) => (
+                  {dataMethod?.map((e) => (
                     <PaymentMethodCard
                       key={e?.code}
                       e={e}

@@ -6,12 +6,9 @@ import NavbarLogoPutih from "../components/Navbar";
 import CariTiketLain from "../components/CariTiketLain";
 import { GiAirplaneDeparture, GiAirplaneArrival } from "react-icons/gi";
 import DetailPembayaran from "../components/DetailPembayaran";
-import { SlPlane } from "react-icons/sl";
-import AirAsiaLogo from "../assets/AirAsia.png";
-import { GoTriangleDown } from "react-icons/go";
-import { SlCalender } from "react-icons/sl";
-import { id } from "date-fns/locale";
+
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   updatePassenger,
   setPassengers,
@@ -21,40 +18,18 @@ import DetailPenumpangAnak from "../components/DetailPenumpangAnak";
 import DetailPenumpangBayi from "../components/DetailPenumpangBayi";
 import DetailPenumpangDewasa from "../components/DetailPenumpangDewasa";
 import { getSearchTicket } from "../redux/action/dataAction";
-import { getBooking } from "../redux/action/bookingAction";
 import { useNavigate } from "react-router-dom";
+import DetailBooking from "../components/DetailBooking";
 
 export default function BookingDetail({ index }) {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const passengers = useSelector((state) => state.passengers.passengers);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [passengerAge, setPassengerAge] = useState(null);
-
-  const [dropdownOpenIndex, setDropdownOpenIndex] = useState(null);
-
   const jumlahDewasa = useSelector((state) => state?.data?.jumlahDewasa);
   const jumlahAnak = useSelector((state) => state?.data?.jumlahAnak);
   const jumlahBayi = useSelector((state) => state?.data?.jumlahBayi);
 
   const totalPenumpang = jumlahDewasa + jumlahAnak + jumlahBayi;
-
-  const handleInputGender = (index, field, value) => {
-    const newPassengers = [...passengers];
-    newPassengers[index][field] = value;
-    setPassengers(newPassengers);
-  };
-
-  const toggleDropdown = (index) => {
-    setDropdownOpenIndex(index === dropdownOpenIndex ? null : index);
-  };
-
-  const handleButtonBooking = (e) => {
-    e.preventDefault();
-    navigate("/payment");
-    dispatch(getBooking());
-  };
 
   useEffect(() => {
     const maxPassengers = 4; // Maximum number of passengers allowed
@@ -114,72 +89,6 @@ export default function BookingDetail({ index }) {
   const departureFlights = useSelector(
     (state) => state?.ticket?.selectedDepartureFlight
   );
-  const returnFlights = useSelector(
-    (state) => state?.ticket?.selectedReturnFlight
-  );
-
-  const formattedDepartureDate = departureFlights?.Date
-    ? new Intl.DateTimeFormat("id-ID", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }).format(new Date(departureFlights.Date))
-    : "Invalid Date";
-
-  const formattedarrivalDate =
-    returnFlights && returnFlights.Date
-      ? new Intl.DateTimeFormat("id-ID", {
-          weekday: "long",
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        }).format(new Date(returnFlights.Date))
-      : "Date not available";
-
-  const calculateTravelTime = (departure, arrival) => {
-    if (!departure || !arrival) {
-      return null; // Handle case where either departure or arrival is undefined or null
-    }
-
-    // Parse the time strings
-    const depParts = departure.split(":");
-    const arrParts = arrival.split(":");
-
-    if (depParts.length !== 2 || arrParts.length !== 2) {
-      return null; // Handle cases where departure or arrival doesn't have correct format
-    }
-
-    const [depHours, depMinutes] = depParts.map(Number);
-    const [arrHours, arrMinutes] = arrParts.map(Number);
-
-    // Convert times to minutes since the start of the day
-    const departureInMinutes = depHours * 60 + depMinutes;
-    const arrivalInMinutes = arrHours * 60 + arrMinutes;
-
-    // Calculate the difference in minutes
-    let differenceInMinutes = arrivalInMinutes - departureInMinutes;
-    if (differenceInMinutes < 0) {
-      // If the arrival time is the next day
-      differenceInMinutes += 24 * 60;
-    }
-    const hours = Math.floor(differenceInMinutes / 60);
-    const minutes = differenceInMinutes % 60;
-
-    // Return the formatted string
-    return `${hours}j ${minutes}m`;
-  };
-
-  const cekPulangPergi = useSelector((state) => state?.data?.roundtrip);
-
-  const departureDateRef = useRef(null);
-
-  const handleDropdownToggle = (flightId) => {
-    setIsDropdownOpen((prevState) => ({
-      ...prevState,
-      [flightId]: !prevState[flightId], // Toggle the dropdown state for the specific flightId
-    }));
-  };
 
   const calculateAge = (birthDate) => {
     const today = new Date();
@@ -197,92 +106,11 @@ export default function BookingDetail({ index }) {
     return age;
   };
 
-  const formatDate = (date) => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero indexed
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
-  };
-
   const handleDateChange = (date, index) => {
-    // Format date to "yyyy-MM-dd"
-    const formattedDate = formatDate(date);
-
-    // Set formatted date to state or dispatch to Redux
-    handleInputChange(index, "tanggalLahir", formattedDate);
-
-    // Calculate age from formatted date
+    handleInputChange(index, "tanggalLahir", date);
     const age = calculateAge(date);
     setPassengerAge(age);
-    console.log("age :>> ", age);
   };
-  console.log("passengerAge :>> ", passengerAge);
-
-  const validateAgeAnak = () => {
-    const anakPassengers = passengers.filter(
-      (passenger) => passenger.kategori === "Anak"
-    );
-
-    for (let passenger of anakPassengers) {
-      if (!passenger.tanggalLahir) {
-        return false; // Return true if tanggalLahir is null
-      }
-
-      const age = calculateAge(passenger.tanggalLahir);
-
-      if (age >= 2 && age <= 12) {
-        return true; // Valid anak
-      }
-    }
-
-    return false; // No valid anak found
-  };
-
-  const validateAgeBayi = () => {
-    const bayiPassengers = passengers.filter(
-      (passenger) => passenger.kategori === "Bayi"
-    );
-
-    for (let passenger of bayiPassengers) {
-      if (!passenger.tanggalLahir) {
-        return false; // Return true if tanggalLahir is null
-      }
-
-      const age = calculateAge(passenger.tanggalLahir);
-
-      if (age < 2) {
-        return true; // Valid bayi
-      }
-    }
-
-    return false; // No valid bayi found
-  };
-
-  const validateAgeDewasa = () => {
-    const dewasaPassengers = passengers.filter(
-      (passenger) => passenger.kategori === "Dewasa"
-    );
-
-    for (let passenger of dewasaPassengers) {
-      if (!passenger.tanggalLahir) {
-        return false; // Return true if tanggalLahir is null
-      }
-
-      const age = calculateAge(passenger.tanggalLahir);
-
-      if (age >= 12 && age <= 100) {
-        return true; // Valid dewasa
-      }
-    }
-
-    return false; // No valid dewasa found
-  };
-
-  const isButtonDisabled = !(
-    validateAgeAnak() ||
-    validateAgeBayi() ||
-    validateAgeDewasa()
-  );
 
   useEffect(() => {
     dispatch(getSearchTicket());
@@ -305,400 +133,14 @@ export default function BookingDetail({ index }) {
         <CariTiketLain />
       </div>
       <div className="flex pt-40 gap-8  max-md:mx-2 max-md:gap-3  max-lg:pt-40  max-xl:pt-40 max-xl:flex-col max-xl:mx-2 max-md:pt-32 ">
-        <div className="flex flex-col gap-8 w-full">
+        <div className="flex flex-col gap-3 w-full">
           <div className="">
             <div className="pb-4 font-bold text-2xl max-lg:text-xl max-sm:text-lg">
               Detail Pemesanan Tiket
             </div>
 
             <div className=" mx-auto w-full bg-white rounded-xl shadow-sm px-6 max-sm:px-4 ">
-              <div className="py-10 flex flex-col gap-10">
-                {/* CARD BERANGKAT */}
-                <div
-                  className="border-2 border-gray-200 rounded-xl p-4 hover:border-blue-400 cursor-pointer"
-                  key={departureFlights?.id}
-                  onClick={() => handleDropdownToggle(departureFlights?.id)}
-                >
-                  <div className="flex items-center gap-4">
-                    <GiAirplaneDeparture size={20} />
-                    <div className="font-bold text-base max-sm:text-sm">
-                      Pesawat Keberangkatan
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-6 pt-4 max-lg:gap-4 ">
-                    <div>
-                      <div className="font-bold text-[22px] max-lg:text-lg max-sm:text-sm">
-                        {formattedDepartureDate}
-                      </div>
-                      <div className="font-semibold text-base max-lg:text-sm max-sm:text-xs">
-                        {departureFlights?.class?.charAt(0)?.toUpperCase() +
-                          departureFlights?.class?.slice(1)?.toLowerCase()}
-                      </div>
-                    </div>
-                    <div className="flex gap-4 max-sm:flex-col max-sm:gap-2">
-                      <div className="flex items-center justify-center ">
-                        <div className="flex flex-col">
-                          <div className="font-bold text-base max-lg:text-sm ">
-                            {departureFlights?.departure_airport?.city}
-                          </div>
-                          <div className=" text-base max-lg:text-sm">
-                            ({departureFlights?.departure_airport?.iata_code})
-                          </div>
-                        </div>
-                        <div className="flex items-center ">
-                          <div className="border-dashed	border-b-2 border-gray-400 w-[60px] mx-2 max-lg:w-[30px] max-sm:w-[20px]"></div>
-                          <div className="">
-                            <SlPlane
-                              className="tilted-icon max-lg:size-[18px] max-sm:size-[20px]"
-                              size={22}
-                            />
-                          </div>
-                          <div className="border-solid border-b-2 border-gray-400 w-[60px] mx-2 max-lg:w-[30px] max-sm:w-[20px]"></div>
-                        </div>
-                        <div className="flex flex-col">
-                          <div className="font-bold text-base max-lg:text-sm">
-                            {departureFlights?.arrival_airport?.city}
-                          </div>
-                          <div className="flex justify-between w-full">
-                            <div className="text-base"></div>{" "}
-                            <div className="text-base max-lg:text-sm">
-                              ({departureFlights?.arrival_airport?.iata_code})
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex gap-4  items-center">
-                        <img
-                          src={departureFlights?.airline?.icon_url}
-                          alt="AirAsia Logo"
-                          className="h-auto max-w-12 rounded"
-                        />
-
-                        <div className="font-medium text-base max-lg:text-sm">
-                          {departureFlights?.airline?.name}
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-center max-sm:justify-start ">
-                        <div className="flex flex-col font-semibold text-lg max-lg:text-sm ">
-                          {departureFlights?.departure_time}
-                        </div>
-                        <div className="flex items-center">
-                          <div className="border-dashed	border-b-2 border-gray-400 w-[40px] mx-2 max-lg:w-[20px] "></div>
-                          <div className="font-bold text-base max-lg:text-sm ">
-                            {calculateTravelTime(
-                              departureFlights?.departure_time,
-                              departureFlights?.arrival_time
-                            )}
-                          </div>
-                          <div className="border-solid border-b border-black w-[40px] mx-2 max-lg:w-[20px] "></div>
-                        </div>
-                        <div className="flex flex-col">
-                          <div className="flex flex-col font-semibold text-lg max-lg:text-sm ">
-                            {departureFlights?.arrival_time}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* dropdown */}
-                  <div
-                    className={` dropdown-content ${
-                      isDropdownOpen[departureFlights?.id] ? "open" : ""
-                    }`}
-                  >
-                    <div className="flex n items-center cursor-pointer border-t border-gray-400  mt-4 ">
-                      <div className="font-bold mt-4 ">Detail Tiket</div>
-                    </div>
-                    <div className="flex pt-6 w-4/5">
-                      <div className="flex ">
-                        <div className="flex flex-col justify-center ">
-                          <div className="text-center text-gray-500 text-sm ">
-                            {calculateTravelTime(
-                              departureFlights?.departure_time,
-                              departureFlights?.arrival_time
-                            )}
-                          </div>
-                        </div>
-                        <div className="flex flex-col items-center">
-                          <LiaCircleSolid size={20} />
-                          <div className="border-r  border-gray-500 h-64 "></div>
-                          <LiaCircleSolid size={20} />
-                        </div>
-                      </div>
-                      <div className="flex  justify-between  pl-3 w-full    ">
-                        <div className="flex flex-col justify-between ">
-                          <div className="flex flex-col ">
-                            <div className="flex items-center gap-2">
-                              <div className="font-bold text-lg">
-                                {departureFlights?.departure_time}
-                              </div>
-                              <div className="font-semibold text-base">
-                                {departureFlights?.departure_airport?.city}
-                              </div>
-                            </div>
-                            <div className="font-semibold text-base">
-                              {`${formattedDepartureDate}`}
-                            </div>
-                          </div>
-                          <div className="flex flex-col gap- text-gray-500 text-sm">
-                            <div className="">Maskapai : </div>
-                            <div className="">Kelas :</div>
-                            <div className="">Nomor Penerbangan :</div>
-                            <div className="mt-2">Bagasi :</div>
-                            <div className="">Bagasi Kabin :</div>
-                          </div>
-                          <div className="flex flex-col ">
-                            <div className="flex items-center gap-2">
-                              <div className="font-bold text-lg">
-                                {" "}
-                                {departureFlights?.arrival_time}
-                              </div>
-                              <div className="font-semibold text-base">
-                                {departureFlights?.arrival_airport?.city}
-                              </div>
-                            </div>
-                            <div className="font-semibold text-base">
-                              {`${formattedDepartureDate}`}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col justify-between ">
-                          <div className="flex flex-col">
-                            <div className="font-bold text-lg">
-                              {
-                                departureFlights?.departure_airport
-                                  ?.name_airport
-                              }
-                            </div>
-                          </div>
-
-                          <div className="flex flex-col gap- text-gray-500 text-sm">
-                            <div className="">
-                              {departureFlights?.airline?.name}
-                            </div>
-                            <div className="">
-                              {departureFlights?.class
-                                ?.charAt(0)
-                                ?.toUpperCase() +
-                                departureFlights?.class
-                                  ?.slice(1)
-                                  ?.toLowerCase()}
-                            </div>
-                            <div className="">
-                              {departureFlights?.flight_number}
-                            </div>
-                            <div className="mt-2">
-                              {departureFlights?.free_baggage} kg
-                            </div>
-                            <div className="">
-                              {departureFlights?.cabin_baggage} kg
-                            </div>
-                          </div>
-                          <div className="flex flex-col">
-                            <div className="font-bold text-lg">
-                              {departureFlights?.arrival_airport?.name_airport}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {/* card KEMBALI */}
-                {cekPulangPergi && returnFlights ? (
-                  <div
-                    className="border-2 border-gray-200 rounded-xl p-4 hover:border-blue-400 cursor-pointer"
-                    key={returnFlights?.id}
-                    onClick={() => handleDropdownToggle(returnFlights?.id)}
-                  >
-                    <div className="flex items-center gap-4">
-                      <GiAirplaneArrival size={20} />
-                      <div className="font-bold text-base max-sm:text-sm">
-                        Pesawat Kembali
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-6 pt-4 max-lg:gap-4 ">
-                      <div>
-                        <div className="font-bold text-[22px] max-lg:text-lg max-sm:text-sm">
-                          {formattedarrivalDate}
-                        </div>
-                        <div className="font-semibold text-base max-lg:text-sm max-sm:text-xs">
-                          {returnFlights?.class?.charAt(0)?.toUpperCase() +
-                            returnFlights?.class?.slice(1)?.toLowerCase()}
-                        </div>
-                      </div>
-                      <div className="flex gap-4 max-sm:flex-col max-sm:gap-2">
-                        <div className="flex items-center justify-center ">
-                          <div className="flex flex-col">
-                            <div className="font-bold text-base max-lg:text-sm ">
-                              {returnFlights?.departure_airport?.city}
-                            </div>
-                            <div className=" text-base max-lg:text-sm">
-                              ({returnFlights?.departure_airport?.iata_code})
-                            </div>
-                          </div>
-                          <div className="flex items-center ">
-                            <div className="border-dashed	border-b-2 border-gray-400 w-[60px] mx-2 max-lg:w-[30px] max-sm:w-[20px]"></div>
-                            <div className="">
-                              <SlPlane
-                                className="tilted-icon max-lg:size-[18px] max-sm:size-[20px]"
-                                size={22}
-                              />
-                            </div>
-                            <div className="border-solid border-b-2 border-gray-400 w-[60px] mx-2 max-lg:w-[30px] max-sm:w-[20px]"></div>
-                          </div>
-                          <div className="flex flex-col">
-                            <div className="font-bold text-base max-lg:text-sm">
-                              {returnFlights?.arrival_airport?.city}
-                            </div>
-                            <div className="flex justify-between w-full">
-                              <div className="text-base"></div>{" "}
-                              <div className="text-base max-lg:text-sm">
-                                ({returnFlights?.arrival_airport?.iata_code})
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex gap-4 items-center">
-                          <img
-                            src={returnFlights?.airline?.icon_url}
-                            alt="AirAsia Logo"
-                            className="h-auto max-w-12 rounded"
-                          />
-
-                          <div className="font-medium text-base max-lg:text-sm">
-                            {returnFlights?.airline?.name}
-                          </div>
-                        </div>
-
-                        <div className="flex items-center justify-center max-sm:justify-start ">
-                          <div className="flex flex-col font-semibold text-lg max-lg:text-sm ">
-                            {returnFlights?.departure_time}
-                          </div>
-                          <div className="flex items-center">
-                            <div className="border-dashed	border-b-2 border-gray-400 w-[40px] mx-2 max-lg:w-[20px] "></div>
-                            <div className="font-bold text-base max-lg:text-sm ">
-                              {calculateTravelTime(
-                                returnFlights?.departure_time,
-                                returnFlights?.arrival_time
-                              )}
-                            </div>
-                            <div className="border-solid border-b border-black w-[40px] mx-2 max-lg:w-[20px] "></div>
-                          </div>
-                          <div className="flex flex-col">
-                            <div className="flex flex-col font-semibold text-lg max-lg:text-sm ">
-                              {returnFlights?.arrival_time}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    {/* dropdown */}
-                    <div
-                      className={` dropdown-content ${
-                        isDropdownOpen[returnFlights?.id] ? "open" : ""
-                      }`}
-                    >
-                      <div className="flex n items-center cursor-pointer border-t border-gray-400  mt-4 ">
-                        <div className="font-bold mt-4 ">Detail Tiket</div>
-                      </div>
-                      <div className="flex pt-6 w-4/5">
-                        <div className="flex ">
-                          <div className="flex flex-col justify-center ">
-                            <div className="text-center text-gray-500 text-sm ">
-                              {calculateTravelTime(
-                                returnFlights?.departure_time,
-                                returnFlights?.arrival_time
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex flex-col items-center">
-                            <LiaCircleSolid size={20} />
-                            <div className="border-r  border-gray-500 h-64 "></div>
-                            <LiaCircleSolid size={20} />
-                          </div>
-                        </div>
-                        <div className="flex  justify-between  pl-3 w-full    ">
-                          <div className="flex flex-col justify-between ">
-                            <div className="flex flex-col ">
-                              <div className="flex items-center gap-2">
-                                <div className="font-bold text-lg">
-                                  {returnFlights?.departure_time}
-                                </div>
-                                <div className="font-semibold text-base">
-                                  {returnFlights?.departure_airport?.city}
-                                </div>
-                              </div>
-                              <div className="font-semibold text-base">
-                                {`${formattedarrivalDate}`}
-                              </div>
-                            </div>
-                            <div className="flex flex-col gap- text-gray-500 text-sm">
-                              <div className="">Maskapai : </div>
-                              <div className="">Kelas :</div>
-                              <div className="">Nomor Penerbangan :</div>
-                              <div className="mt-2">Bagasi :</div>
-                              <div className="">Bagasi Kabin :</div>
-                            </div>
-                            <div className="flex flex-col ">
-                              <div className="flex items-center gap-2">
-                                <div className="font-bold text-lg">
-                                  {" "}
-                                  {returnFlights?.arrival_time}
-                                </div>
-                                <div className="font-semibold text-base">
-                                  {returnFlights?.arrival_airport?.city}
-                                </div>
-                              </div>
-                              <div className="font-semibold text-base">
-                                {`${formattedarrivalDate}`}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="flex flex-col justify-between ">
-                            <div className="flex flex-col">
-                              <div className="font-bold text-lg">
-                                {returnFlights?.departure_airport?.name_airport}
-                              </div>
-                            </div>
-
-                            <div className="flex flex-col gap- text-gray-500 text-sm">
-                              <div className="">
-                                {returnFlights?.airline?.name}
-                              </div>
-                              <div className="">
-                                {returnFlights?.class
-                                  ?.charAt(0)
-                                  ?.toUpperCase() +
-                                  returnFlights?.class?.slice(1)?.toLowerCase()}
-                              </div>
-                              <div className="">
-                                {returnFlights?.flight_number}
-                              </div>
-                              <div className="mt-2">
-                                {returnFlights?.free_baggage} kg
-                              </div>
-                              <div className="">
-                                {returnFlights?.cabin_baggage} kg
-                              </div>
-                            </div>
-                            <div className="flex flex-col">
-                              <div className="font-bold text-lg">
-                                {returnFlights?.arrival_airport?.name_airport}
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div></div>
-                )}
-              </div>
+              <DetailBooking />
             </div>
           </div>
           {/* detail penumpang */}
@@ -750,11 +192,8 @@ export default function BookingDetail({ index }) {
           <DetailPembayaran />
           {/* Detail Pembayaran Component */}
           <button
-            onClick={handleButtonBooking}
-            className={`rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow ${
-              isButtonDisabled ? "bg-gray-400 cursor-not-allowed" : ""
-            }`}
-            disabled={isButtonDisabled}
+            onClick={() => navigate("/payment")}
+            className="rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow"
           >
             Lanjut ke Pembayaran
           </button>
