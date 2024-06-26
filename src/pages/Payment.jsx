@@ -44,12 +44,19 @@ export default function Payment() {
   const dataCek = useSelector((state) => state?.payment?.Metode);
 
   const isButtonDisabled = dataCek === "";
-
+  const departureFlights = useSelector(
+    (state) => state?.ticket?.selectedDepartureFlight
+  );
   useEffect(() => {
     if (!departureFlights) {
       navigate("/search");
     }
   }, [departureFlights, navigate]);
+  const selectedMethod = useSelector((state) => state?.payment?.Metode);
+
+  const handleSelect = (code) => {
+    dispatch(setMetode(code));
+  };
 
   const handleButtonPayment = (e) => {
     e.preventDefault();

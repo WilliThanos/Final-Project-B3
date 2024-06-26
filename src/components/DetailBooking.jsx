@@ -75,6 +75,13 @@ export default function DetailBooking() {
   const cekPulangPergi = useSelector((state) => state?.data?.roundtrip);
   return (
     <div className="py-3">
+      {/* card keberangkatan */}
+      <div className="flex flex-row items-center gap-3">
+        <GiAirplaneDeparture size={20} />
+        <label className="text-xl font-semibold max-sm:text-base">
+          Berangkat
+        </label>
+      </div>
       <div
         key={departureFlights?.id}
         onClick={() => handleDropdownToggle(departureFlights?.id)}
@@ -91,8 +98,8 @@ export default function DetailBooking() {
             </div>{" "}
             <div className="flex gap-3">
               <div>
-                {(departureFlights?.class).charAt(0).toUpperCase() +
-                  (departureFlights?.class).slice(1).toLowerCase()}
+                {departureFlights?.class?.charAt(0).toUpperCase() +
+                  departureFlights?.class?.slice(1).toLowerCase()}
               </div>
             </div>
           </div>
@@ -117,17 +124,18 @@ export default function DetailBooking() {
                   departureFlights?.arrival_time
                 )}
               </p>
-              <div className="flex items-center mx-3">
-                <div className="mb-3">
-                  <GiAirplaneDeparture />
+              <div className="flex justify-center items-center mx-3">
+                <div className="border-dashed	border-b-2 border-gray-400 w-[60px] mx-2 max-lg:w-[30px] max-sm:w-[20px]"></div>
+                <div className="">
+                  <SlPlane
+                    className="tilted-icon max-lg:size-[18px] max-sm:size-[20px]"
+                    size={22}
+                  />
                 </div>
-                <div className="border-t-2 w-full border-gray-400 mx-2 "></div>
-                <div className="mb-3">
-                  <GiAirplaneArrival />
-                </div>
+                <div className="border-dashed	border-b-2 border-gray-400 w-[60px] mx-2 max-lg:w-[30px] max-sm:w-[20px]"></div>
               </div>
             </div>
-            <div className="flex flex-col items-end  w-1/4">
+            <div className="flex max-sm:justify-between flex-col items-end  w-1/4">
               <div className="flex items-center gap-1">
                 <div className="font-bold text-base text-right  max-md:text-sm">
                   {departureFlights?.arrival_airport?.city} (
@@ -165,7 +173,7 @@ export default function DetailBooking() {
             </div>
             <div className="flex  justify-between  pl-3 w-full max-lg: gap-10 ">
               <div className="flex flex-col justify-between  ">
-                <div className="flex flex-col ">
+                <div className="flex max-sm:justify-between flex-col ">
                   <div className="flex items-center gap-2">
                     <div className="font-bold text-lg">
                       {departureFlights?.departure_time}
@@ -191,8 +199,8 @@ export default function DetailBooking() {
                   </div>
                   <div className="">
                     Kelas :{" "}
-                    {(departureFlights?.class).charAt(0).toUpperCase() +
-                      (departureFlights?.class).slice(1).toLowerCase()}
+                    {departureFlights?.class?.charAt(0).toUpperCase() +
+                      departureFlights?.class?.slice(1).toLowerCase()}
                   </div>
                   <div className="">
                     Nomor Penerbangan :{" "}
@@ -233,8 +241,8 @@ export default function DetailBooking() {
                     {departureFlights?.airline?.name}
                   </div>
                   <div className="">
-                    {(departureFlights?.class).charAt(0).toUpperCase() +
-                      (departureFlights?.class).slice(1).toLowerCase()}
+                    {departureFlights?.class?.charAt(0).toUpperCase() +
+                      departureFlights?.class?.slice(1).toLowerCase()}
                   </div>
                   <div className="">
                     {departureFlights?.departureFlights_number}
@@ -260,6 +268,12 @@ export default function DetailBooking() {
       <div>
         {cekPulangPergi && returnFlights ? (
           <div>
+            <div className="flex flex-row items-center gap-3">
+              <GiAirplaneArrival size={20} />
+              <label className="text-xl font-semibold max-sm:text-base">
+                Berangkat
+              </label>
+            </div>
             <div
               key={returnFlights?.id}
               onClick={() => handleDropdownToggle(returnFlights?.id)}
@@ -276,8 +290,8 @@ export default function DetailBooking() {
                   </div>{" "}
                   <div className="flex gap-3">
                     <div>
-                      {(returnFlights?.class).charAt(0).toUpperCase() +
-                        (returnFlights?.class).slice(1).toLowerCase()}
+                      {returnFlights?.class?.charAt(0).toUpperCase() +
+                        returnFlights?.class?.slice(1).toLowerCase()}
                     </div>
                   </div>
                 </div>
@@ -286,7 +300,7 @@ export default function DetailBooking() {
               {/* ISI KONTEN */}
               <div className="flex w-full  justify-between place-items-stretch max-lg:flex-col max-md: max-lg:gap-3">
                 <div className="flex justify-between mt-2  w-full">
-                  <div className="flex flex-col  w-1/4">
+                  <div className="flex flex-col max-sm:justify-between  w-1/4">
                     <div className="flex items-center gap-1">
                       <div className="font-bold text-base max-md:text-sm">
                         {returnFlights?.departure_airport?.city} (
@@ -302,17 +316,18 @@ export default function DetailBooking() {
                         returnFlights?.arrival_time
                       )}
                     </p>
-                    <div className="flex items-center mx-3">
-                      <div className="mb-3">
-                        <GiAirplaneDeparture />
+                    <div className="flex justify-center items-center mx-3">
+                      <div className="border-dashed	border-b-2 border-gray-400 w-[60px] mx-2 max-lg:w-[30px] max-sm:w-[20px]"></div>
+                      <div className="">
+                        <SlPlane
+                          className="tilted-icon max-lg:size-[18px] max-sm:size-[20px]"
+                          size={22}
+                        />
                       </div>
-                      <div className="border-t-2 w-full border-gray-400 mx-2 "></div>
-                      <div className="mb-3">
-                        <GiAirplaneArrival />
-                      </div>
+                      <div className="border-dashed	border-b-2 border-gray-400 w-[60px] mx-2 max-lg:w-[30px] max-sm:w-[20px]"></div>
                     </div>
                   </div>
-                  <div className="flex items-end  flex-col text-center w-1/4">
+                  <div className="flex max-sm:justify-between items-end flex-col text-center w-1/4">
                     <div className="flex items-center gap-1">
                       <div className="font-bold text-base text-right max-md:text-sm">
                         {returnFlights?.arrival_airport?.city} (
@@ -376,8 +391,8 @@ export default function DetailBooking() {
                         </div>
                         <div className="">
                           Kelas :{" "}
-                          {(returnFlights?.class).charAt(0).toUpperCase() +
-                            (returnFlights?.class).slice(1).toLowerCase()}
+                          {returnFlights?.class?.charAt(0).toUpperCase() +
+                            returnFlights?.class?.slice(1).toLowerCase()}
                         </div>
                         <div className="">
                           Nomor Penerbangan :{" "}
@@ -418,8 +433,8 @@ export default function DetailBooking() {
                           {returnFlights?.airline?.name}
                         </div>
                         <div className="">
-                          {(returnFlights?.class).charAt(0).toUpperCase() +
-                            (returnFlights?.class).slice(1).toLowerCase()}
+                          {returnFlights?.class?.charAt(0).toUpperCase() +
+                            returnFlights?.class?.slice(1).toLowerCase()}
                         </div>
                         <div className="">
                           {returnFlights?.returnFlights_number}
