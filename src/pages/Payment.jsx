@@ -537,7 +537,9 @@ export default function Payment() {
             </div>
           </div>
           <button
-            onClick={handleButtonPayment}
+            onClick={() => {
+              dispatch(payment());
+            }}
             className="mb-10 rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow"
           >
             Lanjut ke Pembayaran

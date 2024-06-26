@@ -18,7 +18,6 @@ export const payment = () => async (dispatch, getState) => {
 
     const response = await axios.post(
       `https://expressjs-develop-b4d1.up.railway.app/api/v1/pay?booking_id=${id}&payment_method=${code}`,
-      // Jika tidak ada data payload yang perlu dikirim, tambahkan objek kosong di sini
       {
         headers: {
           Authorization: `Bearer ${token}`,
