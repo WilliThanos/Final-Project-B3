@@ -110,9 +110,11 @@ export default function Payment() {
   };
 
   const dataCek = useSelector((state) => state?.payment?.Metode);
-  const handleButtonPayment = () => {
+  const handleButtonPayment = (e) => {
+    e.preventDefault();
     if (!dataCek) {
       alert("Sepertinya anda belum memilih metode pembayaran");
+      return;
     }
     dispatch(payment());
   };
