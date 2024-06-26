@@ -32,9 +32,25 @@ export default function DetailPenumpangBayi({
     }
   }, [passenger.tanggalLahir]);
 
+  const calculateAge = (birthDate) => {
+    const today = new Date();
+    const birthDateObj = new Date(birthDate);
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+    const monthDiff = today.getMonth() - birthDateObj.getMonth();
+
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDateObj.getDate())
+    ) {
+      age--;
+    }
+
+    return age;
+  };
+
   const validateAge = () => {
     if (!passenger.tanggalLahir) {
-      return true; // Return true if tanggalLahir is null
+      return false; // Return true if tanggalLahir is null
     }
 
     if (passengerAge < 2) {
@@ -43,7 +59,7 @@ export default function DetailPenumpangBayi({
       return false; // Tidak sesuai kategori
     }
   };
-  
+
   useEffect(() => {
     handleInputChange(index, "kategori", "Bayi");
   }, [handleInputChange, index]);
