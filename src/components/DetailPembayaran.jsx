@@ -38,13 +38,9 @@ export default function DetailPembayaran() {
 
   console.log("hargaTiketDewasa :>> ", hargaTiketDewasa);
   const hargaTiketAnak =
-    ((departureFlights?.price || 0) + (returnFlights?.price || 0)) *
-    jmlAnak *
-    0.75;
+    ((departureFlights?.price || 0) + (returnFlights?.price || 0)) * jmlAnak;
   const hargaTiketBayi =
-    ((departureFlights?.price || 0) + (returnFlights?.price || 0)) *
-    jmlBayi *
-    0.5;
+    ((departureFlights?.price || 0) + (returnFlights?.price || 0)) * jmlBayi;
 
   const totalHargaTiket =
     (hargaTiketDewasa || 0) + (hargaTiketAnak || 0) + (hargaTiketBayi || 0);
@@ -54,8 +50,8 @@ export default function DetailPembayaran() {
   const cekHarga = cekPulangPergi
     ? totalHargaTiket
     : departureFlights?.price * jmlDewasa +
-      departureFlights?.price * jmlAnak * 0.75 +
-      departureFlights?.price * jmlBayi * 0.5;
+      departureFlights?.price * jmlAnak +
+      departureFlights?.price * jmlBayi;
 
   console.log("cekHarga :>> ", cekHarga);
 
