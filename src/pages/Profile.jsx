@@ -81,57 +81,83 @@ export default function Profile() {
               onSubmit={handleUpdateProfile}
             >
               <div className="flex justify-between gap-3">
-                <div className="border-2 border-gray-200 rounded-xl px-2 py-1 hover:border-[#2A91E5] text-sm w-1/2">
-                  <p className="">Nama</p>
+                <div className="relative w-1/2 ">
                   <input
-                    className="w-full border-none focus:outline-none"
                     type="text"
-                    placeholder={data?.first_name}
+                    id="floating_first_name"
+                    className="block px-2.5 pb-2.5 pt-4 w-full text-base text-gray-900 bg-transparent rounded-lg border-2 border-gray-300 appearance-none   dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" "
                     value={first_name}
                     onChange={(e) => setFirstName(e.target.value)}
                   />
+                  <label
+                    htmlFor="floating_first_name"
+                    className="mx-2 absolute text-base text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                  >
+                    Nama
+                  </label>
                 </div>
-                <div className="border-2 border-gray-200 rounded-xl px-2 py-1 hover:border-[#2A91E5] text-sm w-1/2">
-                  <p className="">Nama Terahir</p>
+                <div className="relative w-1/2">
                   <input
-                    className="w-full border-none focus:outline-none"
                     type="text"
-                    placeholder={data?.last_name}
+                    id="floating_last_name"
+                    className="block px-2.5 pb-2.5 pt-4 w-full text-base text-gray-900 bg-transparent rounded-lg border-2 border-gray-300 appearance-none   dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    placeholder=" "
                     value={last_name}
                     onChange={(e) => setLastName(e.target.value)}
                   />
+                  <label
+                    htmlFor="floating_last_name"
+                    className=" mx-2 bg-white absolute text-base text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0]  px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                  >
+                    Nama Terahir
+                  </label>
                 </div>
               </div>
-              <div className="border-2 border-gray-200 rounded-xl px-2 py-1 hover:border-red-500 text-sm bg-red-100">
+
+              <div className="border-2 border-gray-200 rounded-xl px-2 py-1 hover:border-red-500 text-sm bg-red-50">
                 <p className="">Email</p>
                 <input
-                  className="w-full bg-red-100 text-black/50"
+                  className="w-full bg-red-50 text-black/50"
                   type="text"
                   placeholder="slamet"
                   value={data?.email || ""}
                   disabled
                 />
               </div>
-              <div className="border-2 border-gray-200 rounded-xl px-2 py-1 hover:border-[#2A91E5] text-sm">
-                <p className="">Ubah Password</p>
+              <div className="relative ">
                 <input
-                  className="w-full border-none focus:outline-none"
                   type="password"
-                  placeholder="Password"
+                  id="floating_password"
+                  className="block px-2.5 pb-2.5 pt-4 w-full text-base text-gray-900 bg-transparent rounded-lg border-2 border-gray-300 appearance-none   dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
+                <label
+                  htmlFor="floating_password"
+                  className="mx-2 absolute text-base text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                >
+                  password
+                </label>
               </div>
-              <div className="border-2 border-gray-200 rounded-xl px-2 py-1 hover:border-[#2A91E5] text-sm">
-                <p className="">konfirmasi Password</p>
+              <div className="relative ">
                 <input
-                  className="w-full border-none focus:outline-none"
                   type="password"
-                  placeholder="Password"
+                  id="floating_confirmPassword"
+                  className="block px-2.5 pb-2.5 pt-4 w-full text-base text-gray-900 bg-transparent rounded-lg border-2 border-gray-300 appearance-none   dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  placeholder=" "
                   value={confirmPassword}
                   onChange={(e) => setconfirmPassword(e.target.value)}
                 />
+                <label
+                  htmlFor="floating_confirmPassword"
+                  className="mx-2 absolute text-base text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                >
+                  konfirmasi Password
+                </label>
               </div>
+
               <button
                 className="bg-[#2A91E5] rounded-3xl py-2 text-white font-semibold focus:bg-[#094D85]"
                 type="submit"

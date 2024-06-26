@@ -26,7 +26,7 @@ export default function MyModal() {
           <div className="flex min-h-full items-center justify-center p-4">
             <DialogPanel
               transition
-              className="flex flex-col justify-center w-full max-w-md rounded-xl bg-white p-6 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
+              className="flex flex-col justify-center w-full max-w-md rounded-xl bg-white p-3 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
             >
               <Button
                 className="inline-flex justify-end gap-2 rounded-md "
@@ -38,7 +38,7 @@ export default function MyModal() {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="size-6"
+                  className="size-4"
                 >
                   <path
                     strokeLinecap="round"
