@@ -116,14 +116,14 @@ export default function DetailPembayaran() {
                 <div className="font-semibold">
                   {cekPulangPergi
                     ? formatRupiah(hargaTiketAnak)
-                    : formatRupiah(departureFlights?.price * jmlAnak * 0.75)}
+                    : formatRupiah(departureFlights?.price * jmlAnak)}
                 </div>
               )}
               {jmlBayi > 0 && (
                 <div className="font-semibold">
                   {cekPulangPergi
                     ? formatRupiah(hargaTiketBayi)
-                    : formatRupiah(departureFlights?.price * jmlBayi * 0.5)}
+                    : formatRupiah(departureFlights?.price * jmlBayi)}
                 </div>
               )}
             </div>
@@ -142,8 +142,8 @@ export default function DetailPembayaran() {
                   ? formatRupiah(totalHargaTiket)
                   : formatRupiah(
                       departureFlights?.price * jmlDewasa +
-                        departureFlights?.price * jmlAnak * 0.75 +
-                        departureFlights?.price * jmlBayi * 0.5
+                        departureFlights?.price * jmlAnak +
+                        departureFlights?.price * jmlBayi
                     )}
               </div>
               <div className="font-semibold">{formatRupiah(biayaAdmin)}</div>

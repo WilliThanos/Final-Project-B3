@@ -26,6 +26,10 @@ import {
   getSearchTicket,
 } from "../redux/action/dataAction";
 import { useNavigate } from "react-router-dom";
+import {
+  setSelectedReturnFlight,
+  setSelectedReturnFlightId,
+} from "../redux/reducers/ticketReducer";
 
 export default function CariTiketLanding() {
   const dispatch = useDispatch();
@@ -54,8 +58,6 @@ export default function CariTiketLanding() {
   const [isDropdownOpen4, setIsDropdownOpen4] = useState(false);
   const [isDropdownOpen5, setIsDropdownOpen5] = useState(false);
   const [airportQuery, setAirportQuery] = useState("");
-
-  console.log("roundTrip :>> ", roundTrip);
 
   useEffect(() => {
     if (seatClass === "") {
@@ -100,10 +102,6 @@ export default function CariTiketLanding() {
       airport?.city.toLowerCase().includes(airportQuery.toLowerCase()) ||
       airport?.iata_code.toLowerCase().includes(airportQuery.toLowerCase())
   );
-
-  useEffect(() => {
-    console.log(dataSearch);
-  }, [dataSearch]);
 
   useEffect(() => {
     dispatch(getSearchTicket());
@@ -289,7 +287,6 @@ export default function CariTiketLanding() {
                     selected={departureDate}
                     onChange={(date) => {
                       dispatch(setDepartureDate(date));
-                      console.log("date :>> ", typeof date);
                     }}
                     dateFormat="EEE, d MMM yyyy"
                     locale={id}
@@ -334,6 +331,8 @@ export default function CariTiketLanding() {
                           checked={roundTrip}
                           onChange={() => {
                             dispatch(setRoundTrip(!roundTrip));
+                            dispatch(setSelectedReturnFlight(null));
+                            dispatch(setSelectedReturnFlightId(null));
                           }}
                         />
 
@@ -1129,7 +1128,6 @@ export default function CariTiketLanding() {
                 selected={departureDate}
                 onChange={(date) => {
                   dispatch(setDepartureDate(date));
-                  console.log("date :>> ", typeof date);
                 }}
                 dateFormat="EEE, d MMM yyyy"
                 locale={id}
@@ -1169,6 +1167,8 @@ export default function CariTiketLanding() {
                   checked={roundTrip}
                   onChange={() => {
                     dispatch(setRoundTrip(!roundTrip));
+                    dispatch(setSelectedReturnFlight(null));
+                    dispatch(setSelectedReturnFlightId(null));
                   }}
                 />
 
@@ -1269,7 +1269,6 @@ export default function CariTiketLanding() {
                     selected={departureDate}
                     onChange={(date) => {
                       dispatch(setDepartureDate(date));
-                      console.log("date :>> ", typeof date);
                     }}
                     dateFormat="EEE, d MMM yyyy"
                     locale={id}
@@ -1306,6 +1305,8 @@ export default function CariTiketLanding() {
                           checked={roundTrip}
                           onChange={() => {
                             dispatch(setRoundTrip(!roundTrip));
+                            dispatch(setSelectedReturnFlight(null));
+                            dispatch(setSelectedReturnFlightId(null));
                           }}
                         />
 
@@ -1434,6 +1435,9 @@ export default function CariTiketLanding() {
               navigate("/search");
 
               dispatch(getSearchTicket());
+              {
+                setIsDropdownOpen(false);
+              }
             }
           }}
           className={`rounded-xl px-5 py-2.5 font-medium text-white hover:shadow ${

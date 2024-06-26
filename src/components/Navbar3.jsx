@@ -154,6 +154,7 @@ function NavbarLogin() {
 
             <div className="block md:hidden">
               <button
+                type="button"
                 onClick={handleDropdownToggle}
                 className="rounded bg-gray-100 p-2 text-gray-600 transition hover:text-gray-600/75"
               >

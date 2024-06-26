@@ -26,6 +26,10 @@ import {
   getSearchTicket,
 } from "../redux/action/dataAction";
 import { useNavigate } from "react-router-dom";
+import {
+  setSelectedReturnFlight,
+  setSelectedReturnFlightId,
+} from "../redux/reducers/ticketReducer";
 
 export default function CariTiketLanding() {
   const dispatch = useDispatch();
@@ -54,8 +58,6 @@ export default function CariTiketLanding() {
   const [isDropdownOpen4, setIsDropdownOpen4] = useState(false);
   const [isDropdownOpen5, setIsDropdownOpen5] = useState(false);
   const [airportQuery, setAirportQuery] = useState("");
-
-  console.log("roundTrip :>> ", roundTrip);
 
   useEffect(() => {
     if (seatClass === "") {
@@ -100,10 +102,6 @@ export default function CariTiketLanding() {
       airport?.city.toLowerCase().includes(airportQuery.toLowerCase()) ||
       airport?.iata_code.toLowerCase().includes(airportQuery.toLowerCase())
   );
-
-  useEffect(() => {
-    console.log(dataSearch);
-  }, [dataSearch]);
 
   useEffect(() => {
     dispatch(getSearchTicket());
@@ -206,8 +204,6 @@ export default function CariTiketLanding() {
     .toString()
     .padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
 
-  console.log("formattedDepartureDate:>> ", formattedDepartureDate); // Output: "2024-06-15"
-
   // Convert to Date object
   const returnDateObject = new Date(returnDate);
 
@@ -220,8 +216,6 @@ export default function CariTiketLanding() {
   const formattedReturnDate = `${returnYear}-${returnMonth
     .toString()
     .padStart(2, "0")}-${returnDay.toString().padStart(2, "0")}`;
-
-  console.log("formattedReturnDate:>> ", formattedReturnDate);
 
   const isSameDate =
     formattedDepartureDate === formattedReturnDate && roundTrip;
@@ -251,14 +245,9 @@ export default function CariTiketLanding() {
     totalPenumpang > 4
   );
 
-  useEffect(() => {
-    console.log("Deparature = ", departureAirport);
-    console.log("Arrival = ", arrivalAirport);
-  }, []);
-
   return (
     <div className="mx-auto left-0 right-0 z-40 max-w-screen-2xl flex justify-between items-center bg-white rounded-xl shadow-sm max-md:mx-2 max-md:text-sm">
-      <div className="flex items-center p-8">
+      <div className="flex items-center p-10">
         <div className="block sm:hidden pr-5 absolute ">
           <button
             onClick={handleDropdownToggle}
@@ -298,7 +287,6 @@ export default function CariTiketLanding() {
                     selected={departureDate}
                     onChange={(date) => {
                       dispatch(setDepartureDate(date));
-                      console.log("date :>> ", typeof date);
                     }}
                     dateFormat="EEE, d MMM yyyy"
                     locale={id}
@@ -343,6 +331,8 @@ export default function CariTiketLanding() {
                           checked={roundTrip}
                           onChange={() => {
                             dispatch(setRoundTrip(!roundTrip));
+                            dispatch(setSelectedReturnFlight(null));
+                            dispatch(setSelectedReturnFlightId(null));
                           }}
                         />
 
@@ -1138,7 +1128,6 @@ export default function CariTiketLanding() {
                 selected={departureDate}
                 onChange={(date) => {
                   dispatch(setDepartureDate(date));
-                  console.log("date :>> ", typeof date);
                 }}
                 dateFormat="EEE, d MMM yyyy"
                 locale={id}
@@ -1175,6 +1164,8 @@ export default function CariTiketLanding() {
                   checked={roundTrip}
                   onChange={() => {
                     dispatch(setRoundTrip(!roundTrip));
+                    dispatch(setSelectedReturnFlight(null));
+                    dispatch(setSelectedReturnFlightId(null));
                   }}
                 />
 
@@ -1275,7 +1266,6 @@ export default function CariTiketLanding() {
                     selected={departureDate}
                     onChange={(date) => {
                       dispatch(setDepartureDate(date));
-                      console.log("date :>> ", typeof date);
                     }}
                     dateFormat="EEE, d MMM yyyy"
                     locale={id}
@@ -1312,6 +1302,8 @@ export default function CariTiketLanding() {
                           checked={roundTrip}
                           onChange={() => {
                             dispatch(setRoundTrip(!roundTrip));
+                            dispatch(setSelectedReturnFlight(null));
+                            dispatch(setSelectedReturnFlightId(null));
                           }}
                         />
 
@@ -1440,6 +1432,9 @@ export default function CariTiketLanding() {
               navigate("/search");
 
               dispatch(getSearchTicket());
+              {
+                setIsDropdownOpen(false);
+              }
             }
           }}
           className={`rounded-xl px-5 py-2.5 font-medium text-white hover:shadow ${
@@ -1449,7 +1444,7 @@ export default function CariTiketLanding() {
           }`}
           disabled={!isButtonEnabled}
         >
-          Cari Tiket Lainnya
+          Cari Tiket
         </button>
       </div>
     </div>

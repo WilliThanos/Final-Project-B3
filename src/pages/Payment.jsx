@@ -19,12 +19,16 @@ import { SlPlane } from "react-icons/sl";
 import { LiaCircleSolid } from "react-icons/lia";
 import { setMetode } from "../redux/reducers/paymentReducer";
 import { payment } from "../redux/action/paymentAction";
+
 import PaymentMethodCard from "../components/MetodePembayaran";
+
+import { useNavigate } from "react-router-dom";
 
 export default function Payment() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getMethodPayment());
@@ -39,18 +43,16 @@ export default function Payment() {
 
   const dataCek = useSelector((state) => state?.payment?.Metode);
 
-  const selectedMethod = useSelector((state) => state?.payment?.Metode);
+  const isButtonDisabled = dataCek === "";
 
-  const handleSelect = (code) => {
-    dispatch(setMetode(code));
-  };
+  useEffect(() => {
+    if (!departureFlights) {
+      navigate("/search");
+    }
+  }, [departureFlights, navigate]);
 
   const handleButtonPayment = (e) => {
     e.preventDefault();
-    if (!selectedMethod) {
-      alert("Sepertinya anda belum memilih metode pembayaran");
-      return;
-    }
     dispatch(payment());
   };
 
@@ -94,7 +96,10 @@ export default function Payment() {
           </div>
           <button
             onClick={handleButtonPayment}
-            className="mb-10 rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow"
+            className={`rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow ${
+              isButtonDisabled ? "bg-gray-400 cursor-not-allowed" : ""
+            }`}
+            disabled={isButtonDisabled}
           >
             Lanjut ke Pembayaran
           </button>

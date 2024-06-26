@@ -19,9 +19,10 @@ export const payment = () => async (dispatch, getState) => {
       {}, // Tambahkan objek kosong jika tidak ada payload data
       config // Gunakan konfigurasi headers dari config
     );
+    dispatch(setData(response?.data));
+    const link = getState().payment?.Data?.transaction?.checkout_url;
+    console.log("link payment :>> ", link);
 
-    dispatch(setData(response.data));
-    const link = getState().payment?.Data?.checkout_url;
     window.location.href = `${link}`;
   } catch (error) {
     if (axios.isAxiosError(error)) {
