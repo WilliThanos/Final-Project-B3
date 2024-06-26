@@ -5,7 +5,8 @@ import InfoBooking from "../components/InfoBooking";
 import Navbar from "../components/Navbar2";
 import { getProfile, updateProfile } from "../redux/action/dataAction";
 import { useDispatch, useSelector } from "react-redux";
-import { setUpdateProfile } from "../redux/reducers/profileReducer";
+import { setModal, setUpdateProfile } from "../redux/reducers/profileReducer";
+import MyModal from "../components/NotifUpdateProfile";
 
 export default function Profile() {
   const [first_name, setFirstName] = useState("");
@@ -19,11 +20,7 @@ export default function Profile() {
     dispatch(getProfile());
   }, [dispatch]);
 
-  const data = useSelector((state) => state.profile.profile.user);
-
-  const handledisabled = () => {
-    alert("email tidak bisa dirubah");
-  };
+  const data = useSelector((state) => state?.profile?.profile?.user);
 
   //fungsi handle update data
   const handleUpdateProfile = (e) => {
@@ -36,15 +33,17 @@ export default function Profile() {
     };
     dispatch(setUpdateProfile(updatedProfile));
     dispatch(updateProfile());
+    dispatch(setModal(true));
   };
 
   const cekPP = data?.image_url;
-
+  const modal = useSelector((state) => state?.profile?.Modal);
   return (
     <div className="min-h-screen mx-auto max-w-screen-2xl">
       <div className="mt-2">
         <Navbar />
       </div>
+
       {/* profil info */}
       <div className="bg-white rounded-2xl shadow-sm mt-24">
         <div className="flex justify-between px-5 py-5">
@@ -56,7 +55,7 @@ export default function Profile() {
             />
             <div className="flex flex-col gap-7 max-md:gap-3">
               <p className="text-xl font-medium">{data?.email}</p>
-              <p>
+              <p className="text-xl font-medium">
                 {data?.first_name} {data?.last_name}
               </p>
             </div>
@@ -64,6 +63,7 @@ export default function Profile() {
           <img className="w-[120px] max-md:hidden" src={Pesawat} alt="" />
         </div>
       </div>
+
       <div>
         <div className="flex justify-between max-md:flex-col max-md:items-center gap-5 mt-3 max-md:gap-2">
           <div className="bg-white rounded-2xl w-2/3 px-5 py-3 shadow-sm max-md:w-full">
@@ -102,13 +102,10 @@ export default function Profile() {
                   />
                 </div>
               </div>
-              <div
-                className="border-2 border-gray-200 rounded-xl px-2 py-1 hover:border-red-500 text-sm bg-red-100"
-                onClick={() => handledisabled()}
-              >
+              <div className="border-2 border-gray-200 rounded-xl px-2 py-1 hover:border-red-500 text-sm bg-red-100">
                 <p className="">Email</p>
                 <input
-                  className="w-full bg-red-100"
+                  className="w-full bg-red-100 text-black/50"
                   type="text"
                   placeholder="slamet"
                   value={data?.email || ""}
@@ -142,6 +139,7 @@ export default function Profile() {
                 Konfirmasi
               </button>
             </form>
+            <MyModal />
           </div>
         </div>
       </div>

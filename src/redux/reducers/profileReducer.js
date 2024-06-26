@@ -4,6 +4,7 @@ import { updateProfile } from "../action/dataAction";
 const initialState = {
   profile: null,
   updateProfile: null,
+  Modal: false,
 };
 
 const profileSlicer = createSlice({
@@ -16,9 +17,12 @@ const profileSlicer = createSlice({
     setUpdateProfile: (state, action) => {
       state.updateProfile = action.payload;
     },
+    setModal: (state, action) => {
+      state.Modal = action.payload;
+    },
   },
 });
 
-export const { setProfile, setUpdateProfile } = profileSlicer.actions;
+export const { setProfile, setUpdateProfile, setModal } = profileSlicer.actions;
 
 export default profileSlicer.reducer;
