@@ -13,15 +13,6 @@ import { SlCalender } from "react-icons/sl";
 import { id } from "date-fns/locale";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  setJenisKelamin,
-  setNamaDepan,
-  setNamaBelakang,
-  setTanggalLahir,
-  setEmail,
-  setNomorHP,
-} from "../redux/reducers/bookingReducer";
-
-import {
   updatePassenger,
   setPassengers,
 } from "../redux/reducers/passengersReducer";
@@ -30,6 +21,7 @@ import DetailPenumpangAnak from "../components/DetailPenumpangAnak";
 import DetailPenumpangBayi from "../components/DetailPenumpangBayi";
 import DetailPenumpangDewasa from "../components/DetailPenumpangDewasa";
 import { getSearchTicket } from "../redux/action/dataAction";
+import { getBooking } from "../redux/action/bookingAction";
 import { useNavigate } from "react-router-dom";
 
 export default function BookingDetail({ index }) {
@@ -41,12 +33,7 @@ export default function BookingDetail({ index }) {
   const [passengerAge, setPassengerAge] = useState(null);
 
   const [dropdownOpenIndex, setDropdownOpenIndex] = useState(null);
-  // const jenisKelamin = useSelector((state) => state?.booking?.jenisKelamin);
-  // const tanggalLahir = useSelector((state) => state?.booking?.tanggalLahir);
-  // const namaDepan = useSelector((state) => state?.booking?.namaDepan);
-  // const namaBelakang = useSelector((state) => state?.booking?.namaBelakang);
-  // const email = useSelector((state) => state?.booking?.email);
-  // const nomorHP = useSelector((state) => state?.booking?.nomorHP);
+
   const jumlahDewasa = useSelector((state) => state?.data?.jumlahDewasa);
   const jumlahAnak = useSelector((state) => state?.data?.jumlahAnak);
   const jumlahBayi = useSelector((state) => state?.data?.jumlahBayi);
@@ -134,9 +121,6 @@ export default function BookingDetail({ index }) {
       }).format(new Date(departureFlights.Date))
     : "Invalid Date";
 
-  console.log("DepartureDate", departureFlights?.Date);
-  console.log("formattedDepartureDate", formattedDepartureDate);
-
   const formattedarrivalDate =
     returnFlights && returnFlights.Date
       ? new Intl.DateTimeFormat("id-ID", {
@@ -182,13 +166,6 @@ export default function BookingDetail({ index }) {
 
   const cekPulangPergi = useSelector((state) => state?.data?.roundtrip);
 
-  // const formattedDate = new Intl.DateTimeFormat("id-ID", {
-  //   weekday: "long",
-  //   year: "numeric",
-  //   month: "long",
-  //   day: "numeric",
-  // })?.format(new Date(tanggalLahir));
-
   const departureDateRef = useRef(null);
 
   const handleDropdownToggle = (flightId) => {
@@ -214,11 +191,92 @@ export default function BookingDetail({ index }) {
     return age;
   };
 
+  const formatDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are zero indexed
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   const handleDateChange = (date, index) => {
-    handleInputChange(index, "tanggalLahir", date);
+    // Format date to "yyyy-MM-dd"
+    const formattedDate = formatDate(date);
+
+    // Set formatted date to state or dispatch to Redux
+    handleInputChange(index, "tanggalLahir", formattedDate);
+
+    // Calculate age from formatted date
     const age = calculateAge(date);
     setPassengerAge(age);
+    console.log("age :>> ", age);
   };
+  console.log("passengerAge :>> ", passengerAge);
+
+  const validateAgeAnak = () => {
+    const anakPassengers = passengers.filter(
+      (passenger) => passenger.kategori === "Anak"
+    );
+
+    for (let passenger of anakPassengers) {
+      if (!passenger.tanggalLahir) {
+        return false; // Return true if tanggalLahir is null
+      }
+
+      const age = calculateAge(passenger.tanggalLahir);
+
+      if (age >= 2 && age <= 12) {
+        return true; // Valid anak
+      }
+    }
+
+    return false; // No valid anak found
+  };
+
+  const validateAgeBayi = () => {
+    const bayiPassengers = passengers.filter(
+      (passenger) => passenger.kategori === "Bayi"
+    );
+
+    for (let passenger of bayiPassengers) {
+      if (!passenger.tanggalLahir) {
+        return false; // Return true if tanggalLahir is null
+      }
+
+      const age = calculateAge(passenger.tanggalLahir);
+
+      if (age < 2) {
+        return true; // Valid bayi
+      }
+    }
+
+    return false; // No valid bayi found
+  };
+
+  const validateAgeDewasa = () => {
+    const dewasaPassengers = passengers.filter(
+      (passenger) => passenger.kategori === "Dewasa"
+    );
+
+    for (let passenger of dewasaPassengers) {
+      if (!passenger.tanggalLahir) {
+        return false; // Return true if tanggalLahir is null
+      }
+
+      const age = calculateAge(passenger.tanggalLahir);
+
+      if (age >= 12 && age <= 100) {
+        return true; // Valid dewasa
+      }
+    }
+
+    return false; // No valid dewasa found
+  };
+
+  const isButtonDisabled = !(
+    validateAgeAnak() ||
+    validateAgeBayi() ||
+    validateAgeDewasa()
+  );
 
   useEffect(() => {
     dispatch(getSearchTicket());
@@ -686,8 +744,14 @@ export default function BookingDetail({ index }) {
           <DetailPembayaran />
           {/* Detail Pembayaran Component */}
           <button
-            onClick={() => navigate("/payment")}
-            className="rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow"
+            onClick={() => {
+              navigate("/payment");
+              dispatch(getBooking());
+            }}
+            className={`rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow ${
+              isButtonDisabled ? "bg-gray-400 cursor-not-allowed" : ""
+            }`}
+            disabled={isButtonDisabled}
           >
             Lanjut ke Pembayaran
           </button>

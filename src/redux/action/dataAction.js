@@ -9,7 +9,10 @@ import {
   setReturnFlights,
 } from "../reducers/ticketReducer";
 import { setProfile, setUpdateProfile } from "../reducers/profileReducer";
+
 import FormData from "form-data";
+
+import { logout } from "../reducers/authReducer";
 
 export const updateProfile = () => async (dispatch, getState) => {
   try {
@@ -42,6 +45,8 @@ export const updateProfile = () => async (dispatch, getState) => {
 
     console.log("cek update profile :>> ", response.data);
     // dispatch(setUpdateProfile(response.data.data));
+
+    dispatch(setUpdateProfile(response.data.data)); // Dispatch data yang diterima dari API
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Axios error:", error.response?.data || error.message);
@@ -90,9 +95,11 @@ export const getProfile = () => async (dispatch, getState) => {
     if (axios.isAxiosError(error)) {
       console.error("Axios error:", error);
       alert(error?.message);
+      dispatch(logout()); // Tambahkan ini untuk logout ketika error terjadi
       return;
     }
     alert(error?.message);
+    dispatch(logout()); // Tambahkan ini untuk logout ketika error terjadi
   }
 };
 
@@ -147,8 +154,6 @@ export const getSearchTicket = () => async (dispatch, getState) => {
     const passengerClass =
       ticketClass !== null ? ticketClass.toUpperCase() : null;
 
-    console.log("passengerClass :>> ", passengerClass);
-
     const formattedDepartureDate = new Intl.DateTimeFormat("id-ID", {
       weekday: "long",
       year: "numeric",
@@ -191,18 +196,14 @@ export const getSearchTicket = () => async (dispatch, getState) => {
     }
 
     const searchingDepartureDate = parseAndFormatDate(formattedDepartureDate);
-    console.log("searchingDepartureDate :>> ", searchingDepartureDate);
 
     const searchingReturnDate = parseAndFormatDate(formattedReturnDate);
-    console.log("searchingReturnDate :>> ", searchingReturnDate);
 
-    console.log("REDUX DEPARTURE >>>", departureAirportCode);
     const response = await axios.get(
       `https://expressjs-develop-b4d1.up.railway.app/api/v1/flights?departureAirport=${departureAirportCode}&arrivalAirport=${arrivalAirportCode}&departureDate=${searchingDepartureDate}&returnDate=${searchingReturnDate}&flightClass=${passengerClass}`
     );
     dispatch(setDepartureFlights(response?.data?.departureFlights));
     dispatch(setReturnFlights(response?.data?.returnFlights));
-    console.log("REDUX RESPONSE TIKET >>>", response?.data);
   } catch (error) {
     if (axios.isAxiosError(error)) {
       dispatch(setDepartureFlights(null));

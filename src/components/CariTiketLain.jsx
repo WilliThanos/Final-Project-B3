@@ -206,8 +206,6 @@ export default function CariTiketLanding() {
     .toString()
     .padStart(2, "0")}-${day.toString().padStart(2, "0")}`;
 
-  console.log("formattedDepartureDate:>> ", formattedDepartureDate); // Output: "2024-06-15"
-
   // Convert to Date object
   const returnDateObject = new Date(returnDate);
 
@@ -220,8 +218,6 @@ export default function CariTiketLanding() {
   const formattedReturnDate = `${returnYear}-${returnMonth
     .toString()
     .padStart(2, "0")}-${returnDay.toString().padStart(2, "0")}`;
-
-  console.log("formattedReturnDate:>> ", formattedReturnDate);
 
   const isSameDate =
     formattedDepartureDate === formattedReturnDate && roundTrip;
@@ -250,11 +246,6 @@ export default function CariTiketLanding() {
     isDepartureDateBeforeToday ||
     totalPenumpang > 4
   );
-
-  useEffect(() => {
-    console.log("Deparature = ", departureAirport);
-    console.log("Arrival = ", arrivalAirport);
-  }, []);
 
   return (
     <div className="mx-auto fixed left-0 right-0 z-40 max-w-screen-2xl flex justify-between items-center bg-white rounded-xl shadow-sm max-md:mx-2 max-md:text-sm">
