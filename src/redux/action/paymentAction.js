@@ -20,7 +20,9 @@ export const payment = () => async (dispatch, getState) => {
       config // Gunakan konfigurasi headers dari config
     );
 
-    dispatch(setData(response.data)); // Sesuaikan data yang diambil dari response
+    dispatch(setData(response.data));
+    const link = getState().payment?.Data?.checkout_url;
+    window.location.href = `${link}`;
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Axios error:", error.response?.data || error.message);
