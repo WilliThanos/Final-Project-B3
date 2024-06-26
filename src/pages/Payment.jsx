@@ -117,6 +117,8 @@ export default function Payment() {
       return;
     }
     dispatch(payment());
+    const link = useSelector((state) => state?.payment?.Data?.checkout_url);
+    window.location.href = `${link}`;
   };
 
   return (
