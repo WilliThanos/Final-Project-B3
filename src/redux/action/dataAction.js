@@ -81,7 +81,6 @@ export const getProfile = () => async (dispatch, getState) => {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      // withCredentials: true, // Mengizinkan pengiriman cookie
     };
 
     const response = await axios.get(
@@ -89,7 +88,6 @@ export const getProfile = () => async (dispatch, getState) => {
       config
     );
 
-    console.log("response profile redux :>> ", response?.data);
     dispatch(setProfile(response?.data?.data)); // Dispatch data yang diterima dari API
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -106,14 +104,10 @@ export const getProfile = () => async (dispatch, getState) => {
 export const getDepartureAirport = () => async (dispatch, getState) => {
   try {
     const id = getState().data?.departureAirportId;
-    // const allAirport = getState().data?.allAirport;
-    // const departureAirport = allAirport?.find((airport) => airport.id === id);
-    // console.log("departureAirport :>> ", departureAirport);
-    console.log("REDUX id", id);
+
     const response = await axios.get(
       `https://expressjs-develop-b4d1.up.railway.app/api/v1/bandara/${id}`
     );
-    // console.log("REDUX response", response.data);
     dispatch(setDepartureAirport(response.data.data));
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -128,11 +122,9 @@ export const getArrivalAirport = () => async (dispatch, getState) => {
   try {
     const id = getState().data?.arrivalAirportId;
 
-    console.log("REDUX id", id);
     const response = await axios.get(
       `https://expressjs-develop-b4d1.up.railway.app/api/v1/bandara/${id}`
     );
-    // console.log("REDUX response", response.data);
     dispatch(setArrivalAirport(response.data.data));
   } catch (error) {
     if (axios.isAxiosError(error)) {

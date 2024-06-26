@@ -50,6 +50,12 @@ export default function BookingDetail({ index }) {
     setDropdownOpenIndex(index === dropdownOpenIndex ? null : index);
   };
 
+  const handleButtonBooking = (e) => {
+    e.preventDefault();
+    navigate("/payment");
+    dispatch(getBooking());
+  };
+
   useEffect(() => {
     const maxPassengers = 4; // Maximum number of passengers allowed
 
@@ -744,10 +750,7 @@ export default function BookingDetail({ index }) {
           <DetailPembayaran />
           {/* Detail Pembayaran Component */}
           <button
-            onClick={() => {
-              navigate("/payment");
-              dispatch(getBooking());
-            }}
+            onClick={handleButtonBooking}
             className={`rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow ${
               isButtonDisabled ? "bg-gray-400 cursor-not-allowed" : ""
             }`}
