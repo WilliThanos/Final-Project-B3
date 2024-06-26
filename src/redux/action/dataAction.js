@@ -9,23 +9,42 @@ import {
   setReturnFlights,
 } from "../reducers/ticketReducer";
 import { setProfile, setUpdateProfile } from "../reducers/profileReducer";
+
+import FormData from "form-data";
+
 import { logout } from "../reducers/authReducer";
 
-export const updateProfile = () => async (dispatch) => {
+export const updateProfile = () => async (dispatch, getState) => {
   try {
-    const token = getState().auth?.token;
+    const state = getState();
+    const { first_name, last_name, password, confirmPassword } =
+      state.profile.updateProfile;
+    const token = state.auth.token;
+
+    let data = new FormData();
+    data.append("first_name", first_name);
+    data.append("last_name", last_name);
+    data.append("password", password);
+    data.append("confirmPassword", confirmPassword);
+
     const config = {
+      method: "put",
+      maxBodyLength: Infinity,
+      url: "https://expressjs-develop-b4d1.up.railway.app/api/v1/profil",
       headers: {
+        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
+        // ...data.getHeaders(),
       },
-      // withCredentials: true, // Mengizinkan pengiriman cookie
+      data: data,
     };
 
-    const response = await axios.put(
-      "https://expressjs-develop-b4d1.up.railway.app/api/v1/profil",
-      config
-    );
+    const response = await axios.request(config);
+    alert("profile telah diperbarui");
+    window.location.reload();
+
+    console.log("cek update profile :>> ", response.data);
+    // dispatch(setUpdateProfile(response.data.data));
 
     dispatch(setUpdateProfile(response.data.data)); // Dispatch data yang diterima dari API
   } catch (error) {

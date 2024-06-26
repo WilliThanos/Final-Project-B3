@@ -14,6 +14,9 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import Payment from "./pages/Payment.jsx";
 import Profile from "./pages/Profile.jsx";
 import VerifikasiEmail from "./pages/VerifikasiEmail.jsx";
+
+import History from "./pages/History.jsx";
+
 import ForgotPassword from "./pages/ForgotPassword.jsx";
 import ConfirmPassword from "./pages/ConfirmEmail.jsx";
 import KonfirmasiPembayaran from "./pages/KonfirmasiPembayaran.jsx";
@@ -63,6 +66,10 @@ export default function App() {
     {
       element: <PrivateRoute />, // Protect the following routes
       children: [
+        {
+          path: "history",
+          element: <History />,
+        },
         {
           path: "/booking-detail",
           element: <BookingDetail />,
