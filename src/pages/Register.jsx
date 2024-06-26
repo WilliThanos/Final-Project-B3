@@ -383,7 +383,7 @@ export default function Register() {
                 <p className="text-sm text-gray-600">
                   Sudah Punya Akun?{" "}
                   <a
-                    href="/"
+                    href="/login"
                     className="font-medium text-[#2a91e5] hover:text-[#1e73b5]"
                   >
                     Login
