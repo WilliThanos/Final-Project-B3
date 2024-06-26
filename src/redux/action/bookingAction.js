@@ -7,16 +7,30 @@ import { setBookedPassengers } from "../reducers/passengersReducer";
 export const getBooking = () => async (dispatch, getState) => {
   try {
     const token = getState().auth?.token;
-    const passengers = getState().passengers.passengers; // Extract passengers from Redux state
+    const passengers = getState().passengers?.passengers;
+
+    if (!token) {
+      throw new Error("Authentication token is missing");
+    }
+
+    // Log passengers array to inspect the data
+    console.log("Passengers from state: ", passengers);
 
     // Format passengers data
-    const formattedPassengers = passengers.map((passenger) => ({
-      full_name: `${passenger.namaDepan} ${passenger.namaBelakang}`,
-      birth_date: passenger.tanggalLahir,
-      type: passenger.kategori,
-      id_passport_number: passenger.nik,
-      citizenship: passenger.citizenship || "ID", // Assuming default citizenship to 'ID'
-    }));
+    const formattedPassengers = passengers?.map((passenger) => {
+      // Log each passenger to inspect individual properties
+      console.log("Passenger data: ", passenger);
+      return {
+        birth_date: passenger?.tanggalLahir || "",
+        type: passenger?.kategori || "",
+        id_passport_number: passenger?.nik || "",
+        citizenship: passenger?.citizenship || "ID",
+        gender: passenger?.jenisKelamin || "",
+        first_name: passenger?.namaDepan || "",
+        last_name: passenger?.namaBelakang || "",
+        phone_number: passenger?.nomorHP || "", // Provide default empty string if undefined
+      };
+    });
 
     const today = new Date();
     const year = today.getFullYear();
@@ -29,12 +43,18 @@ export const getBooking = () => async (dispatch, getState) => {
       passengers: formattedPassengers,
     };
 
-    console.log("bookingData :>> ", bookingData);
+    // Log formatted booking data to inspect the result
+    console.log("Formattedaa bookingData :>> ", bookingData);
 
     const scheduleId = getState().ticket?.selectedDepartureFlightId;
+    const returnscheduleId = getState().ticket?.selectedReturnFlightId;
+
+    // if (!scheduleId || !returnscheduleId) {
+    //   throw new Error("Flight IDs are missing");
+    // }
 
     const response = await axios.post(
-      `https://expressjs-develop-b4d1.up.railway.app/api/v1/booking?schedule_id=${scheduleId}`,
+      `https://expressjs-develop-b4d1.up.railway.app/api/v1/booking?schedule_id=${scheduleId}&return_schedule_id=${returnscheduleId}`,
       bookingData,
       {
         headers: {
@@ -48,9 +68,11 @@ export const getBooking = () => async (dispatch, getState) => {
     dispatch(setBookedPassengers(response.data));
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      alert(error.message);
+      console.error("Axios error:", error);
+      alert(error.response?.data?.message || error.message);
       return;
     }
+    console.error("Unexpected error:", error);
     alert(error.message);
   }
 };

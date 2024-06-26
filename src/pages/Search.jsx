@@ -181,7 +181,7 @@ export default function Search() {
                           <div className="text-lime-500">
                             <FaCircleCheck size={25} />
                           </div>
-                          <div className="hidden text-lg font-bold text-lime-500 max-lg:flex">
+                          <div className="hidden text-lg font-bold text-lime-500 max-lg:flex ">
                             {" "}
                             Tiket terpilih
                           </div>

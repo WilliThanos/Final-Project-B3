@@ -121,6 +121,11 @@ export default function Payment() {
     }
   }, [departureFlights, navigate]);
 
+  const handleButtonPayment = (e) => {
+    e.preventDefault();
+    dispatch(payment());
+  };
+
   return (
     <form className="max-w-screen-2xl mx-auto  ">
       <NavbarLogoBiru />
@@ -541,10 +546,7 @@ export default function Payment() {
             </div>
           </div>
           <button
-            onClick={(e) => {
-              e.preventDefault();
-              dispatch(payment());
-            }}
+            onClick={handleButtonPayment}
             className={`rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow ${
               isButtonDisabled ? "bg-gray-400 cursor-not-allowed" : ""
             }`}
