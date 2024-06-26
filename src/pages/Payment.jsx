@@ -19,11 +19,13 @@ import { SlPlane } from "react-icons/sl";
 import { LiaCircleSolid } from "react-icons/lia";
 import { setMetode } from "../redux/reducers/paymentReducer";
 import { payment } from "../redux/action/paymentAction";
+import { useNavigate } from "react-router-dom";
 
 export default function Payment() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getMethodPayment());
@@ -113,14 +115,11 @@ export default function Payment() {
 
   const isButtonDisabled = dataCek === "";
 
-  const handleButtonPayment = (e) => {
-    e.preventDefault();
-    if (!dataCek) {
-      alert("Sepertinya anda belum memilih metode pembayaran");
-      return;
+  useEffect(() => {
+    if (!departureFlights) {
+      navigate("/search");
     }
-    dispatch(payment());
-  };
+  }, [departureFlights, navigate]);
 
   return (
     <form className="max-w-screen-2xl mx-auto  ">
