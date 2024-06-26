@@ -110,6 +110,9 @@ export default function Payment() {
   };
 
   const dataCek = useSelector((state) => state?.payment?.Metode);
+
+  const isButtonDisabled = dataCek === "";
+
   const handleButtonPayment = (e) => {
     e.preventDefault();
     if (!dataCek) {
@@ -539,10 +542,14 @@ export default function Payment() {
             </div>
           </div>
           <button
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               dispatch(payment());
             }}
-            className="mb-10 rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow"
+            className={`rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow ${
+              isButtonDisabled ? "bg-gray-400 cursor-not-allowed" : ""
+            }`}
+            disabled={isButtonDisabled}
           >
             Lanjut ke Pembayaran
           </button>
