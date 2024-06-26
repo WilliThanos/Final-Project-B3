@@ -174,34 +174,43 @@ export default function Search() {
                   }
                   className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg mt-2 cursor-pointer"
                 >
-                  <div className="flex justify-between items-center cursor-pointer max-md:text-sm">
+                  <div className="flex  justify-between items-center cursor-pointer  max-lg:text-sm max-lg:flex-col max-lg:items-start">
                     <div>
-                      <div className="flex items-center gap-3">
-                        <div className="text-lime-500">
-                          <FaCircleCheck size={25} />
+                      <div className="flex items-center gap-3 max-lg:flex-col max-lg:items-start">
+                        <div className="flex gap-3">
+                          <div className="text-lime-500">
+                            <FaCircleCheck size={25} />
+                          </div>
+                          <div className="hidden text-lg font-bold text-lime-500 max-lg:flex">
+                            {" "}
+                            Tiket terpilih
+                          </div>
                         </div>
+
                         <img
                           src={`${selectedDepartureFlight?.airline?.icon_url}`}
                           className="h-7 w-auto rounded"
                         />
-                        <div>{selectedDepartureFlight?.airline?.name}</div>{" "}
-                        <div>-</div>
-                        <div>
-                          {selectedDepartureFlight?.class
-                            ?.charAt(0)
-                            ?.toUpperCase() +
-                            selectedDepartureFlight?.class
-                              ?.slice(1)
-                              ?.toLowerCase()}
+                        <div className="flex gap-3">
+                          <div>{selectedDepartureFlight?.airline?.name}</div>{" "}
+                          <div>-</div>
+                          <div>
+                            {selectedDepartureFlight?.class
+                              .charAt(0)
+                              .toUpperCase() +
+                              selectedDepartureFlight?.class
+                                .slice(1)
+                                .toLowerCase()}
+                          </div>
                         </div>
                       </div>{" "}
                     </div>
-                    <div className="text-lg font-bold text-lime-500">
+                    <div className="text-lg font-bold text-lime-500 max-lg:hidden">
                       {" "}
                       Tiket terpilih
                     </div>
                   </div>
-                  <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center max-lg:flex-col max-md: max-lg:gap-3">
                     <div className="flex pt-6 w-3/4">
                       <div className="flex flex-col text-center">
                         <div className="flex items-center gap-1">
@@ -237,7 +246,7 @@ export default function Search() {
                       </div>
                       <div className="flex flex-col text-center">
                         <div className="flex items-center gap-1">
-                          <div className="font-bold text-base max-md:text-sm">
+                          <div className="font-bold text-base  max-md:text-sm">
                             {selectedDepartureFlight?.arrival_airport?.city} (
                             {
                               selectedDepartureFlight?.arrival_airport
@@ -249,9 +258,9 @@ export default function Search() {
                         <div>{selectedDepartureFlight?.arrival_time}</div>
                       </div>
                     </div>
-                    <div className="font-bold text-xl text-[#2A91E5] max-md:text-sm">
+                    <div className="font-bold text-xl text-[#2A91E5]">
                       Rp{" "}
-                      {selectedDepartureFlight?.price?.toLocaleString("id-ID")}
+                      {selectedDepartureFlight?.price.toLocaleString("id-ID")}
                       ,00
                     </div>
                   </div>
@@ -261,7 +270,7 @@ export default function Search() {
                       isDropdownOpen[selectedDepartureFlight?.id] ? "open" : ""
                     }`}
                   >
-                    <div className="flex n items-center cursor-pointer border-t border-gray-400 mt-4 ">
+                    <div className="flex n items-center cursor-pointer border-t border-gray-400  mt-4 ">
                       <div className="font-bold mt-4 ">Detail Tiket</div>
                     </div>
                     <div className="flex pt-6 w-4/5">
@@ -276,13 +285,13 @@ export default function Search() {
                         </div>
                         <div className="flex flex-col items-center">
                           <LiaCircleSolid size={20} />
-                          <div className="border-r border-gray-500 h-64 "></div>
+                          <div className="border-r  border-gray-500 h-64 "></div>
                           <LiaCircleSolid size={20} />
                         </div>
                       </div>
-                      <div className="flex justify-between pl-3 w-full">
-                        <div className="flex flex-col justify-between">
-                          <div className="flex flex-col">
+                      <div className="flex  justify-between  pl-3 w-full max-lg: gap-10 ">
+                        <div className="flex flex-col justify-between  ">
+                          <div className="flex flex-col ">
                             <div className="flex items-center gap-2">
                               <div className="font-bold text-lg">
                                 {selectedDepartureFlight?.departure_time}
@@ -298,16 +307,44 @@ export default function Search() {
                               {`${formattedDepartureDate}`}
                             </div>
                           </div>
-                          <div className="flex flex-col gap- text-gray-500 text-sm">
+                          <div className="flex flex-col gap- text-gray-500 text-sm max-sm:hidden">
                             <div className="">Maskapai : </div>
                             <div className="">Kelas :</div>
                             <div className="">Nomor Penerbangan :</div>
                             <div className="mt-2">Bagasi :</div>
                             <div className="">Bagasi Kabin :</div>
                           </div>
-                          <div className="flex flex-col">
+                          <div className="hidden max-sm:flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
+                            <div className="">
+                              Maskapai :{" "}
+                              {selectedDepartureFlight?.airline?.name}
+                            </div>
+                            <div className="">
+                              Kelas :{" "}
+                              {(selectedDepartureFlight?.class)
+                                .charAt(0)
+                                .toUpperCase() +
+                                (selectedDepartureFlight?.class)
+                                  .slice(1)
+                                  .toLowerCase()}
+                            </div>
+                            <div className="">
+                              Nomor Penerbangan :{" "}
+                              {selectedDepartureFlight?.flight_number}
+                            </div>
+                            <div className="mt-2 ">
+                              Bagasi : {selectedDepartureFlight?.free_baggage}{" "}
+                              kg
+                            </div>
+                            <div className="">
+                              Bagasi Kabin :{" "}
+                              {selectedDepartureFlight?.cabin_baggage} kg
+                            </div>
+                          </div>
+                          <div className="flex flex-col ">
                             <div className="flex items-center gap-2">
                               <div className="font-bold text-lg">
+                                {" "}
                                 {selectedDepartureFlight?.arrival_time}
                               </div>
                               <div className="font-semibold text-base">
@@ -320,7 +357,7 @@ export default function Search() {
                           </div>
                         </div>
 
-                        <div className="flex flex-col justify-between">
+                        <div className="flex flex-col justify-between max-sm:hidden ">
                           <div className="flex flex-col">
                             <div className="font-bold text-lg">
                               {
@@ -330,8 +367,8 @@ export default function Search() {
                             </div>
                           </div>
 
-                          <div className="flex flex-col gap- text-gray-500 text-sm">
-                            <div className="">
+                          <div className="flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
+                            <div className="max-lg:pt-11">
                               {selectedDepartureFlight?.airline?.name}
                             </div>
                             <div className="">
@@ -345,14 +382,14 @@ export default function Search() {
                             <div className="">
                               {selectedDepartureFlight?.flight_number}
                             </div>
-                            <div className="mt-2">
+                            <div className="mt-2 max-lg:pt-4">
                               {selectedDepartureFlight?.free_baggage} kg
                             </div>
                             <div className="">
                               {selectedDepartureFlight?.cabin_baggage} kg
                             </div>
                           </div>
-                          <div className="flex flex-col">
+                          <div className="flex flex-col ">
                             <div className="font-bold text-lg">
                               {
                                 selectedDepartureFlight?.arrival_airport
@@ -383,17 +420,19 @@ export default function Search() {
                     onClick={() => handleDropdownToggle(flight?.id)}
                     className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg mt-2 cursor-pointer"
                   >
-                    <div className="flex justify-between items-center cursor-pointer  max-md:text-sm">
+                    <div className="flex  justify-between items-center cursor-pointer  max-lg:text-sm max-lg:flex-col max-lg:items-start">
                       <div>
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 max-lg:flex-col max-lg:items-start">
                           <img
                             src={`${flight?.airline?.icon_url}`}
                             className="h-7 w-auto rounded"
                           />
-                          <div>{flight?.airline?.name}</div> <div>-</div>
-                          <div>
-                            {(flight?.class).charAt(0).toUpperCase() +
-                              (flight?.class).slice(1).toLowerCase()}
+                          <div className="flex gap-3">
+                            <div>{flight?.airline?.name}</div> <div>-</div>
+                            <div>
+                              {(flight?.class).charAt(0).toUpperCase() +
+                                (flight?.class).slice(1).toLowerCase()}
+                            </div>
                           </div>
                         </div>{" "}
                       </div>
@@ -401,7 +440,7 @@ export default function Search() {
                         {flight.seat_available} kursi tersisa
                       </div>
                     </div>
-                    <div className="flex justify-between items-center">
+                    <div className="flex justify-between items-center max-lg:flex-col max-md: max-lg:gap-3">
                       <div className="flex pt-6 w-3/4">
                         <div className="flex flex-col text-center">
                           <div className="flex items-center gap-1">
@@ -439,7 +478,7 @@ export default function Search() {
                           <div>{flight?.arrival_time}</div>
                         </div>
                       </div>
-                      <div className="font-bold text-xl text-[#2A91E5]  max-md:text-sm">
+                      <div className="font-bold text-xl text-[#2A91E5]">
                         Rp {flight?.price.toLocaleString("id-ID")},00
                       </div>
                     </div>
@@ -468,8 +507,8 @@ export default function Search() {
                             <LiaCircleSolid size={20} />
                           </div>
                         </div>
-                        <div className="flex  justify-between  pl-3 w-full    ">
-                          <div className="flex flex-col justify-between ">
+                        <div className="flex  justify-between  pl-3 w-full max-lg: gap-10 ">
+                          <div className="flex flex-col justify-between  ">
                             <div className="flex flex-col ">
                               <div className="flex items-center gap-2">
                                 <div className="font-bold text-lg">
@@ -483,12 +522,31 @@ export default function Search() {
                                 {`${formattedDepartureDate}`}
                               </div>
                             </div>
-                            <div className="flex flex-col gap- text-gray-500 text-sm">
+                            <div className="flex flex-col gap- text-gray-500 text-sm max-sm:hidden">
                               <div className="">Maskapai : </div>
                               <div className="">Kelas :</div>
                               <div className="">Nomor Penerbangan :</div>
                               <div className="mt-2">Bagasi :</div>
                               <div className="">Bagasi Kabin :</div>
+                            </div>
+                            <div className="hidden max-sm:flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
+                              <div className="">
+                                Maskapai : {flight?.airline?.name}
+                              </div>
+                              <div className="">
+                                Kelas :{" "}
+                                {(flight?.class).charAt(0).toUpperCase() +
+                                  (flight?.class).slice(1).toLowerCase()}
+                              </div>
+                              <div className="">
+                                Nomor Penerbangan : {flight?.flight_number}
+                              </div>
+                              <div className="mt-2 ">
+                                Bagasi : {flight?.free_baggage} kg
+                              </div>
+                              <div className="">
+                                Bagasi Kabin : {flight?.cabin_baggage} kg
+                              </div>
                             </div>
                             <div className="flex flex-col ">
                               <div className="flex items-center gap-2">
@@ -506,26 +564,28 @@ export default function Search() {
                             </div>
                           </div>
 
-                          <div className="flex flex-col justify-between ">
+                          <div className="flex flex-col justify-between max-sm:hidden ">
                             <div className="flex flex-col">
                               <div className="font-bold text-lg">
                                 {flight?.departure_airport?.name_airport}
                               </div>
                             </div>
 
-                            <div className="flex flex-col gap- text-gray-500 text-sm">
-                              <div className="">{flight?.airline?.name}</div>
+                            <div className="flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
+                              <div className="max-lg:pt-11">
+                                {flight?.airline?.name}
+                              </div>
                               <div className="">
                                 {(flight?.class).charAt(0).toUpperCase() +
                                   (flight?.class).slice(1).toLowerCase()}
                               </div>
                               <div className="">{flight?.flight_number}</div>
-                              <div className="mt-2">
+                              <div className="mt-2 max-lg:pt-4">
                                 {flight?.free_baggage} kg
                               </div>
                               <div className="">{flight?.cabin_baggage} kg</div>
                             </div>
-                            <div className="flex flex-col">
+                            <div className="flex flex-col ">
                               <div className="font-bold text-lg">
                                 {flight?.arrival_airport?.name_airport}
                               </div>
@@ -572,34 +632,43 @@ export default function Search() {
                       }
                       className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg mt-2 cursor-pointer"
                     >
-                      <div className="flex justify-between items-center cursor-pointer max-md:text-sm">
+                      <div className="flex  justify-between items-center cursor-pointer  max-lg:text-sm max-lg:flex-col max-lg:items-start">
                         <div>
-                          <div className="flex items-center gap-3">
-                            <div className="text-lime-500">
-                              <FaCircleCheck size={25} />
+                          <div className="flex items-center gap-3 max-lg:flex-col max-lg:items-start">
+                            <div className="flex gap-3">
+                              <div className="text-lime-500">
+                                <FaCircleCheck size={25} />
+                              </div>
+                              <div className="hidden text-lg font-bold text-lime-500 max-lg:flex">
+                                {" "}
+                                Tiket terpilih
+                              </div>
                             </div>
+
                             <img
                               src={`${selectedReturnFlight?.airline?.icon_url}`}
                               className="h-7 w-auto rounded"
                             />
-                            <div>{selectedReturnFlight?.airline?.name}</div>{" "}
-                            <div>-</div>
-                            <div>
-                              {selectedReturnFlight?.class
-                                ?.charAt(0)
-                                ?.toUpperCase() +
-                                selectedReturnFlight?.class
-                                  ?.slice(1)
-                                  ?.toLowerCase()}
+                            <div className="flex gap-3">
+                              <div>{selectedReturnFlight?.airline?.name}</div>{" "}
+                              <div>-</div>
+                              <div>
+                                {selectedReturnFlight?.class
+                                  .charAt(0)
+                                  .toUpperCase() +
+                                  selectedReturnFlight?.class
+                                    .slice(1)
+                                    .toLowerCase()}
+                              </div>
                             </div>
                           </div>{" "}
                         </div>
-                        <div className="text-lg font-bold text-lime-500">
+                        <div className="text-lg font-bold text-lime-500 max-lg:hidden">
                           {" "}
                           Tiket terpilih
                         </div>
                       </div>
-                      <div className="flex justify-between items-center">
+                      <div className="flex justify-between items-center max-lg:flex-col max-md: max-lg:gap-3">
                         <div className="flex pt-6 w-3/4">
                           <div className="flex flex-col text-center">
                             <div className="flex items-center gap-1">
@@ -636,7 +705,7 @@ export default function Search() {
                           </div>
                           <div className="flex flex-col text-center">
                             <div className="flex items-center gap-1">
-                              <div className="font-bold text-base max-md:text-sm">
+                              <div className="font-bold text-base  max-md:text-sm">
                                 {selectedReturnFlight?.arrival_airport?.city} (
                                 {
                                   selectedReturnFlight?.arrival_airport
@@ -648,11 +717,9 @@ export default function Search() {
                             <div>{selectedReturnFlight?.arrival_time}</div>
                           </div>
                         </div>
-                        <div className="font-bold text-xl text-[#2A91E5] max-md:text-sm">
+                        <div className="font-bold text-xl text-[#2A91E5]">
                           Rp{" "}
-                          {(selectedReturnFlight?.price).toLocaleString(
-                            "id-ID"
-                          )}
+                          {selectedReturnFlight?.price.toLocaleString("id-ID")}
                           ,00
                         </div>
                       </div>
@@ -662,7 +729,7 @@ export default function Search() {
                           isDropdownOpen[selectedReturnFlight?.id] ? "open" : ""
                         }`}
                       >
-                        <div className="flex n items-center cursor-pointer border-t border-gray-400 mt-4 ">
+                        <div className="flex n items-center cursor-pointer border-t border-gray-400  mt-4 ">
                           <div className="font-bold mt-4 ">Detail Tiket</div>
                         </div>
                         <div className="flex pt-6 w-4/5">
@@ -677,13 +744,13 @@ export default function Search() {
                             </div>
                             <div className="flex flex-col items-center">
                               <LiaCircleSolid size={20} />
-                              <div className="border-r border-gray-500 h-64 "></div>
+                              <div className="border-r  border-gray-500 h-64 "></div>
                               <LiaCircleSolid size={20} />
                             </div>
                           </div>
-                          <div className="flex justify-between pl-3 w-full">
-                            <div className="flex flex-col justify-between">
-                              <div className="flex flex-col">
+                          <div className="flex  justify-between  pl-3 w-full max-lg: gap-10 ">
+                            <div className="flex flex-col justify-between  ">
+                              <div className="flex flex-col ">
                                 <div className="flex items-center gap-2">
                                   <div className="font-bold text-lg">
                                     {selectedReturnFlight?.departure_time}
@@ -696,19 +763,47 @@ export default function Search() {
                                   </div>
                                 </div>
                                 <div className="font-semibold text-base">
-                                  {`${formattedReturnDate}`}
+                                  {`${formattedDepartureDate}`}
                                 </div>
                               </div>
-                              <div className="flex flex-col gap- text-gray-500 text-sm">
+                              <div className="flex flex-col gap- text-gray-500 text-sm max-sm:hidden">
                                 <div className="">Maskapai : </div>
                                 <div className="">Kelas :</div>
                                 <div className="">Nomor Penerbangan :</div>
                                 <div className="mt-2">Bagasi :</div>
                                 <div className="">Bagasi Kabin :</div>
                               </div>
-                              <div className="flex flex-col">
+                              <div className="hidden max-sm:flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
+                                <div className="">
+                                  Maskapai :{" "}
+                                  {selectedReturnFlight?.airline?.name}
+                                </div>
+                                <div className="">
+                                  Kelas :{" "}
+                                  {(selectedReturnFlight?.class)
+                                    .charAt(0)
+                                    .toUpperCase() +
+                                    (selectedReturnFlight?.class)
+                                      .slice(1)
+                                      .toLowerCase()}
+                                </div>
+                                <div className="">
+                                  Nomor Penerbangan :{" "}
+                                  {selectedReturnFlight?.flight_number}
+                                </div>
+                                <div className="mt-2 ">
+                                  Bagasi : {selectedReturnFlight?.free_baggage}{" "}
+                                  kg
+                                </div>
+                                <div className="">
+                                  Bagasi Kabin :{" "}
+                                  {selectedReturnFlight?.cabin_baggage} kg
+                                </div>
+                              </div>
+                              <div className="flex flex-col ">
                                 <div className="flex items-center gap-2">
                                   <div className="font-bold text-lg">
+                                    {" "}
                                     {selectedReturnFlight?.arrival_time}
                                   </div>
                                   <div className="font-semibold text-base">
@@ -719,12 +814,12 @@ export default function Search() {
                                   </div>
                                 </div>
                                 <div className="font-semibold text-base">
-                                  {`${formattedReturnDate}`}
+                                  {`${formattedDepartureDate}`}
                                 </div>
                               </div>
                             </div>
 
-                            <div className="flex flex-col justify-between">
+                            <div className="flex flex-col justify-between max-sm:hidden ">
                               <div className="flex flex-col">
                                 <div className="font-bold text-lg">
                                   {
@@ -734,9 +829,9 @@ export default function Search() {
                                 </div>
                               </div>
 
-                              <div className="flex flex-col gap- text-gray-500 text-sm">
-                                <div className="">
-                                  {selectedDepartureFlight?.airline?.name}
+                              <div className="flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
+                                <div className="max-lg:pt-11">
+                                  {selectedReturnFlight?.airline?.name}
                                 </div>
                                 <div className="">
                                   {(selectedReturnFlight?.class)
@@ -749,14 +844,14 @@ export default function Search() {
                                 <div className="">
                                   {selectedReturnFlight?.flight_number}
                                 </div>
-                                <div className="mt-2">
+                                <div className="mt-2 max-lg:pt-4">
                                   {selectedReturnFlight?.free_baggage} kg
                                 </div>
                                 <div className="">
                                   {selectedReturnFlight?.cabin_baggage} kg
                                 </div>
                               </div>
-                              <div className="flex flex-col">
+                              <div className="flex flex-col ">
                                 <div className="font-bold text-lg">
                                   {
                                     selectedReturnFlight?.arrival_airport
@@ -777,11 +872,6 @@ export default function Search() {
                       Pilih Tiket Lain
                       <FaRegEdit />
                     </div>
-
-                    {/* <div className="bg-[#2A91E5] mt-2 hover:bg-sky-700 hover:shadow hover:text-gray-200 border border-gray-300 font-medium text-white p-2 rounded-lg text-center cursor-pointer">
-                  {" "}
-                  Lanjut Ke Pembayaran
-                </div> */}
                   </div>
                 ) : filteredAndSortedReturnFlights &&
                   filteredAndSortedReturnFlights.length > 0 ? (
@@ -792,17 +882,19 @@ export default function Search() {
                         onClick={() => handleDropdownToggle(flight?.id)}
                         className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg mt-2 cursor-pointer"
                       >
-                        <div className="flex justify-between items-center cursor-pointer  max-md:text-sm">
+                        <div className="flex  justify-between items-center cursor-pointer  max-lg:text-sm max-lg:flex-col max-lg:items-start">
                           <div>
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 max-lg:flex-col max-lg:items-start">
                               <img
                                 src={`${flight?.airline?.icon_url}`}
                                 className="h-7 w-auto rounded"
                               />
-                              <div>{flight?.airline?.name}</div> <div>-</div>
-                              <div>
-                                {(flight?.class).charAt(0).toUpperCase() +
-                                  (flight?.class).slice(1).toLowerCase()}
+                              <div className="flex gap-3">
+                                <div>{flight?.airline?.name}</div> <div>-</div>
+                                <div>
+                                  {(flight?.class).charAt(0).toUpperCase() +
+                                    (flight?.class).slice(1).toLowerCase()}
+                                </div>
                               </div>
                             </div>{" "}
                           </div>
@@ -810,7 +902,7 @@ export default function Search() {
                             {flight.seat_available} kursi tersisa
                           </div>
                         </div>
-                        <div className="flex justify-between items-center">
+                        <div className="flex justify-between items-center max-lg:flex-col max-md: max-lg:gap-3">
                           <div className="flex pt-6 w-3/4">
                             <div className="flex flex-col text-center">
                               <div className="flex items-center gap-1">
@@ -848,7 +940,7 @@ export default function Search() {
                               <div>{flight?.arrival_time}</div>
                             </div>
                           </div>
-                          <div className="font-bold text-xl text-[#2A91E5]  max-md:text-sm">
+                          <div className="font-bold text-xl text-[#2A91E5]">
                             Rp {flight?.price.toLocaleString("id-ID")},00
                           </div>
                         </div>
@@ -877,8 +969,8 @@ export default function Search() {
                                 <LiaCircleSolid size={20} />
                               </div>
                             </div>
-                            <div className="flex  justify-between  pl-3 w-full    ">
-                              <div className="flex flex-col justify-between ">
+                            <div className="flex  justify-between  pl-3 w-full max-lg: gap-10 ">
+                              <div className="flex flex-col justify-between  ">
                                 <div className="flex flex-col ">
                                   <div className="flex items-center gap-2">
                                     <div className="font-bold text-lg">
@@ -889,15 +981,34 @@ export default function Search() {
                                     </div>
                                   </div>
                                   <div className="font-semibold text-base">
-                                    {`${formattedReturnDate}`}
+                                    {`${formattedDepartureDate}`}
                                   </div>
                                 </div>
-                                <div className="flex flex-col gap- text-gray-500 text-sm">
+                                <div className="flex flex-col gap- text-gray-500 text-sm max-sm:hidden">
                                   <div className="">Maskapai : </div>
                                   <div className="">Kelas :</div>
                                   <div className="">Nomor Penerbangan :</div>
                                   <div className="mt-2">Bagasi :</div>
                                   <div className="">Bagasi Kabin :</div>
+                                </div>
+                                <div className="hidden max-sm:flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
+                                  <div className="">
+                                    Maskapai : {flight?.airline?.name}
+                                  </div>
+                                  <div className="">
+                                    Kelas :{" "}
+                                    {(flight?.class).charAt(0).toUpperCase() +
+                                      (flight?.class).slice(1).toLowerCase()}
+                                  </div>
+                                  <div className="">
+                                    Nomor Penerbangan : {flight?.flight_number}
+                                  </div>
+                                  <div className="mt-2 ">
+                                    Bagasi : {flight?.free_baggage} kg
+                                  </div>
+                                  <div className="">
+                                    Bagasi Kabin : {flight?.cabin_baggage} kg
+                                  </div>
                                 </div>
                                 <div className="flex flex-col ">
                                   <div className="flex items-center gap-2">
@@ -910,20 +1021,20 @@ export default function Search() {
                                     </div>
                                   </div>
                                   <div className="font-semibold text-base">
-                                    {`${formattedReturnDate}`}
+                                    {`${formattedDepartureDate}`}
                                   </div>
                                 </div>
                               </div>
 
-                              <div className="flex flex-col justify-between ">
+                              <div className="flex flex-col justify-between max-sm:hidden ">
                                 <div className="flex flex-col">
                                   <div className="font-bold text-lg">
                                     {flight?.departure_airport?.name_airport}
                                   </div>
                                 </div>
 
-                                <div className="flex flex-col gap- text-gray-500 text-sm">
-                                  <div className="">
+                                <div className="flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
+                                  <div className="max-lg:pt-11">
                                     {flight?.airline?.name}
                                   </div>
                                   <div className="">
@@ -933,14 +1044,14 @@ export default function Search() {
                                   <div className="">
                                     {flight?.flight_number}
                                   </div>
-                                  <div className="mt-2">
+                                  <div className="mt-2 max-lg:pt-4">
                                     {flight?.free_baggage} kg
                                   </div>
                                   <div className="">
                                     {flight?.cabin_baggage} kg
                                   </div>
                                 </div>
-                                <div className="flex flex-col">
+                                <div className="flex flex-col ">
                                   <div className="font-bold text-lg">
                                     {flight?.arrival_airport?.name_airport}
                                   </div>
@@ -952,9 +1063,10 @@ export default function Search() {
                         {/* END DROPDOWN DETAILS */}
                       </div>
                       <div
-                        onClick={() =>
-                          dispatch(setSelectedReturnFlight(flight))
-                        }
+                        onClick={() => {
+                          dispatch(setSelectedReturnFlight(flight));
+                          dispatch(setSelectedReturnFlightId(flight.id));
+                        }}
                         className="bg-[#2A91E5] hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer"
                       >
                         Pilih Tiket

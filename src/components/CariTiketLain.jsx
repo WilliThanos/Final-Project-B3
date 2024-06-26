@@ -1434,6 +1434,9 @@ export default function CariTiketLanding() {
               navigate("/search");
 
               dispatch(getSearchTicket());
+              {
+                setIsDropdownOpen(false);
+              }
             }
           }}
           className={`rounded-xl px-5 py-2.5 font-medium text-white hover:shadow ${
