@@ -1269,7 +1269,7 @@ export default function CariTiketLanding() {
           }`}
           disabled={!isButtonEnabled}
         >
-          Cari Tiket Lainnya
+          Cari Tiket
         </button>
       </div>
     </div>
