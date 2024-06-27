@@ -22,6 +22,7 @@ import ConfirmPassword from "./pages/ConfirmEmail.jsx";
 import KonfirmasiPembayaran from "./pages/KonfirmasiPembayaran.jsx";
 import { useSelector } from "react-redux";
 import PrivateRoute from "./routes/PrivateRoutes.jsx";
+import AuthCallback from "./components/AuthCallback.jsx";
 
 export const baseApiURL = "https://expressjs-develop-b4d1.up.railway.app/api";
 
@@ -31,6 +32,10 @@ export default function App() {
   // );
 
   const router = createBrowserRouter([
+    {
+      path: "/auth-callback",
+      element: <AuthCallback />,
+    },
     {
       path: "/",
       element: <Landing />,
@@ -63,6 +68,7 @@ export default function App() {
       path: "/search",
       element: <Search />,
     },
+
     {
       element: <PrivateRoute />, // Protect the following routes
       children: [
