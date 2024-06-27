@@ -21,7 +21,7 @@ export const payment = () => async (dispatch, getState) => {
     );
     dispatch(setData(response?.data));
     const link = getState().payment?.Data?.transaction?.checkout_url;
-    console.log("link payment :>> ", link);
+    // console.log("link payment :>> ", link);
 
     window.location.href = `${link}`;
   } catch (error) {

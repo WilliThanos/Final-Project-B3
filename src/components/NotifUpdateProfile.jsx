@@ -10,7 +10,6 @@ export default function MyModal() {
   }
 
   const status = useSelector((state) => state?.profile?.updateProfile);
-  console.log("status", status);
   const modal = useSelector((state) => state?.profile?.Modal);
 
   return (
