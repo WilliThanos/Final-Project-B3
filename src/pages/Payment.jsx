@@ -39,6 +39,7 @@ export default function Payment() {
   const handleButtonPayment = (e) => {
     e.preventDefault();
     dispatch(payment());
+    navigate("/history");
   };
 
   return (
@@ -86,7 +87,7 @@ export default function Payment() {
             }`}
             disabled={isButtonDisabled}
           >
-            Lanjut ke Pembayaran
+            Bayar Sekarang
           </button>
         </div>
       </div>

@@ -25,6 +25,13 @@ export default function Profile() {
   //fungsi handle update data
   const handleUpdateProfile = (e) => {
     e.preventDefault();
+    if (first_name.trim() === "" || last_name.trim() === "") {
+      dispatch(
+        setUpdateProfile("Tolong inputkan nama depan dan belakang anda")
+      );
+      dispatch(setModal(true));
+      return;
+    }
     const updatedProfile = {
       first_name,
       last_name,
@@ -55,7 +62,7 @@ export default function Profile() {
             />
             <div className="flex flex-col gap-7 max-md:gap-3">
               <p className="text-xl font-medium">{data?.email}</p>
-              <p className="text-xl font-medium">
+              <p className="text-xl font-medium max-sm:text-base">
                 {data?.first_name} {data?.last_name}
               </p>
             </div>

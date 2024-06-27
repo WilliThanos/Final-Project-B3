@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { GiAirplaneDeparture, GiAirplaneArrival } from "react-icons/gi";
 import { HiArrowSmRight } from "react-icons/hi";
+import { useDispatch, useSelector } from "react-redux";
+import { getBookingHistory } from "../redux/action/bookingAction";
 
 export default function InfoBooking() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getBookingHistory());
+  }, [dispatch]);
+
+  const dataHistory = useSelector((state) => state?.history?.historyPemesanan);
+  console.log("dataHistory :>> ", dataHistory);
+
   return (
     <div className=" ">
       {/* card perjalanan */}

@@ -11,6 +11,7 @@ export default function MyModal() {
 
   const status = useSelector((state) => state?.profile?.updateProfile);
   const modal = useSelector((state) => state?.profile?.Modal);
+  const pesan = useSelector((state) => state?.profile?.updateProfile);
 
   return (
     <>
@@ -51,7 +52,14 @@ export default function MyModal() {
                 as="h3"
                 className="text-base/7 font-medium"
               ></DialogTitle>
-              <p className="mt-2 text-center text-base">{status?.message}</p>
+              <p className="mt-2 text-center text-base">
+                {pesan === "Tolong inputkan nama depan dan belakang anda" ? (
+                  <p>{pesan}</p>
+                ) : (
+                  <p>{status?.message}</p>
+                )}
+              </p>
+
               <div className="mt-4"></div>
             </DialogPanel>
           </div>

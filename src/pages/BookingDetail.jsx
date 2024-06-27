@@ -20,6 +20,7 @@ import DetailPenumpangDewasa from "../components/DetailPenumpangDewasa";
 import { getSearchTicket } from "../redux/action/dataAction";
 import { useNavigate } from "react-router-dom";
 import DetailBooking from "../components/DetailBooking";
+import { getBooking } from "../redux/action/bookingAction";
 
 export default function BookingDetail({ index }) {
   const navigate = useNavigate();
