@@ -83,6 +83,12 @@ const authSlice = createSlice({
       state.token = null;
       localStorage.removeItem("persist:root3");
     },
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
+    setMessage: (state, action) => {
+      state.message = action.payload;
+    },
   },
 });
 
@@ -102,6 +108,8 @@ export const {
   setToken,
   clearMessage,
   logout,
+  setUser,
+  setMessage,
 } = authSlice.actions;
 
 export default authSlice.reducer;
