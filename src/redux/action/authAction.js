@@ -72,7 +72,7 @@ export const login = createAsyncThunk(
     } catch (error) {
       dispatch(loginFailure(error.response.data.message));
       const message = {
-        type: "error",
+        type: "error" || "false",
         message: error.response.data.message,
       };
       Cookies.set("flashMessage", JSON.stringify(message));
