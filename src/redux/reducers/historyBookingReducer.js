@@ -11,9 +11,13 @@ const historySlicer = createSlice({
     sethistoryPemesanan: (state, action) => {
       state.historyPemesanan = action.payload;
     },
+    hapus: (state) => {
+      state.historyPemesanan = null;
+      localStorage.removeItem("persist:root3");
+    },
   },
 });
 
-export const { sethistoryPemesanan } = historySlicer.actions;
+export const { sethistoryPemesanan, hapus } = historySlicer.actions;
 
 export default historySlicer.reducer;

@@ -135,7 +135,7 @@ export default function DetailBooking() {
                 <div className="border-dashed	border-b-2 border-gray-400 w-[60px] mx-2 max-lg:w-[30px] max-sm:w-[20px]"></div>
               </div>
             </div>
-            <div className="flex justify-between flex-col items-end  w-1/4">
+            <div className="  flex justify-between flex-col items-end  w-1/4">
               <div className="flex items-center gap-1">
                 <div className="font-bold text-base text-right  max-md:text-sm">
                   {departureFlights?.arrival_airport?.city} (
@@ -271,7 +271,7 @@ export default function DetailBooking() {
             <div className="flex flex-row items-center gap-3">
               <GiAirplaneArrival size={20} />
               <label className="text-xl font-semibold max-sm:text-base">
-                Berangkat
+                Pulang
               </label>
             </div>
             <div

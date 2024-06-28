@@ -76,8 +76,8 @@ export default function Profile() {
       <div>
         <div className="flex justify-between max-md:flex-col max-md:items-center gap-5 mt-3 max-md:gap-2">
           <div className="bg-white rounded-2xl w-2/3 px-5 py-3 shadow-sm max-md:w-full">
-            <div className="flex justify-between">
-              <label className="font-bold text-2xl ">
+            <div className="flex justify-between items-center">
+              <label className="font-bold text-2xl max-sm:text-xl">
                 Transaksi Terakhir {data?.first_name}
               </label>
               <p
@@ -88,14 +88,16 @@ export default function Profile() {
               </p>
             </div>
             {/* card perjalanan */}
-            <div className="mt-5">
+            <div className="mt-5 overflow-y-auto h-[550px] max-sm:h-[400px]">
               <InfoBooking />
             </div>
           </div>
 
           {/* INPUT UBAH PROFIL */}
           <div className="bg-white max-h-96 rounded-2xl px-5 py-3 shadow-sm w-1/3 max-md:w-full">
-            <label className=" font-bold text-2xl">Ubah Profil Anda</label>
+            <label className=" font-bold text-2xl max-sm:text-xl">
+              Ubah Profil Anda
+            </label>
             {/* form ubah profil */}
             <form
               className="flex flex-col gap-3 mt-5"

@@ -5,6 +5,7 @@ import { logout } from "../redux/reducers/authReducer";
 import { getProfile } from "../redux/action/dataAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { hapus } from "../redux/reducers/historyBookingReducer";
 
 function NavbarLogoBiru() {
   const dispatch = useDispatch();
@@ -47,6 +48,7 @@ function NavbarLogoBiru() {
 
   const confirmLogout = () => {
     dispatch(logout());
+    dispatch(hapus());
     setShowConfirmation(false);
     navigate("/");
   };

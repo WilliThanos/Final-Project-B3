@@ -28,6 +28,7 @@ import CariTiketLanding from "../components/CariTiketLanding";
 import { AiOutlineSearch } from "react-icons/ai";
 import BangOwi from "../assets/BangOwi.jpeg";
 import beachVid from "../assets/beachVid.mp4";
+import OurTeam from "../components/ourTeam.jsx";
 
 export default function Landing() {
   const dispatch = useDispatch();
@@ -219,7 +220,7 @@ export default function Landing() {
       </section>
 
       <section id="maskapai">
-        <div className="overflow-hidden bg-white py-32">
+        <div className="overflow-hidden bg-white py-32 max-sm:py-10">
           <div className="mx-auto max-w-7xl px-6 lg:flex lg:px-8">
             <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-12 gap-y-16 lg:mx-0 lg:min-w-full lg:max-w-none lg:flex-none lg:gap-y-8">
               <div className="lg:col-end-1 lg:w-full lg:max-w-lg lg:pb-8">
@@ -283,7 +284,7 @@ export default function Landing() {
       </section>
 
       <section>
-        <div className="bg-white py-32">
+        <div className="bg-white py-32 max-sm:py-10">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto flex max-w-2xl flex-col items-end justify-between gap-16 lg:mx-0 lg:max-w-none lg:flex-row">
               <div className="w-full lg:max-w-lg lg:flex-auto">
@@ -344,6 +345,9 @@ export default function Landing() {
             </div>
           </div>
         </div>
+      </section>
+      <section className="bg-white">
+        <OurTeam />
       </section>
 
       <Footer />

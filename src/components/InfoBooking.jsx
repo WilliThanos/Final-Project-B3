@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { GiAirplaneDeparture, GiAirplaneArrival } from "react-icons/gi";
 import { HiArrowSmRight } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,10 +12,15 @@ import {
   setSelectedReturnFlightId,
 } from "../redux/reducers/ticketReducer";
 import { useNavigate } from "react-router-dom";
+import Kosong from "../assets/empty.png";
+import { IoWarning } from "react-icons/io5";
+import { setRoundTrip } from "../redux/reducers/dataReducer";
 
 export default function InfoBooking() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showWarning, setShowWarning] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
 
   useEffect(() => {
     dispatch(getBookingHistory());
@@ -26,7 +31,7 @@ export default function InfoBooking() {
 
   const calculateTravelTime = (departure, arrival) => {
     if (!departure || !arrival) {
-      return null; // Handle case where either departure or arrival is undefined or null
+      return null;
     }
 
     // Parse the time strings
@@ -34,26 +39,22 @@ export default function InfoBooking() {
     const arrParts = arrival.split(":");
 
     if (depParts.length !== 2 || arrParts.length !== 2) {
-      return null; // Handle cases where departure or arrival doesn't have correct format
+      return null;
     }
 
     const [depHours, depMinutes] = depParts.map(Number);
     const [arrHours, arrMinutes] = arrParts.map(Number);
 
-    // Convert times to minutes since the start of the day
     const departureInMinutes = depHours * 60 + depMinutes;
     const arrivalInMinutes = arrHours * 60 + arrMinutes;
 
-    // Calculate the difference in minutes
     let differenceInMinutes = arrivalInMinutes - departureInMinutes;
     if (differenceInMinutes < 0) {
-      // If the arrival time is the next day
       differenceInMinutes += 24 * 60;
     }
     const hours = Math.floor(differenceInMinutes / 60);
     const minutes = differenceInMinutes % 60;
 
-    // Return the formatted string
     return `${hours}j ${minutes}m`;
   };
 
@@ -99,16 +100,30 @@ export default function InfoBooking() {
     return `${dayName}, ${day} ${month} ${year}`;
   };
 
-  const handleButtonPayment = (id, schedule, returnSchedule) => {
-    dispatch(setSelectedDepartureFlight(schedule));
-    dispatch(setSelectedReturnFlight(returnSchedule));
-    dispatch(setBookedPassengers(id));
+  const handleButtonClick = () => {
+    if (status === "PENDING") {
+      return;
+    }
+    dispatch(setSelectedDepartureFlight(e.schedule));
+    dispatch(setSelectedReturnFlight(e.returnSchedule));
+    dispatch(setBookedPassengers(e.id));
+    navigate("/payment");
   };
 
   return (
     <div>
       {dataHistory === null ? (
-        <div>HMMM Sepertinya Anda belum memesan Tiket</div>
+        <div className="flex flex-col items-center gap-2">
+          <img className="max-w-60" src={Kosong} alt="" />
+
+          <p>hmmm Sepertinya Anda belum memesan Tiket</p>
+          <p
+            onClick={() => navigate("/search")}
+            className="text-blue-500 cursor-pointer"
+          >
+            Pesan Tiket Sekarang
+          </p>
+        </div>
       ) : (
         <div className="flex flex-col gap-2 ">
           {dataHistory?.map((e) => {
@@ -125,6 +140,15 @@ export default function InfoBooking() {
                 key={e?.id}
                 className="border bg-white border-gray-300 rounded-xl hover:border-blue-500"
                 onClick={() => {
+                  if (e?.status === "SELESAI") {
+                    setSelectedId(e?.id);
+                    setShowWarning(true);
+                    return;
+                  }
+
+                  if (e?.returnSchedule !== null) {
+                    dispatch(setRoundTrip(true));
+                  }
                   dispatch(setSelectedDepartureFlight(e.schedule));
                   dispatch(setSelectedReturnFlight(e.returnSchedule));
                   dispatch(setBookedPassengers(e.id));
@@ -211,6 +235,13 @@ export default function InfoBooking() {
                       </div>
                     </div>
                   </div>
+                  {showWarning && selectedId === e.id && (
+                    <div className=" flex items-center gap-2 text-blue-500 font-normal text-xs mt-2">
+                      <IoWarning size={20} />
+                      <div>Anda Sudah Membayar Tiket Ini </div>
+                    </div>
+                  )}
+
                   <div>
                     {/* CEK KONDISI PP */}
                     {e?.returnSchedule === null ? (
@@ -299,7 +330,6 @@ export default function InfoBooking() {
               </div>
             );
           })}
-          {/* card perjalanan */}
         </div>
       )}
     </div>
