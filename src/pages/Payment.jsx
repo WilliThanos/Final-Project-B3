@@ -53,7 +53,7 @@ export default function Payment() {
           </div>
           <div className=" mx-auto bg-white rounded-xl shadow-sm px-6 max-sm:px-4 w-full">
             <div className=" my-5 max-lg:w-full ">
-              <div className="font text-base text-gray-600 max-md:text-sm">
+              <div className="font text-base text-gray-600 max-md:text-sm mb-2">
                 Silahkan pilih metode pembayaran{" "}
               </div>
               <div className="mt-2">

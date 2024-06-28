@@ -210,12 +210,6 @@ export default function BookingDetail({ index }) {
     return true; // Semua penumpang dewasa valid
   };
 
-  const isButtonDisabled = !(
-    validateAgeAnak() &&
-    validateAgeBayi() &&
-    validateAgeDewasa()
-  );
-
   useEffect(() => {
     dispatch(getSearchTicket());
   }, []);
@@ -227,7 +221,8 @@ export default function BookingDetail({ index }) {
   }, [departureFlights, navigate]);
 
   const handleButtonBooking = (e) => {
-    if (isButtonDisabled) {
+    if (!(validateAgeAnak() && validateAgeBayi() && validateAgeDewasa())) {
+      e.preventDefault();
       setShowWarning(true);
     } else {
       e.preventDefault();
@@ -306,24 +301,19 @@ export default function BookingDetail({ index }) {
           <DetailPembayaran />
           {/* Detail Pembayaran Component */}.
           <div>
-            <div onClick={handleButtonBooking} className="relative ">
-              <button
-                onClick={!isButtonDisabled ? handleButtonBooking : null}
-                className={`rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow ${
-                  isButtonDisabled ? "bg-gray-400 cursor-not-allowed" : ""
-                }`}
-                disabled={isButtonDisabled}
-              >
-                Lanjut ke Pembayaran
-              </button>
-            </div>
-            {showWarning && (
-              <div className="flex items-center gap-2 text-red-500 font-normal text-xs">
-                <IoWarning size={20} />
-                <div>Mohon isi data pemesanan</div>
-              </div>
-            )}
+            <button
+              onClick={handleButtonBooking}
+              className={`rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow `}
+            >
+              Lanjut ke Pembayaran
+            </button>
           </div>
+          {showWarning && (
+            <div className="flex items-center gap-2 text-red-500 font-normal text-xs mt-2">
+              <IoWarning size={20} />
+              <div>Mohon isi data pemesanan</div>
+            </div>
+          )}
         </div>
       </div>
     </form>

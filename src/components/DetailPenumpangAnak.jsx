@@ -63,6 +63,7 @@ export default function DetailPenumpangAnak({
 
   useEffect(() => {
     handleInputChange(index, "kategori", "Anak");
+    handleInputChange(index, "jenisKelamin", "Pria");
   }, [handleInputChange, index]);
 
   return (

@@ -62,6 +62,7 @@ export default function DetailPenumpangBayi({
 
   useEffect(() => {
     handleInputChange(index, "kategori", "Bayi");
+    handleInputChange(index, "jenisKelamin", "Pria");
   }, [handleInputChange, index]);
 
   return (
