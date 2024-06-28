@@ -241,7 +241,7 @@ function NavbarLogoBiru() {
                       href="/profile"
                       className="block rounded-md  px-4 py-2 text-[#333333]/60 hover:bg-gray-300 hover:text-[#333333] font-semibold"
                     >
-                      Profil{" "}
+                      Profila{" "}
                     </a>
                     <a
                       onClick={handleLogout}
