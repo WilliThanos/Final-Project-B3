@@ -51,7 +51,7 @@ export default function DetailPenumpangDewasa({
 
   const validateAge = () => {
     if (!passenger.tanggalLahir) {
-      return false; // Return true if tanggalLahir is null
+      return true; // Return true if tanggalLahir is null
     }
 
     if (passengerAge >= 12 && passengerAge <= 100) {

@@ -6,6 +6,7 @@ import NavbarLogoPutih from "../components/Navbar";
 import CariTiketLain from "../components/CariTiketLain";
 import { GiAirplaneDeparture, GiAirplaneArrival } from "react-icons/gi";
 import DetailPembayaran from "../components/DetailPembayaran";
+import { IoWarning } from "react-icons/io5";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -31,6 +32,8 @@ export default function BookingDetail({ index }) {
   const jumlahDewasa = useSelector((state) => state?.data?.jumlahDewasa);
   const jumlahAnak = useSelector((state) => state?.data?.jumlahAnak);
   const jumlahBayi = useSelector((state) => state?.data?.jumlahBayi);
+  const [showWarning, setShowWarning] = useState(false);
+  console.log("showWarning :>> ", showWarning);
 
   const totalPenumpang = jumlahDewasa + jumlahAnak + jumlahBayi;
 
@@ -130,7 +133,14 @@ export default function BookingDetail({ index }) {
     );
 
     for (let passenger of anakPassengers) {
-      if (!passenger.tanggalLahir) {
+      if (
+        !passenger.tanggalLahir ||
+        !passenger.jenisKelamin ||
+        !passenger.namaBelakang ||
+        !passenger.namaDepan ||
+        !passenger.nik ||
+        !passenger.nomorHP
+      ) {
         return false; // Return false if tanggalLahir is null
       }
 
@@ -151,7 +161,14 @@ export default function BookingDetail({ index }) {
     );
 
     for (let passenger of bayiPassengers) {
-      if (!passenger.tanggalLahir) {
+      if (
+        !passenger.tanggalLahir ||
+        !passenger.jenisKelamin ||
+        !passenger.namaBelakang ||
+        !passenger.namaDepan ||
+        !passenger.nik ||
+        !passenger.nomorHP
+      ) {
         return false; // Return false if tanggalLahir is null
       }
 
@@ -172,7 +189,14 @@ export default function BookingDetail({ index }) {
     );
 
     for (let passenger of dewasaPassengers) {
-      if (!passenger.tanggalLahir) {
+      if (
+        !passenger.tanggalLahir ||
+        !passenger.jenisKelamin ||
+        !passenger.namaBelakang ||
+        !passenger.namaDepan ||
+        !passenger.nik ||
+        !passenger.nomorHP
+      ) {
         return false; // Return false if tanggalLahir is null
       }
 
@@ -203,9 +227,13 @@ export default function BookingDetail({ index }) {
   }, [departureFlights, navigate]);
 
   const handleButtonBooking = (e) => {
-    e.preventDefault();
-    navigate("/payment");
-    dispatch(getBooking());
+    if (isButtonDisabled) {
+      setShowWarning(true);
+    } else {
+      e.preventDefault();
+      navigate("/payment");
+      dispatch(getBooking());
+    }
   };
 
   return (
@@ -277,15 +305,25 @@ export default function BookingDetail({ index }) {
           {/* Detail Pembayaran Component */}
           <DetailPembayaran />
           {/* Detail Pembayaran Component */}.
-          <button
-            onClick={handleButtonBooking}
-            className={`rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow ${
-              isButtonDisabled ? "bg-gray-400 cursor-not-allowed" : ""
-            }`}
-            disabled={isButtonDisabled}
-          >
-            Lanjut ke Pembayaran
-          </button>
+          <div>
+            <div onClick={handleButtonBooking} className="relative ">
+              <button
+                onClick={!isButtonDisabled ? handleButtonBooking : null}
+                className={`rounded-xl bg-[#2A91E5] px-5 mt-8 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow ${
+                  isButtonDisabled ? "bg-gray-400 cursor-not-allowed" : ""
+                }`}
+                disabled={isButtonDisabled}
+              >
+                Lanjut ke Pembayaran
+              </button>
+            </div>
+            {showWarning && (
+              <div className="flex items-center gap-2 text-red-500 font-normal text-xs">
+                <IoWarning size={20} />
+                <div>Mohon isi data pemesanan</div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </form>
