@@ -51,7 +51,7 @@ export default function DetailPenumpangDewasa({
 
   const validateAge = () => {
     if (!passenger.tanggalLahir) {
-      return false; // Return true if tanggalLahir is null
+      return true; // Return true if tanggalLahir is null
     }
 
     if (passengerAge >= 12 && passengerAge <= 100) {
@@ -62,6 +62,7 @@ export default function DetailPenumpangDewasa({
   };
   useEffect(() => {
     handleInputChange(index, "kategori", "Dewasa");
+    handleInputChange(index, "jenisKelamin", "Pria");
   }, [handleInputChange, index]);
 
   return (

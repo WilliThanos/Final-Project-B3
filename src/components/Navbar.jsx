@@ -20,6 +20,11 @@ function NavbarLogoPutih() {
       dispatch(getProfile());
     }
   }, []);
+  useEffect(() => {
+    if (!token) {
+      dispatch(logout());
+    }
+  }, []);
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);

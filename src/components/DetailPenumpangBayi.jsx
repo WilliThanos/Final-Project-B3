@@ -50,7 +50,7 @@ export default function DetailPenumpangBayi({
 
   const validateAge = () => {
     if (!passenger.tanggalLahir) {
-      return false; // Return true if tanggalLahir is null
+      return true; // Return true if tanggalLahir is null
     }
 
     if (passengerAge < 2) {
@@ -62,6 +62,7 @@ export default function DetailPenumpangBayi({
 
   useEffect(() => {
     handleInputChange(index, "kategori", "Bayi");
+    handleInputChange(index, "jenisKelamin", "Pria");
   }, [handleInputChange, index]);
 
   return (
