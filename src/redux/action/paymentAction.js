@@ -5,7 +5,9 @@ export const payment = () => async (dispatch, getState) => {
   try {
     const token = getState().auth?.token;
     const code = getState().payment?.Metode;
-    const id = getState().passengers?.bookedPassengers?.data?.id;
+    const id =
+      getState().passengers?.bookedPassengers?.data?.id ||
+      getState().passengers?.bookedPassengers;
 
     const config = {
       headers: {
