@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import logo from "../assets/weblogo.png";
 import bg from "../assets/bg.png";
-import NavbarLogoPutih from "../components/Navbar";
+import NavbarLanding from "../components/Navbar";
 import Footer from "../components/Footer";
 import FlashMessage from "../components/FlashMessage";
 import { useDispatch } from "react-redux";
@@ -80,7 +80,7 @@ export default function ConfirmPassword() {
         className="min-h-screen flex items-center justify-center relative bg-cover bg-center"
         style={{ backgroundImage: `url(${bg})` }}
       >
-        <NavbarLogoPutih />
+        <NavbarLanding />
         <main className="flex-1 flex items-center justify-center p-6 relative z-10">
           <div className="max-w-md w-full bg-white shadow-lg rounded-xl p-10">
             <div className="text-center">

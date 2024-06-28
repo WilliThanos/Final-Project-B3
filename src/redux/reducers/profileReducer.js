@@ -5,6 +5,7 @@ const initialState = {
   profile: null,
   updateProfile: null,
   Modal: false,
+  notif: null,
 };
 
 const profileSlicer = createSlice({
@@ -20,9 +21,13 @@ const profileSlicer = createSlice({
     setModal: (state, action) => {
       state.Modal = action.payload;
     },
+    setNotif: (state, action) => {
+      state.notif = action.payload;
+    },
   },
 });
 
-export const { setProfile, setUpdateProfile, setModal } = profileSlicer.actions;
+export const { setProfile, setUpdateProfile, setModal, setNotif } =
+  profileSlicer.actions;
 
 export default profileSlicer.reducer;
