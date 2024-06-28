@@ -108,7 +108,7 @@ export default function DetailBooking() {
         {/* ISI KONTEN */}
         <div className="flex w-full  justify-between place-items-stretch max-lg:flex-col max-md: max-lg:gap-3">
           <div className="flex justify-between mt-2  w-full">
-            <div className="  flex flex-col  w-1/4">
+            <div className="  flex flex-col justify-between w-1/4">
               <div className="flex items-center gap-1">
                 <div className="font-bold text-base max-md:text-sm">
                   {departureFlights?.departure_airport?.city} (
@@ -135,7 +135,7 @@ export default function DetailBooking() {
                 <div className="border-dashed	border-b-2 border-gray-400 w-[60px] mx-2 max-lg:w-[30px] max-sm:w-[20px]"></div>
               </div>
             </div>
-            <div className="flex max-sm:justify-between flex-col items-end  w-1/4">
+            <div className="flex justify-between flex-col items-end  w-1/4">
               <div className="flex items-center gap-1">
                 <div className="font-bold text-base text-right  max-md:text-sm">
                   {departureFlights?.arrival_airport?.city} (
