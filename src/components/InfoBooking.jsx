@@ -4,9 +4,12 @@ import { HiArrowSmRight } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { getBookingHistory } from "../redux/action/bookingAction";
 import { SlPlane } from "react-icons/sl";
+import { setBookedPassengers } from "../redux/reducers/passengersReducer";
+import { useNavigate } from "react-router-dom";
 
 export default function InfoBooking() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getBookingHistory());
@@ -90,6 +93,10 @@ export default function InfoBooking() {
     return `${dayName}, ${day} ${month} ${year}`;
   };
 
+  const handleButtonPayment = (id) => {
+    dispatch(setBookedPassengers(id));
+    navigate("/payment");
+  };
   return (
     <div className="flex flex-col gap-2 ">
       {dataHistory?.map((e) => {
@@ -99,9 +106,13 @@ export default function InfoBooking() {
         const biayaAdmin = (2 / 100) * hargaTiket;
         const pajak = (10 / 100) * hargaTiket;
         const totalHarga = (hargaTiket || 0) + (pajak || 0) + (biayaAdmin || 0);
-
+        console.log("cek ID", e?.id);
         return (
-          <div className="border bg-white border-gray-300 rounded-xl hover:border-blue-500">
+          <div
+            onClick={handleButtonPayment(e?.id)}
+            key={e?.id}
+            className="border bg-white border-gray-300 rounded-xl hover:border-blue-500"
+          >
             <div className=" p-4 rounded-lg">
               {/* KEPALA KONTEN */}
               <div className="flex justify-between items-center">
