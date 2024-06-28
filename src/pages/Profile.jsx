@@ -7,6 +7,7 @@ import { getProfile, updateProfile } from "../redux/action/dataAction";
 import { useDispatch, useSelector } from "react-redux";
 import { setModal, setUpdateProfile } from "../redux/reducers/profileReducer";
 import MyModal from "../components/NotifUpdateProfile";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const [first_name, setFirstName] = useState("");
@@ -15,6 +16,7 @@ export default function Profile() {
   const [confirmPassword, setconfirmPassword] = useState("");
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(getProfile());
@@ -74,14 +76,26 @@ export default function Profile() {
       <div>
         <div className="flex justify-between max-md:flex-col max-md:items-center gap-5 mt-3 max-md:gap-2">
           <div className="bg-white rounded-2xl w-2/3 px-5 py-3 shadow-sm max-md:w-full">
-            <label className="font-bold text-2xl ">
-              Transaksi Terakhir {data?.first_name}
-            </label>
+            <div className="flex justify-between">
+              <label className="font-bold text-2xl ">
+                Transaksi Terakhir {data?.first_name}
+              </label>
+              <p
+                className="text-blue-500 cursor-pointer"
+                onClick={() => navigate("/history")}
+              >
+                Lihat Semua
+              </p>
+            </div>
             {/* card perjalanan */}
-            <InfoBooking />
+            <div className="mt-5">
+              <InfoBooking />
+            </div>
           </div>
-          <div className="bg-white rounded-2xl px-5 py-3 shadow-sm w-1/3 max-md:w-full">
-            <label className="font-bold text-2xl">Ubah Profil Anda</label>
+
+          {/* INPUT UBAH PROFIL */}
+          <div className="bg-white max-h-96 rounded-2xl px-5 py-3 shadow-sm w-1/3 max-md:w-full">
+            <label className=" font-bold text-2xl">Ubah Profil Anda</label>
             {/* form ubah profil */}
             <form
               className="flex flex-col gap-3 mt-5"

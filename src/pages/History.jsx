@@ -12,7 +12,9 @@ export default function History() {
       <div className="mt-24 flex justify-between gap-3">
         <div className="w-2/3">
           <label className="font-bold text-2xl ">Riwayat Pembelian Tiket</label>
-          <InfoBooking />
+          <div className="mt-5">
+            <InfoBooking />
+          </div>
         </div>
         <div className="w-1/3">
           <label className="font-bold text-2xl ">Detail Pemesanan</label>
