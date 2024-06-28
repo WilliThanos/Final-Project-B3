@@ -5,7 +5,9 @@ export const payment = () => async (dispatch, getState) => {
   try {
     const token = getState().auth?.token;
     const code = getState().payment?.Metode;
-    const id = getState().passengers?.bookedPassengers?.data?.id;
+    const id =
+      getState().passengers?.bookedPassengers?.data?.id ||
+      getState().passengers?.bookedPassengers;
 
     const config = {
       headers: {
@@ -16,14 +18,14 @@ export const payment = () => async (dispatch, getState) => {
 
     const response = await axios.post(
       `https://expressjs-develop-b4d1.up.railway.app/api/v1/pay?booking_id=${id}&payment_method=${code}`,
-      {}, // Tambahkan objek kosong jika tidak ada payload data
-      config // Gunakan konfigurasi headers dari config
+      {},
+      config
     );
     dispatch(setData(response?.data));
     const link = getState().payment?.Data?.transaction?.checkout_url;
     console.log("link payment :>> ", link);
 
-    window.location.href = `${link}`;
+    window.open(link, "_blank");
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Axios error:", error.response?.data || error.message);

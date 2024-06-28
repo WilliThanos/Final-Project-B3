@@ -7,7 +7,6 @@ const initialState = {
   tanggalLahir: null,
   email: null,
   nomorHP: null,
-  Method: null,
 };
 
 const bookingSlicer = createSlice({
@@ -32,9 +31,6 @@ const bookingSlicer = createSlice({
     setNomorHP: (state, action) => {
       state.nomorHP = action.payload;
     },
-    serMethod: (state, action) => {
-      state.Method = action.payload;
-    },
   },
 });
 
@@ -45,7 +41,6 @@ export const {
   setTanggalLahir,
   setEmail,
   setNomorHP,
-  serMethod,
 } = bookingSlicer.actions;
 
 export default bookingSlicer.reducer;

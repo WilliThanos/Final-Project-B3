@@ -34,27 +34,20 @@ export const updateProfile = () => async (dispatch, getState) => {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${token}`,
-        // ...data.getHeaders(),
       },
       data: data,
     };
 
     const response = await axios.request(config);
-    alert("profile telah diperbarui");
     window.location.reload();
-
-    console.log("cek update profile :>> ", response.data);
-    // dispatch(setUpdateProfile(response.data.data));
-
-    dispatch(setUpdateProfile(response.data.data)); // Dispatch data yang diterima dari API
+    dispatch(setUpdateProfile(response?.data));
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Axios error:", error.response?.data || error.message);
-      alert(error.response?.data?.message || error.message);
+      dispatch(setUpdateProfile(error.response?.data));
       return;
     }
     console.error("Error:", error.message);
-    alert(error.message);
   }
 };
 
@@ -88,16 +81,16 @@ export const getProfile = () => async (dispatch, getState) => {
       config
     );
 
-    dispatch(setProfile(response?.data?.data)); // Dispatch data yang diterima dari API
+    dispatch(setProfile(response?.data?.data));
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Axios error:", error);
       alert(error?.message);
-      dispatch(logout()); // Tambahkan ini untuk logout ketika error terjadi
+      dispatch(logout());
       return;
     }
     alert(error?.message);
-    dispatch(logout()); // Tambahkan ini untuk logout ketika error terjadi
+    dispatch(logout());
   }
 };
 

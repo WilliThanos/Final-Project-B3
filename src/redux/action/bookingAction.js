@@ -1,8 +1,8 @@
 import axios from "axios";
 
 import { setMethod } from "../reducers/paymentReducer";
-
 import { setBookedPassengers } from "../reducers/passengersReducer";
+import { sethistoryPemesanan } from "../reducers/historyBookingReducer";
 
 export const getBooking = () => async (dispatch, getState) => {
   try {
@@ -99,6 +99,34 @@ export const getMethodPayment = () => async (dispatch, getState) => {
     if (axios.isAxiosError(error)) {
       console.error("Axios error:", error);
       alert(error?.message);
+      return;
+    }
+    alert(error?.message);
+  }
+};
+
+export const getBookingHistory = () => async (dispatch, getState) => {
+  try {
+    const token = getState().auth?.token;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      // withCredentials: true, // Mengizinkan pengiriman cookie
+    };
+
+    const response = await axios.get(
+      "https://expressjs-develop-b4d1.up.railway.app/api/v1/get-booking",
+      config
+    );
+
+    // console.log("response method redux :>> ", response?.data);
+    dispatch(sethistoryPemesanan(response?.data?.data));
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error:", error);
+
       return;
     }
     alert(error?.message);

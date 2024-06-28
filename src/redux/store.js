@@ -14,6 +14,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 // import { payment } from "./action/paymentAction";
 import paymentReducer from "./reducers/paymentReducer";
+import historyBookingReducer from "./reducers/historyBookingReducer";
 
 const rootReducers = combineReducers({
   data: dataReducer,
@@ -23,6 +24,7 @@ const rootReducers = combineReducers({
   filter: filterReducer,
   auth: authReducer,
   payment: paymentReducer,
+  history: historyBookingReducer,
 });
 
 const persistConfig = {
