@@ -5,6 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { getBookingHistory } from "../redux/action/bookingAction";
 import { SlPlane } from "react-icons/sl";
 import { setBookedPassengers } from "../redux/reducers/passengersReducer";
+import {
+  setSelectedDepartureFlight,
+  setSelectedReturnFlight,
+  setSelectedDepartureFlightId,
+  setSelectedReturnFlightId,
+} from "../redux/reducers/ticketReducer";
 import { useNavigate } from "react-router-dom";
 
 export default function InfoBooking() {
@@ -93,10 +99,12 @@ export default function InfoBooking() {
     return `${dayName}, ${day} ${month} ${year}`;
   };
 
-  const handleButtonPayment = (id) => {
+  const handleButtonPayment = (id, schedule, returnSchedule) => {
+    dispatch(setSelectedDepartureFlight(schedule));
+    dispatch(setSelectedReturnFlight(returnSchedule));
     dispatch(setBookedPassengers(id));
-    navigate("/payment");
   };
+
   return (
     <div className="flex flex-col gap-2 ">
       {dataHistory?.map((e) => {
@@ -109,9 +117,14 @@ export default function InfoBooking() {
         console.log("cek ID", e?.id);
         return (
           <div
-            onClick={handleButtonPayment(e?.id)}
             key={e?.id}
             className="border bg-white border-gray-300 rounded-xl hover:border-blue-500"
+            onClick={() => {
+              dispatch(setSelectedDepartureFlight(e.schedule));
+              dispatch(setSelectedReturnFlight(e.returnSchedule));
+              dispatch(setBookedPassengers(e.id));
+              navigate("/payment");
+            }}
           >
             <div className=" p-4 rounded-lg">
               {/* KEPALA KONTEN */}

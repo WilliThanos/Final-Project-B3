@@ -68,7 +68,7 @@ const AuthCallback = () => {
           <p className="text-gray-700 mb-8">Silahkan login kembali </p>
           <a
             className="rounded-xl bg-[#2A91E5] px-6 py-3 transition text-base font-medium text-white hover:text-gray-200 hover:bg-sky-700 hover:shadow"
-            href="/login"
+            href="/"
           >
             Kembali ke Beranda{" "}
           </a>
