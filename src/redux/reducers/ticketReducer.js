@@ -32,6 +32,10 @@ const ticketSlicer = createSlice({
     setSelectedReturnFlightId: (state, action) => {
       state.selectedReturnFlightId = action.payload;
     },
+    hapusDataTiket: (state) => {
+      state.selectedDepartureFlight = null;
+      state.selectedReturnFlight = null;
+    },
     // clearSelectedTicket: (state) => {
     //   state.selectedDepartureFlight = null;
     //   state.selectedReturnFlight = null;
@@ -50,6 +54,7 @@ export const {
   setSelectedReturnFlight,
   setSelectedDepartureFlightId,
   setSelectedReturnFlightId,
+  hapusDataTiket,
 } = ticketSlicer.actions;
 
 export default ticketSlicer.reducer;

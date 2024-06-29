@@ -7,14 +7,6 @@ import { AiFillInstagram } from "react-icons/ai";
 
 const people = [
   {
-    name: "Deo Septry Wengi",
-    role: "Frond End Developer",
-    imageUrl: deo,
-    instagram:
-      "https://www.instagram.com/d_septryy?igsh=MXV2bGh1MXExNjh4NQ%3D%3D&utm_source=qr ",
-    linkedinUrl: "https://www.linkedin.com/in/deo-septry-9a3b132b1/",
-  },
-  {
     name: "Nikodemus Hendrojoyo Suryokuncoro",
     role: "Frond End Developer",
     imageUrl: niko,
@@ -23,7 +15,16 @@ const people = [
       "https://www.linkedin.com/in/nikodemus-suryokuncoro-aab5722a3/",
   },
   {
-    name: "WILLIAM RAYHAN HARSONO",
+    name: "Deo Septry Wengi",
+    role: "Frond End Developer",
+    imageUrl: deo,
+    instagram:
+      "https://www.instagram.com/d_septryy?igsh=MXV2bGh1MXExNjh4NQ%3D%3D&utm_source=qr ",
+    linkedinUrl: "https://www.linkedin.com/in/deo-septry-9a3b132b1/",
+  },
+
+  {
+    name: "William Rayhan Harsono",
     role: "Frond End Developer",
     imageUrl: wili,
     instagram: "https://instagram.com/willi.ry",
@@ -87,7 +88,7 @@ export default function OurTeam() {
                       alt=""
                     />
                     <div className="space-y-2">
-                      <div className="text-lg leading-6 font-medium space-y-1">
+                      <div className="text-lg max-sm:text-base leading-6 font-medium space-y-1">
                         <h3>{person.name}</h3>
                         <p className="text-blue-500">{person.role}</p>
                       </div>

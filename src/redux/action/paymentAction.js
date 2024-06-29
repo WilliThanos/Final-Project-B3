@@ -1,5 +1,10 @@
 import axios from "axios";
-import { setData, setPesan } from "../reducers/paymentReducer";
+import {
+  setData,
+  setMethod,
+  setMetode,
+  setPesan,
+} from "../reducers/paymentReducer";
 
 export const payment = () => async (dispatch, getState) => {
   try {
@@ -22,6 +27,7 @@ export const payment = () => async (dispatch, getState) => {
       config
     );
     dispatch(setData(response?.data));
+    dispatch(setMetode(null));
     const link = getState().payment?.Data?.transaction?.checkout_url;
     // console.log("link payment :>> ", link);
 
@@ -29,7 +35,7 @@ export const payment = () => async (dispatch, getState) => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Axios error:", error.response?.data || error.message);
-      dispatch(setPesan(error.response?.data));
+      dispatch(setPesan(error.response?.data || error.message));
       return { error: true };
     }
     console.error("Error:", error.message);

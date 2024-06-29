@@ -49,10 +49,6 @@ export const getBooking = () => async (dispatch, getState) => {
     const scheduleId = getState().ticket?.selectedDepartureFlightId;
     const returnscheduleId = getState().ticket?.selectedReturnFlightId;
 
-    // if (!scheduleId || !returnscheduleId) {
-    //   throw new Error("Flight IDs are missing");
-    // }
-
     const response = await axios.post(
       `https://expressjs-develop-b4d1.up.railway.app/api/v1/booking?schedule_id=${scheduleId}&return_schedule_id=${returnscheduleId}`,
       bookingData,
@@ -98,7 +94,7 @@ export const getMethodPayment = () => async (dispatch, getState) => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Axios error:", error);
-      alert(error?.message);
+
       return;
     }
     alert(error?.message);
@@ -113,7 +109,6 @@ export const getBookingHistory = () => async (dispatch, getState) => {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-      // withCredentials: true, // Mengizinkan pengiriman cookie
     };
 
     const response = await axios.get(

@@ -15,6 +15,7 @@ import storage from "redux-persist/lib/storage"; // defaults to localStorage for
 // import { payment } from "./action/paymentAction";
 import paymentReducer from "./reducers/paymentReducer";
 import historyBookingReducer from "./reducers/historyBookingReducer";
+import adminReducer from "./reducers/adminReducer";
 
 const rootReducers = combineReducers({
   data: dataReducer,
@@ -25,6 +26,7 @@ const rootReducers = combineReducers({
   auth: authReducer,
   payment: paymentReducer,
   history: historyBookingReducer,
+  admin: adminReducer,
 });
 
 const persistConfig = {

@@ -3,6 +3,7 @@ import { GiAirplaneDeparture, GiAirplaneArrival } from "react-icons/gi";
 import { SlPlane } from "react-icons/sl";
 import { LiaCircleSolid } from "react-icons/lia";
 import { useDispatch, useSelector } from "react-redux";
+import empty from "../assets/empty.png";
 export default function DetailBooking() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -71,212 +72,63 @@ export default function DetailBooking() {
     // Return the formatted string
     return `${hours}j ${minutes}m`;
   };
+  //formating ke bentuk ruupiah
+  const formatRupiah = (number) => {
+    return new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+    }).format(number);
+  };
+
+  const jmlPenumpang = useSelector((state) => state?.data?.penumpang);
+  const jmlAnak = useSelector((state) => state?.data?.jumlahAnak);
+  const jmlBayi = useSelector((state) => state?.data?.jumlahBayi);
+  const jmlDewasa = useSelector((state) => state?.data?.jumlahDewasa);
+
+  const hargaTiketDewasa =
+    ((departureFlights?.price || 0) + (returnFlights?.price || 0)) * jmlDewasa;
+
+  console.log("hargaTiketDewasa :>> ", hargaTiketDewasa);
+  const hargaTiketAnak =
+    ((departureFlights?.price || 0) + (returnFlights?.price || 0)) * jmlAnak;
+  const hargaTiketBayi =
+    ((departureFlights?.price || 0) + (returnFlights?.price || 0)) * jmlBayi;
+
+  const totalHargaTiket =
+    (hargaTiketDewasa || 0) + (hargaTiketAnak || 0) + (hargaTiketBayi || 0);
 
   const cekPulangPergi = useSelector((state) => state?.data?.roundtrip);
+
+  // cek harga
+  const cekHarga = cekPulangPergi
+    ? totalHargaTiket
+    : departureFlights?.price * jmlDewasa +
+      departureFlights?.price * jmlAnak +
+      departureFlights?.price * jmlBayi;
+
+  //pajak
+  const pajak = (10 / 100) * cekHarga;
+  //biayayaa admin
+  const biayaAdmin = (2 / 100) * cekHarga;
+
+  //harga total
+  const totalHarga = (pajak || 0) + (biayaAdmin || 0) + (cekHarga || 0);
+
   return (
     <div className="py-3">
-      {/* card keberangkatan */}
-      <div className="flex flex-row items-center gap-3">
-        <GiAirplaneDeparture size={20} />
-        <label className="text-xl font-semibold max-sm:text-base">
-          Berangkat
-        </label>
-      </div>
-      <div
-        key={departureFlights?.id}
-        onClick={() => handleDropdownToggle(departureFlights?.id)}
-        className="bg-white border border-gray-300 font-medium text-black p-6 rounded-lg mt-2 cursor-pointer hover:border-blue-500"
-      >
-        {/* KEPALA KONTEN */}
-        <div className="flex  justify-between items-center cursor-pointer  max-lg:text-sm max-lg:flex-col max-lg:items-start">
-          <div className=" w-full flex justify-between">
-            <div className="flex items-center max-sm:gap-1 gap-3 max-lg:flex-col max-lg:items-start">
-              <img
-                src={`${departureFlights?.airline?.icon_url}`}
-                className="h-7 w-auto rounded max-sm:h-4"
-              />
-            </div>{" "}
-            <div className="flex gap-3">
-              <div>
-                {departureFlights?.class?.charAt(0).toUpperCase() +
-                  departureFlights?.class?.slice(1).toLowerCase()}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ISI KONTEN */}
-        <div className="flex w-full  justify-between place-items-stretch max-lg:flex-col max-md: max-lg:gap-3">
-          <div className="flex justify-between mt-2  w-full">
-            <div className="  flex flex-col justify-between w-1/4">
-              <div className="flex items-center gap-1">
-                <div className="font-bold text-base max-md:text-sm">
-                  {departureFlights?.departure_airport?.city} (
-                  {departureFlights?.departure_airport?.iata_code})
-                </div>
-              </div>
-              <div className="">{departureFlights?.departure_time}</div>
-            </div>
-            <div className="flex flex-col justify-center w-2/4">
-              <p className="text-center text-gray-400 text-sm">
-                {calculateTravelTime(
-                  departureFlights?.departure_time,
-                  departureFlights?.arrival_time
-                )}
-              </p>
-              <div className="flex justify-center items-center mx-3">
-                <div className="border-dashed	border-b-2 border-gray-400 w-[60px] mx-2 max-lg:w-[30px] max-sm:w-[20px]"></div>
-                <div className="">
-                  <SlPlane
-                    className="tilted-icon max-lg:size-[18px] max-sm:size-[20px]"
-                    size={22}
-                  />
-                </div>
-                <div className="border-dashed	border-b-2 border-gray-400 w-[60px] mx-2 max-lg:w-[30px] max-sm:w-[20px]"></div>
-              </div>
-            </div>
-            <div className="  flex justify-between flex-col items-end  w-1/4">
-              <div className="flex items-center gap-1">
-                <div className="font-bold text-base text-right  max-md:text-sm">
-                  {departureFlights?.arrival_airport?.city} (
-                  {departureFlights?.arrival_airport?.iata_code})
-                </div>
-              </div>
-              <div>{departureFlights?.arrival_time}</div>
-            </div>
-          </div>
-        </div>
-        {/* DROPDOWN DETAILS */}
-        <div
-          className={` dropdown-content ${
-            isDropdownOpen[departureFlights?.id] ? "open" : ""
-          }`}
-        >
-          <div className="flex n items-center cursor-pointer border-t border-gray-400  mt-4 ">
-            <div className="font-bold mt-4 ">Detail Tiket</div>
-          </div>
-          <div className="flex pt-6 w-4/5">
-            <div className="flex ">
-              <div className="flex flex-col justify-center ">
-                <div className="text-center text-gray-500 text-sm ">
-                  {calculateTravelTime(
-                    departureFlights?.departure_time,
-                    departureFlights?.arrival_time
-                  )}
-                </div>
-              </div>
-              <div className="flex flex-col items-center">
-                <LiaCircleSolid size={20} />
-                <div className="border-r  border-gray-500 h-64 "></div>
-                <LiaCircleSolid size={20} />
-              </div>
-            </div>
-            <div className="flex  justify-between  pl-3 w-full max-lg: gap-10 ">
-              <div className="flex flex-col justify-between  ">
-                <div className="flex max-sm:justify-between flex-col ">
-                  <div className="flex items-center gap-2">
-                    <div className="font-bold text-lg">
-                      {departureFlights?.departure_time}
-                    </div>
-                    <div className="font-semibold text-base">
-                      {departureFlights?.departure_airport?.city}
-                    </div>
-                  </div>
-                  <div className="font-semibold text-base">
-                    {`${formattedDepartureDate}`}
-                  </div>
-                </div>
-                <div className="flex flex-col gap- text-gray-500 text-sm max-sm:hidden">
-                  <div className="">Maskapai : </div>
-                  <div className="">Kelas :</div>
-                  <div className="">Nomor Penerbangan :</div>
-                  <div className="mt-2">Bagasi :</div>
-                  <div className="">Bagasi Kabin :</div>
-                </div>
-                <div className="hidden max-sm:flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
-                  <div className="">
-                    Maskapai : {departureFlights?.airline?.name}
-                  </div>
-                  <div className="">
-                    Kelas :{" "}
-                    {departureFlights?.class?.charAt(0).toUpperCase() +
-                      departureFlights?.class?.slice(1).toLowerCase()}
-                  </div>
-                  <div className="">
-                    Nomor Penerbangan :{" "}
-                    {departureFlights?.departureFlights_number}
-                  </div>
-                  <div className="mt-2 ">
-                    Bagasi : {departureFlights?.free_baggage} kg
-                  </div>
-                  <div className="">
-                    Bagasi Kabin : {departureFlights?.cabin_baggage} kg
-                  </div>
-                </div>
-                <div className="flex flex-col ">
-                  <div className="flex items-center gap-2">
-                    <div className="font-bold text-lg">
-                      {" "}
-                      {departureFlights?.arrival_time}
-                    </div>
-                    <div className="font-semibold text-base">
-                      {departureFlights?.arrival_airport?.city}
-                    </div>
-                  </div>
-                  <div className="font-semibold text-base">
-                    {`${formattedDepartureDate}`}
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col justify-between max-sm:hidden ">
-                <div className="flex flex-col">
-                  <div className="font-bold text-lg">
-                    {departureFlights?.departure_airport?.name_airport}
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
-                  <div className="max-lg:pt-11">
-                    {departureFlights?.airline?.name}
-                  </div>
-                  <div className="">
-                    {departureFlights?.class?.charAt(0).toUpperCase() +
-                      departureFlights?.class?.slice(1).toLowerCase()}
-                  </div>
-                  <div className="">
-                    {departureFlights?.departureFlights_number}
-                  </div>
-                  <div className="mt-2 max-lg:pt-4">
-                    {departureFlights?.free_baggage} kg
-                  </div>
-                  <div className="">{departureFlights?.cabin_baggage} kg</div>
-                </div>
-                <div className="flex flex-col ">
-                  <div className="font-bold text-lg">
-                    {departureFlights?.arrival_airport?.name_airport}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* END DROPDOWN DETAILS */}
-      </div>
-
-      {/* DROPDOWN KEMBALI */}
-      <div className="mt-4">
-        {cekPulangPergi && returnFlights ? (
+      <div>
+        {departureFlights ? (
           <div>
+            {/* card keberangkatan */}
             <div className="flex flex-row items-center gap-3">
-              <GiAirplaneArrival size={20} />
+              <GiAirplaneDeparture size={20} />
               <label className="text-xl font-semibold max-sm:text-base">
-                Pulang
+                Berangkat
               </label>
             </div>
             <div
-              key={returnFlights?.id}
-              onClick={() => handleDropdownToggle(returnFlights?.id)}
+              key={departureFlights?.id}
+              onClick={() => handleDropdownToggle(departureFlights?.id)}
               className="bg-white border border-gray-300 font-medium text-black p-6 rounded-lg mt-2 cursor-pointer hover:border-blue-500"
             >
               {/* KEPALA KONTEN */}
@@ -284,14 +136,14 @@ export default function DetailBooking() {
                 <div className=" w-full flex justify-between">
                   <div className="flex items-center max-sm:gap-1 gap-3 max-lg:flex-col max-lg:items-start">
                     <img
-                      src={`${returnFlights?.airline?.icon_url}`}
+                      src={`${departureFlights?.airline?.icon_url}`}
                       className="h-7 w-auto rounded max-sm:h-4"
                     />
                   </div>{" "}
                   <div className="flex gap-3">
                     <div>
-                      {returnFlights?.class?.charAt(0).toUpperCase() +
-                        returnFlights?.class?.slice(1).toLowerCase()}
+                      {departureFlights?.class?.charAt(0).toUpperCase() +
+                        departureFlights?.class?.slice(1).toLowerCase()}
                     </div>
                   </div>
                 </div>
@@ -300,20 +152,20 @@ export default function DetailBooking() {
               {/* ISI KONTEN */}
               <div className="flex w-full  justify-between place-items-stretch max-lg:flex-col max-md: max-lg:gap-3">
                 <div className="flex justify-between mt-2  w-full">
-                  <div className="flex flex-col max-sm:justify-between  w-1/4">
+                  <div className="  flex flex-col justify-between w-1/4">
                     <div className="flex items-center gap-1">
                       <div className="font-bold text-base max-md:text-sm">
-                        {returnFlights?.departure_airport?.city} (
-                        {returnFlights?.departure_airport?.iata_code})
+                        {departureFlights?.departure_airport?.city} (
+                        {departureFlights?.departure_airport?.iata_code})
                       </div>
                     </div>
-                    <div className="">{returnFlights?.departure_time}</div>
+                    <div className="">{departureFlights?.departure_time}</div>
                   </div>
                   <div className="flex flex-col justify-center w-2/4">
                     <p className="text-center text-gray-400 text-sm">
                       {calculateTravelTime(
-                        returnFlights?.departure_time,
-                        returnFlights?.arrival_time
+                        departureFlights?.departure_time,
+                        departureFlights?.arrival_time
                       )}
                     </p>
                     <div className="flex justify-center items-center mx-3">
@@ -327,21 +179,21 @@ export default function DetailBooking() {
                       <div className="border-dashed	border-b-2 border-gray-400 w-[60px] mx-2 max-lg:w-[30px] max-sm:w-[20px]"></div>
                     </div>
                   </div>
-                  <div className="flex max-sm:justify-between items-end flex-col text-center w-1/4">
+                  <div className="  flex justify-between flex-col items-end  w-1/4">
                     <div className="flex items-center gap-1">
-                      <div className="font-bold text-base text-right max-md:text-sm">
-                        {returnFlights?.arrival_airport?.city} (
-                        {returnFlights?.arrival_airport?.iata_code})
+                      <div className="font-bold text-base text-right  max-md:text-sm">
+                        {departureFlights?.arrival_airport?.city} (
+                        {departureFlights?.arrival_airport?.iata_code})
                       </div>
                     </div>
-                    <div>{returnFlights?.arrival_time}</div>
+                    <div>{departureFlights?.arrival_time}</div>
                   </div>
                 </div>
               </div>
               {/* DROPDOWN DETAILS */}
               <div
                 className={` dropdown-content ${
-                  isDropdownOpen[returnFlights?.id] ? "open" : ""
+                  isDropdownOpen[departureFlights?.id] ? "open" : ""
                 }`}
               >
                 <div className="flex n items-center cursor-pointer border-t border-gray-400  mt-4 ">
@@ -352,8 +204,8 @@ export default function DetailBooking() {
                     <div className="flex flex-col justify-center ">
                       <div className="text-center text-gray-500 text-sm ">
                         {calculateTravelTime(
-                          returnFlights?.departure_time,
-                          returnFlights?.arrival_time
+                          departureFlights?.departure_time,
+                          departureFlights?.arrival_time
                         )}
                       </div>
                     </div>
@@ -365,13 +217,13 @@ export default function DetailBooking() {
                   </div>
                   <div className="flex  justify-between  pl-3 w-full max-lg: gap-10 ">
                     <div className="flex flex-col justify-between  ">
-                      <div className="flex flex-col ">
+                      <div className="flex max-sm:justify-between flex-col ">
                         <div className="flex items-center gap-2">
                           <div className="font-bold text-lg">
-                            {returnFlights?.departure_time}
+                            {departureFlights?.departure_time}
                           </div>
                           <div className="font-semibold text-base">
-                            {returnFlights?.departure_airport?.city}
+                            {departureFlights?.departure_airport?.city}
                           </div>
                         </div>
                         <div className="font-semibold text-base">
@@ -387,32 +239,32 @@ export default function DetailBooking() {
                       </div>
                       <div className="hidden max-sm:flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
                         <div className="">
-                          Maskapai : {returnFlights?.airline?.name}
+                          Maskapai : {departureFlights?.airline?.name}
                         </div>
                         <div className="">
                           Kelas :{" "}
-                          {returnFlights?.class?.charAt(0).toUpperCase() +
-                            returnFlights?.class?.slice(1).toLowerCase()}
+                          {departureFlights?.class?.charAt(0).toUpperCase() +
+                            departureFlights?.class?.slice(1).toLowerCase()}
                         </div>
                         <div className="">
                           Nomor Penerbangan :{" "}
-                          {returnFlights?.returnFlights_number}
+                          {departureFlights?.departureFlights_number}
                         </div>
                         <div className="mt-2 ">
-                          Bagasi : {returnFlights?.free_baggage} kg
+                          Bagasi : {departureFlights?.free_baggage} kg
                         </div>
                         <div className="">
-                          Bagasi Kabin : {returnFlights?.cabin_baggage} kg
+                          Bagasi Kabin : {departureFlights?.cabin_baggage} kg
                         </div>
                       </div>
                       <div className="flex flex-col ">
                         <div className="flex items-center gap-2">
                           <div className="font-bold text-lg">
                             {" "}
-                            {returnFlights?.arrival_time}
+                            {departureFlights?.arrival_time}
                           </div>
                           <div className="font-semibold text-base">
-                            {returnFlights?.arrival_airport?.city}
+                            {departureFlights?.arrival_airport?.city}
                           </div>
                         </div>
                         <div className="font-semibold text-base">
@@ -424,31 +276,31 @@ export default function DetailBooking() {
                     <div className="flex flex-col justify-between max-sm:hidden ">
                       <div className="flex flex-col">
                         <div className="font-bold text-lg">
-                          {returnFlights?.departure_airport?.name_airport}
+                          {departureFlights?.departure_airport?.name_airport}
                         </div>
                       </div>
 
                       <div className="flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
                         <div className="max-lg:pt-11">
-                          {returnFlights?.airline?.name}
+                          {departureFlights?.airline?.name}
                         </div>
                         <div className="">
-                          {returnFlights?.class?.charAt(0).toUpperCase() +
-                            returnFlights?.class?.slice(1).toLowerCase()}
+                          {departureFlights?.class?.charAt(0).toUpperCase() +
+                            departureFlights?.class?.slice(1).toLowerCase()}
                         </div>
                         <div className="">
-                          {returnFlights?.returnFlights_number}
+                          {departureFlights?.departureFlights_number}
                         </div>
                         <div className="mt-2 max-lg:pt-4">
-                          {returnFlights?.free_baggage} kg
+                          {departureFlights?.free_baggage} kg
                         </div>
                         <div className="">
-                          {returnFlights?.cabin_baggage} kg
+                          {departureFlights?.cabin_baggage} kg
                         </div>
                       </div>
                       <div className="flex flex-col ">
                         <div className="font-bold text-lg">
-                          {returnFlights?.arrival_airport?.name_airport}
+                          {departureFlights?.arrival_airport?.name_airport}
                         </div>
                       </div>
                     </div>
@@ -457,9 +309,244 @@ export default function DetailBooking() {
               </div>
               {/* END DROPDOWN DETAILS */}
             </div>
+
+            {/* DROPDOWN KEMBALI */}
+            <div className="mt-4">
+              {cekPulangPergi && returnFlights ? (
+                <div>
+                  <div className="flex flex-row items-center gap-3">
+                    <GiAirplaneArrival size={20} />
+                    <label className="text-xl font-semibold max-sm:text-base">
+                      Pulang
+                    </label>
+                  </div>
+                  <div
+                    key={returnFlights?.id}
+                    onClick={() => handleDropdownToggle(returnFlights?.id)}
+                    className="bg-white border border-gray-300 font-medium text-black p-6 rounded-lg mt-2 cursor-pointer hover:border-blue-500"
+                  >
+                    {/* KEPALA KONTEN */}
+                    <div className="flex  justify-between items-center cursor-pointer  max-lg:text-sm max-lg:flex-col max-lg:items-start">
+                      <div className=" w-full flex justify-between">
+                        <div className="flex items-center max-sm:gap-1 gap-3 max-lg:flex-col max-lg:items-start">
+                          <img
+                            src={`${returnFlights?.airline?.icon_url}`}
+                            className="h-7 w-auto rounded max-sm:h-4"
+                          />
+                        </div>{" "}
+                        <div className="flex gap-3">
+                          <div>
+                            {returnFlights?.class?.charAt(0).toUpperCase() +
+                              returnFlights?.class?.slice(1).toLowerCase()}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* ISI KONTEN */}
+                    <div className="flex w-full  justify-between place-items-stretch max-lg:flex-col max-md: max-lg:gap-3">
+                      <div className="flex justify-between mt-2  w-full">
+                        <div className="flex flex-col max-sm:justify-between  w-1/4">
+                          <div className="flex items-center gap-1">
+                            <div className="font-bold text-base max-md:text-sm">
+                              {returnFlights?.departure_airport?.city} (
+                              {returnFlights?.departure_airport?.iata_code})
+                            </div>
+                          </div>
+                          <div className="">
+                            {returnFlights?.departure_time}
+                          </div>
+                        </div>
+                        <div className="flex flex-col justify-center w-2/4">
+                          <p className="text-center text-gray-400 text-sm">
+                            {calculateTravelTime(
+                              returnFlights?.departure_time,
+                              returnFlights?.arrival_time
+                            )}
+                          </p>
+                          <div className="flex justify-center items-center mx-3">
+                            <div className="border-dashed	border-b-2 border-gray-400 w-[60px] mx-2 max-lg:w-[30px] max-sm:w-[20px]"></div>
+                            <div className="">
+                              <SlPlane
+                                className="tilted-icon max-lg:size-[18px] max-sm:size-[20px]"
+                                size={22}
+                              />
+                            </div>
+                            <div className="border-dashed	border-b-2 border-gray-400 w-[60px] mx-2 max-lg:w-[30px] max-sm:w-[20px]"></div>
+                          </div>
+                        </div>
+                        <div className="flex max-sm:justify-between items-end flex-col text-center w-1/4">
+                          <div className="flex items-center gap-1">
+                            <div className="font-bold text-base text-right max-md:text-sm">
+                              {returnFlights?.arrival_airport?.city} (
+                              {returnFlights?.arrival_airport?.iata_code})
+                            </div>
+                          </div>
+                          <div>{returnFlights?.arrival_time}</div>
+                        </div>
+                      </div>
+                    </div>
+                    {/* DROPDOWN DETAILS */}
+                    <div
+                      className={` dropdown-content ${
+                        isDropdownOpen[returnFlights?.id] ? "open" : ""
+                      }`}
+                    >
+                      <div className="flex n items-center cursor-pointer border-t border-gray-400  mt-4 ">
+                        <div className="font-bold mt-4 ">Detail Tiket</div>
+                      </div>
+                      <div className="flex pt-6 w-4/5">
+                        <div className="flex ">
+                          <div className="flex flex-col justify-center ">
+                            <div className="text-center text-gray-500 text-sm ">
+                              {calculateTravelTime(
+                                returnFlights?.departure_time,
+                                returnFlights?.arrival_time
+                              )}
+                            </div>
+                          </div>
+                          <div className="flex flex-col items-center">
+                            <LiaCircleSolid size={20} />
+                            <div className="border-r  border-gray-500 h-64 "></div>
+                            <LiaCircleSolid size={20} />
+                          </div>
+                        </div>
+                        <div className="flex  justify-between  pl-3 w-full max-lg: gap-10 ">
+                          <div className="flex flex-col justify-between  ">
+                            <div className="flex flex-col ">
+                              <div className="flex items-center gap-2">
+                                <div className="font-bold text-lg">
+                                  {returnFlights?.departure_time}
+                                </div>
+                                <div className="font-semibold text-base">
+                                  {returnFlights?.departure_airport?.city}
+                                </div>
+                              </div>
+                              <div className="font-semibold text-base">
+                                {`${formattedDepartureDate}`}
+                              </div>
+                            </div>
+                            <div className="flex flex-col gap- text-gray-500 text-sm max-sm:hidden">
+                              <div className="">Maskapai : </div>
+                              <div className="">Kelas :</div>
+                              <div className="">Nomor Penerbangan :</div>
+                              <div className="mt-2">Bagasi :</div>
+                              <div className="">Bagasi Kabin :</div>
+                            </div>
+                            <div className="hidden max-sm:flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
+                              <div className="">
+                                Maskapai : {returnFlights?.airline?.name}
+                              </div>
+                              <div className="">
+                                Kelas :{" "}
+                                {returnFlights?.class?.charAt(0).toUpperCase() +
+                                  returnFlights?.class?.slice(1).toLowerCase()}
+                              </div>
+                              <div className="">
+                                Nomor Penerbangan :{" "}
+                                {returnFlights?.returnFlights_number}
+                              </div>
+                              <div className="mt-2 ">
+                                Bagasi : {returnFlights?.free_baggage} kg
+                              </div>
+                              <div className="">
+                                Bagasi Kabin : {returnFlights?.cabin_baggage} kg
+                              </div>
+                            </div>
+                            <div className="flex flex-col ">
+                              <div className="flex items-center gap-2">
+                                <div className="font-bold text-lg">
+                                  {" "}
+                                  {returnFlights?.arrival_time}
+                                </div>
+                                <div className="font-semibold text-base">
+                                  {returnFlights?.arrival_airport?.city}
+                                </div>
+                              </div>
+                              <div className="font-semibold text-base">
+                                {`${formattedDepartureDate}`}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="flex flex-col justify-between max-sm:hidden ">
+                            <div className="flex flex-col">
+                              <div className="font-bold text-lg">
+                                {returnFlights?.departure_airport?.name_airport}
+                              </div>
+                            </div>
+
+                            <div className="flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
+                              <div className="max-lg:pt-11">
+                                {returnFlights?.airline?.name}
+                              </div>
+                              <div className="">
+                                {returnFlights?.class?.charAt(0).toUpperCase() +
+                                  returnFlights?.class?.slice(1).toLowerCase()}
+                              </div>
+                              <div className="">
+                                {returnFlights?.returnFlights_number}
+                              </div>
+                              <div className="mt-2 max-lg:pt-4">
+                                {returnFlights?.free_baggage} kg
+                              </div>
+                              <div className="">
+                                {returnFlights?.cabin_baggage} kg
+                              </div>
+                            </div>
+                            <div className="flex flex-col ">
+                              <div className="font-bold text-lg">
+                                {returnFlights?.arrival_airport?.name_airport}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {/* END DROPDOWN DETAILS */}
+                  </div>
+                </div>
+              ) : (
+                <div></div>
+              )}
+            </div>
+            <div className="flex justify-between p-6 text-lg max-lg:text-base max-sm:text-sm">
+              <div className="flex flex-col gap-2">
+                <div className="">Harga Tiket</div>
+                <div className="">Biaya Administrasi</div>
+                <div className="">Pajak 10%</div>
+              </div>
+              <div className="flex flex-col gap-2 ">
+                <div className="font-semibold">
+                  {cekPulangPergi
+                    ? formatRupiah(totalHargaTiket)
+                    : formatRupiah(
+                        departureFlights?.price * jmlDewasa +
+                          departureFlights?.price * jmlAnak +
+                          departureFlights?.price * jmlBayi
+                      )}
+                </div>
+                <div className="font-semibold">{formatRupiah(biayaAdmin)}</div>
+                <div className="font-semibold">{formatRupiah(pajak)}</div>
+              </div>
+            </div>
+            <p className="border-b-2 border-gray-200"></p>
+            <div className="flex justify-between items-center py-5 text-lg max-lg:text-base max-sm:text-sm">
+              <div className="">
+                <div className="">Jumlah Yang Dibayarkan</div>
+              </div>
+              <div className="">
+                <div className="font-bold text-3xl text-[#2A91E5] max-lg:text-2xl max-sm:text-xl">
+                  {formatRupiah(totalHarga)}
+                </div>
+              </div>
+            </div>
           </div>
         ) : (
-          <div></div>
+          <div className="flex flex-col items-center justify-center">
+            <img className="w-40" src={empty} alt="" />
+            <p className="text-center">pilih tiket terlebih dahulu</p>
+          </div>
         )}
       </div>
     </div>

@@ -6,7 +6,10 @@ import { getNotification, getProfile } from "../redux/action/dataAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { hapus } from "../redux/reducers/historyBookingReducer";
+
+import { hapusDataTiket } from "../redux/reducers/ticketReducer";
 import { hapusProfile } from "../redux/reducers/profileReducer";
+
 import { MdNotificationImportant, MdNotifications } from "react-icons/md";
 
 function NavbarLogoBiru() {
@@ -71,6 +74,9 @@ function NavbarLogoBiru() {
     dispatch(logout());
     dispatch(hapus());
     dispatch(hapusProfile());
+
+    dispatch(setStatus(null));
+
     setShowConfirmation(false);
     navigate("/");
   };

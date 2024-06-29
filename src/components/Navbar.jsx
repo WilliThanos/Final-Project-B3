@@ -12,6 +12,12 @@ import { MdNotificationImportant, MdNotifications } from "react-icons/md";
 
 import { useLocation } from "react-router-dom";
 import { getNotification } from "../redux/action/dataAction";
+import {
+  hapusDataTiket,
+  setSelectedDepartureFlight,
+  setSelectedReturnFlight,
+} from "../redux/reducers/ticketReducer";
+import { setStatus } from "../redux/reducers/paymentReducer";
 
 function NavbarLanding() {
   const dispatch = useDispatch();

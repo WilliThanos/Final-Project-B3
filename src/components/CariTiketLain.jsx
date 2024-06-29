@@ -1433,6 +1433,7 @@ export default function CariTiketLanding() {
               navigate("/search");
               dispatch(setSelectedDepartureFlight(null));
               dispatch(setSelectedReturnFlight(null));
+
               dispatch(getSearchTicket());
               {
                 setIsDropdownOpen(false);

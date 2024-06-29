@@ -13,7 +13,6 @@ const historySlicer = createSlice({
     },
     hapus: (state) => {
       state.historyPemesanan = null;
-      localStorage.removeItem("persist:root3");
     },
   },
 });
