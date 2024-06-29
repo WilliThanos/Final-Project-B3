@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import NavbarLogoBiru from "../components/Navbar2";
-import NavbarLogoPutih from "../components/Navbar";
 import CariTiketLain from "../components/CariTiketLain";
 import Filter from "../components/Filter";
 import { useDispatch, useSelector } from "react-redux";
@@ -150,7 +149,7 @@ export default function Search() {
       <div className="mt-24">
         <CariTiketLain />
       </div>
-      <div className="flex pt-32 gap-8 max-md:flex-col max-md:mx-2 max-md:gap-3  max-lg:pt-40  max-xl:pt-40">
+      <div className="flex pt-6 gap-8 max-md:flex-col max-md:mx-2 max-md:gap-3  max-lg:pt-6  max-xl:pt-6">
         <div className=" flex ">
           <Filter />
         </div>

@@ -8,8 +8,7 @@ import {
 import { MdDateRange } from "react-icons/md";
 import { FaPersonCircleCheck } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa";
-import NavbarLogoPutih from "../components/Navbar";
-import NavbarLogoBiru from "../components/Navbar2";
+import NavbarLanding from "../components/Navbar";
 import Footer from "../components/Footer";
 import { useDispatch } from "react-redux";
 import TicketIcon from "../assets/TicketIcon";
@@ -85,7 +84,7 @@ export default function Landing() {
           muted
         />
         <div className="absolute w-full h-full top-0 left-0 bg-gray-900/10"></div>
-        <NavbarLogoPutih />
+        <NavbarLanding />
         <div className="absolute top-0 w-full h-full flex flex-col justify-center text-center p-4">
           <div className="absolute inset-0 bg-black opacity-50"></div>
           <div className="relative z-10">
@@ -282,7 +281,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <section>
+      <section id="mengapakami">
         <div className="bg-white py-32">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto flex max-w-2xl flex-col items-end justify-between gap-16 lg:mx-0 lg:max-w-none lg:flex-row">

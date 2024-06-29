@@ -3,8 +3,6 @@ import mascot from "../assets/mascot.png";
 import logo from "../assets/weblogo.png";
 import bg from "../assets/bg.png";
 import bgresp from "../assets/bgresp.png";
-import NavbarLogoBiru from "../components/Navbar2";
-import NavbarLogoPutih from "../components/Navbar";
 import NavbarLogin from "../components/Navbar3";
 import Footer from "../components/Footer";
 import FlashMessage from "../components/FlashMessage";

@@ -246,7 +246,7 @@ export default function CariTiketLanding() {
   );
 
   return (
-    <div className="mx-auto fixed left-0 right-0 z-40 max-w-screen-2xl flex justify-between items-center bg-white rounded-xl shadow-sm max-md:mx-2 max-md:text-sm">
+    <div className="mx-auto left-0 right-0 z-40 max-w-screen-2xl flex justify-between items-center bg-white rounded-xl shadow-sm max-md:mx-2 max-md:text-sm">
       <div className="flex items-center p-8">
         <div className="block sm:hidden pr-5 absolute ">
           <button
