@@ -8,7 +8,11 @@ import {
   setDepartureFlights,
   setReturnFlights,
 } from "../reducers/ticketReducer";
-import { setProfile, setUpdateProfile } from "../reducers/profileReducer";
+import {
+  setProfile,
+  setUpdateProfile,
+  setNotif,
+} from "../reducers/profileReducer";
 
 import FormData from "form-data";
 
@@ -196,5 +200,33 @@ export const getSearchTicket = () => async (dispatch, getState) => {
       return;
     }
     alert(error.message);
+  }
+};
+
+export const getNotification = () => async (dispatch, getState) => {
+  try {
+    const token = getState().auth?.token;
+    const id = getState().auth?.user?.id;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    };
+
+    const response = await axios.get(
+      `https://expressjs-develop-b4d1.up.railway.app/api/v1/notifikasi/${id}`,
+      config
+    );
+
+    dispatch(setNotif(response?.data));
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error:", error);
+      alert(error?.message);
+
+      return;
+    }
+    alert(error?.message);
   }
 };

@@ -57,12 +57,18 @@ function NavbarLogoBiru() {
   const cancelLogout = () => {
     setShowConfirmation(false);
   };
+  const scrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   console.log("cekState :>> ", cekState);
   console.log("token :>> ", token);
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 mx-auto max-w-screen-2xl my-4 bg-white/30 rounded-xl shadow-lg max-md:mx-2">
+    <div className="fixed top-0 left-0 right-0 z-50 mx-auto max-w-screen-2xl my-4 bg-white rounded-xl shadow-lg max-md:mx-2">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between max-w-screen-2xl">
           <div className="md:flex md:items-center md:gap-12">
@@ -152,34 +158,21 @@ function NavbarLogoBiru() {
                   </a>
                 </li>
 
-                <li className="flex gap-1 p-3 cursor-pointer hover:bg-gray-200 hover:text-[#333333] text-[#333333]/60 transition  font-semibold hover:shadow rounded-xl ">
-                  <a href="/booking-detail" className=" ">
-                    {" "}
-                    Tujuan{" "}
-                  </a>
-                  <a href="/booking-detail" className="">
-                    {" "}
-                    Terbaik{" "}
-                  </a>
-                </li>
+                <a
+                  href="/#tujuanterbaik"
+                  className="flex gap-1 p-3 cursor-pointer hover:bg-gray-200 hover:text-[#333333] text-[#333333]/60 transition  font-semibold hover:shadow rounded-xl "
+                >
+                  <a className=" "> Tujuan </a>
+                  <a className=""> Terbaik </a>
+                </a>
 
-                <li>
-                  <a
-                    className="text-[#333333]/60 transition hover:text-[#333333] font-semibold hover:shadow rounded-xl hover:bg-gray-200 p-3"
-                    href="/payment"
-                  >
-                    {" "}
-                    Promo{" "}
-                  </a>
-                </li>
-
-                <li
-                  href="#"
+                <a
+                  href="/#mengapakami"
                   className="flex gap-1 p-3 cursor-pointer hover:bg-gray-200 hover:text-[#333333] text-[#333333]/60 transition  font-semibold hover:shadow rounded-xl "
                 >
                   <a className=" ">Mengapa </a>
                   <a className=""> Kami </a>
-                </li>
+                </a>
               </ul>
             </nav>
           </div>
@@ -388,7 +381,7 @@ function NavbarLogoBiru() {
                     Beranda
                   </a>
                   <a
-                    href="#"
+                    href="/#tujuanterbaik"
                     className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold"
                   >
                     Tujuan Terbaik
@@ -400,7 +393,7 @@ function NavbarLogoBiru() {
                     Promo
                   </a>
                   <a
-                    href="#"
+                    href="/#mengapakami"
                     className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold"
                   >
                     Mengapa Kami

@@ -8,15 +8,28 @@ import { useNavigate } from "react-router-dom";
 import { hapus } from "../redux/reducers/historyBookingReducer";
 import { hapusProfile } from "../redux/reducers/profileReducer";
 
-function NavbarLogoPutih() {
+import { useLocation, useNavigate } from "react-router-dom";
+import { getNotification } from "../redux/action/dataAction";
+
+
+function NavbarLanding() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const cekState = useSelector((state) => state);
   console.log("cekState :>> ", cekState);
   const token = useSelector((state) => state?.auth?.token);
+
+  useEffect(() => {
+    if (token) {
+      dispatch(getNotification());
+    }
+  }, []);
+
   useEffect(() => {
     if (token) {
       dispatch(getProfile());
@@ -59,8 +72,24 @@ function NavbarLogoPutih() {
     setShowConfirmation(false);
   };
 
+  const scrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.getElementById(location.hash.substring(1));
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+  }, [location]);
+
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 mx-auto max-w-screen-2xl my-4 bg-white/50 rounded-xl shadow-lg max-md:mx-2">
+    <div className="fixed top-0 left-0 right-0 z-50 mx-auto max-w-screen-2xl my-4 bg-white rounded-xl shadow-lg max-md:mx-2">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between max-w-screen-2xl">
           <div className="md:flex md:items-center md:gap-12">
@@ -151,6 +180,7 @@ function NavbarLogoPutih() {
                 </li>
 
                 <li
+                  onClick={() => scrollToSection("tujuanterbaik")}
                   className="flex gap-1 cursor-pointer text-[#333333]/60 transition hover:text-white font-semibold hover:shadow rounded-xl hover:bg-gray-400 p-3"
                   href="#"
                 >
@@ -158,17 +188,8 @@ function NavbarLogoPutih() {
                   <a> Terbaik </a>
                 </li>
 
-                <li>
-                  <a
-                    className="text-[#333333]/60 transition hover:text-white font-semibold hover:shadow rounded-xl hover:bg-gray-400 p-3"
-                    href="#"
-                  >
-                    {" "}
-                    Promo{" "}
-                  </a>
-                </li>
-
                 <li
+                  onClick={() => scrollToSection("mengapakami")}
                   className="flex gap-1 cursor-pointer text-[#333333]/60 transition hover:text-white font-semibold hover:shadow rounded-xl hover:bg-gray-400 p-3"
                   href="#"
                 >
@@ -202,7 +223,7 @@ function NavbarLogoPutih() {
               <div className="relative hidden md:flex">
                 <div
                   onClick={handleDropdownToggle2}
-                  className="flex items-center gap-4 text-white"
+                  className="flex items-center gap-4 text-[#333333]/60"
                 >
                   <img
                     className="w-10 h-10 rounded-full"
@@ -384,6 +405,7 @@ function NavbarLogoPutih() {
                     Beranda
                   </a>
                   <a
+                    onClick={() => scrollToSection("tujuanterbaik")}
                     href="#"
                     className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold"
                   >
@@ -396,6 +418,7 @@ function NavbarLogoPutih() {
                     Promo
                   </a>
                   <a
+                    onClick={() => scrollToSection("mengapakami")}
                     href="#"
                     className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold"
                   >
@@ -411,4 +434,4 @@ function NavbarLogoPutih() {
   );
 }
 
-export default NavbarLogoPutih;
+export default NavbarLanding;

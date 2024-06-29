@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import NavbarLogoBiru from "../components/Navbar2";
-import NavbarLogoPutih from "../components/Navbar";
 import CariTiketLain from "../components/CariTiketLain";
 import { GiAirplaneDeparture, GiAirplaneArrival } from "react-icons/gi";
 import DetailPembayaran from "../components/DetailPembayaran";
