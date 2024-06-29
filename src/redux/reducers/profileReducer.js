@@ -5,7 +5,7 @@ const initialState = {
   profile: null,
   updateProfile: null,
   Modal: false,
-  notif: null,
+  notif: [],
 };
 
 const profileSlicer = createSlice({
@@ -25,15 +25,19 @@ const profileSlicer = createSlice({
     hapusProfile: (state) => {
       state.profile = null;
     },
-  
+
     setNotif: (state, action) => {
       state.notif = action.payload;
     },
   },
 });
 
-export const { setProfile, setUpdateProfile, setModal, setNotif,hapusProfile } =
-
-  profileSlicer.actions;
+export const {
+  setProfile,
+  setUpdateProfile,
+  setModal,
+  setNotif,
+  hapusProfile,
+} = profileSlicer.actions;
 
 export default profileSlicer.reducer;

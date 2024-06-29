@@ -4,6 +4,7 @@ import logo from "../assets/weblogo.png";
 import bg from "../assets/bg.png";
 import bgresp from "../assets/bgresp.png";
 import NavbarLogin from "../components/Navbar3";
+import NavbarLogoBiru from "../components/Navbar2";
 import Footer from "../components/Footer";
 import FlashMessage from "../components/FlashMessage";
 import { useDispatch, useSelector } from "react-redux";
@@ -94,7 +95,7 @@ export default function Login() {
           className="absolute inset-0 opacity-80 md:opacity-0"
           style={{ backgroundImage: `url(${bgresp})` }}
         ></div>
-        <NavbarLogin />
+        <NavbarLogoBiru />
         <main className="flex-1 flex items-center justify-center p-6 relative z-10">
           <div className="max-w-md w-full bg-white shadow-lg rounded-xl p-10">
             <div className="text-center">
@@ -103,7 +104,7 @@ export default function Login() {
               </h2>
               <img className="mx-auto h-16 w-auto" src={logo} alt="Logo" />
               <a
-                href="#"
+                onClick={handleGoogleLogin}
                 className="shadow-2xl mt-11 flex w-full items-center justify-center gap-3 rounded-md px-3 py-1.5 text-black bg-gradient-to-r focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hover:from-white hover:to-blue-200"
               >
                 <svg
@@ -132,10 +133,7 @@ export default function Login() {
                     d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
                   ></path>
                 </svg>
-                <span
-                  onClick={handleGoogleLogin}
-                  className="text-sm font-semibold leading-6"
-                >
+                <span className="text-sm font-semibold leading-6">
                   Continue With Google
                 </span>
               </a>

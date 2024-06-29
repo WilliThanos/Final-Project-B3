@@ -82,6 +82,7 @@ const authSlice = createSlice({
     logout: (state) => {
       state.token = null;
       localStorage.removeItem("persist:root3");
+      return initialState;
     },
     setUser: (state, action) => {
       state.user = action.payload;

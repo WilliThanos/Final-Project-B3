@@ -4,6 +4,7 @@ import logo from "../assets/weblogo.png";
 import bg from "../assets/bg.png";
 import bgresp from "../assets/bgresp.png";
 import NavbarLogin from "../components/Navbar3";
+import NavbarLogoBiru from "../components/Navbar2";
 import Footer from "../components/Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { register } from "../redux/action/authAction";
@@ -127,7 +128,7 @@ export default function Register() {
           style={{ backgroundImage: `url(${bgresp})` }}
         ></div>
         <main className="flex-1 flex items-center justify-center p-6 relative z-10">
-          <NavbarLogin />
+          <NavbarLogoBiru />
           <div className="max-w-md w-full bg-white shadow-lg rounded-xl p-10">
             <div className="text-center">
               <h2 className="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">
