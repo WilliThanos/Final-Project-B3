@@ -10,7 +10,7 @@ import { FaPersonCircleCheck } from "react-icons/fa6";
 import { FaSearch } from "react-icons/fa";
 import NavbarLanding from "../components/Navbar";
 import Footer from "../components/Footer";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import TicketIcon from "../assets/TicketIcon";
 import {
   setArrivalAirport,
@@ -28,10 +28,13 @@ import { AiOutlineSearch } from "react-icons/ai";
 import BangOwi from "../assets/BangOwi.jpeg";
 import beachVid from "../assets/beachVid.mp4";
 import OurTeam from "../components/ourTeam.jsx";
+import { getNotification } from "../redux/action/dataAction";
 
 export default function Landing() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const token = useSelector((state) => state?.auth?.token);
+
   const [isRoundTrip, setIsRoundTrip] = useState(false);
   const [inputSearch, setInputSearch] = useState({
     asal: "",
@@ -46,6 +49,12 @@ export default function Landing() {
   useEffect(() => {
     dispatch(setRoundTrip(false));
   }, [dispatch]);
+
+  useEffect(() => {
+    if (token) {
+      dispatch(getNotification());
+    }
+  }, []);
 
   useEffect(() => {
     console.log(inputSearch);

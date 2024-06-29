@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { hapus } from "../redux/reducers/historyBookingReducer";
 import { hapusProfile } from "../redux/reducers/profileReducer";
+import { FaBell } from "react-icons/fa";
+import { MdNotificationImportant, MdNotifications } from "react-icons/md";
 
 import { useLocation } from "react-router-dom";
 import { getNotification } from "../redux/action/dataAction";
@@ -24,22 +26,29 @@ function NavbarLanding() {
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);
+  const [isDropdownOpen3, setIsDropdownOpen3] = useState(false);
+  const [hasNewNotifications, setHasNewNotifications] = useState(true);
+
   const [showConfirmation, setShowConfirmation] = useState(false);
   const cekState = useSelector((state) => state);
   console.log("cekState :>> ", cekState);
   const token = useSelector((state) => state?.auth?.token);
+  const notification = useSelector((state) => state?.profile?.notif?.data);
 
   useEffect(() => {
     if (token) {
       dispatch(getNotification());
     }
-  }, []);
+  }, [token, dispatch]);
+
+  console.log("notification :>> ", notification);
 
   useEffect(() => {
     if (token) {
       dispatch(getProfile());
     }
   }, []);
+
   useEffect(() => {
     if (!token) {
       dispatch(logout());
@@ -48,10 +57,19 @@ function NavbarLanding() {
 
   const handleDropdownToggle = () => {
     setIsDropdownOpen(!isDropdownOpen);
+    setIsDropdownOpen3(false);
+    setIsDropdownOpen2(false);
   };
 
   const handleDropdownToggle2 = () => {
     setIsDropdownOpen2(!isDropdownOpen2);
+    setIsDropdownOpen3(false);
+    setIsDropdownOpen(false);
+  };
+  const handleDropdownToggle3 = () => {
+    setIsDropdownOpen3(!isDropdownOpen3);
+    setIsDropdownOpen2(false);
+    setIsDropdownOpen(false);
   };
 
   const userFirstName = useSelector(
@@ -63,6 +81,7 @@ function NavbarLanding() {
 
   const handleLogout = () => {
     setShowConfirmation(true);
+    setIsDropdownOpen3(false);
   };
 
   const confirmLogout = () => {
@@ -92,6 +111,28 @@ function NavbarLanding() {
       }
     }
   }, [location]);
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Intl.DateTimeFormat("id-ID", options).format(date);
+  };
+
+  const sortedNotifications = [...(notification || [])].sort(
+    (a, b) => new Date(b.date) - new Date(a.date)
+  );
+
+  // const hasNewNotifications = sortedNotifications?.some((notif) => notif.isNew);
+
+  console.log("sortedNotifications:", sortedNotifications);
+  console.log("hasNewNotifications:", hasNewNotifications);
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 mx-auto max-w-screen-2xl my-4 bg-white rounded-xl shadow-lg max-md:mx-2">
@@ -287,6 +328,43 @@ function NavbarLanding() {
                 )}
               </div>
             )}
+            <div className="relative">
+              {token && (
+                <div onClick={() => setHasNewNotifications(false)}>
+                  {hasNewNotifications ? (
+                    <MdNotificationImportant
+                      onClick={handleDropdownToggle3}
+                      size={22}
+                      color="red"
+                      className="cursor-pointer"
+                    />
+                  ) : (
+                    <MdNotifications
+                      onClick={handleDropdownToggle3}
+                      size={22}
+                      color="gray"
+                      className="cursor-pointer"
+                    />
+                  )}
+                </div>
+              )}
+              {isDropdownOpen3 && (
+                <div className="absolute right-0 ">
+                  <div className=" mt-3 w-56  bg-white border text-sm border-gray-200 rounded-md shadow-lg z-10 max-h-28 overflow-y-auto max-sm:w-40">
+                    {sortedNotifications?.map((notif) => (
+                      <div key={notif.id} className=" ">
+                        <div className="block rounded-md border px-4 py-2 text-[#333333]/60 hover:bg-gray-300 hover:text-[#333333] ">
+                          {notif.message}
+                        </div>
+                        <div className="block rounded-md border-y- px-4 py-1 text-xs  text-[#333333]/60 hover:bg-gray-300 hover:text-[#333333] ">
+                          {formatDate(notif.date)}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
             {showConfirmation && (
               <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-70 flex justify-center items-center">
                 <div className="bg-white p-4 rounded-lg shadow-lg font-semibold text-lg">
