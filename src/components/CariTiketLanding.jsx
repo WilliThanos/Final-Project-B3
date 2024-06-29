@@ -27,6 +27,7 @@ import {
 } from "../redux/action/dataAction";
 import { useNavigate } from "react-router-dom";
 import {
+  setSelectedDepartureFlight,
   setSelectedReturnFlight,
   setSelectedReturnFlightId,
 } from "../redux/reducers/ticketReducer";
@@ -1137,7 +1138,7 @@ export default function CariTiketLanding() {
               />
             </div>
             <div>
-              {isSameDate && (
+              {isSameDate && roundTrip && (
                 <div className="hidden md:flex items-center gap-2 text-red-500 font-normal  text-sm">
                   <IoWarning size={20} />
                   <div>Tanggal keberangkatan dan kembali tidak boleh sama</div>
@@ -1430,7 +1431,8 @@ export default function CariTiketLanding() {
           onClick={() => {
             if (isButtonEnabled) {
               navigate("/search");
-
+              dispatch(setSelectedDepartureFlight(null));
+              dispatch(setSelectedReturnFlight(null));
               dispatch(getSearchTicket());
               {
                 setIsDropdownOpen(false);
