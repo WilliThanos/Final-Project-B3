@@ -10,6 +10,12 @@ import { hapusProfile } from "../redux/reducers/profileReducer";
 
 import { useLocation } from "react-router-dom";
 import { getNotification } from "../redux/action/dataAction";
+import {
+  hapusDataTiket,
+  setSelectedDepartureFlight,
+  setSelectedReturnFlight,
+} from "../redux/reducers/ticketReducer";
+import { hapusDataPayment, setStatus } from "../redux/reducers/paymentReducer";
 
 function NavbarLanding() {
   const dispatch = useDispatch();

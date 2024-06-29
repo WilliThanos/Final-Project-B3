@@ -8,6 +8,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { setModal, setUpdateProfile } from "../redux/reducers/profileReducer";
 import MyModal from "../components/NotifUpdateProfile";
 import { useNavigate } from "react-router-dom";
+import {
+  setSelectedDepartureFlight,
+  setSelectedReturnFlight,
+} from "../redux/reducers/ticketReducer";
+import { setStatus } from "../redux/reducers/paymentReducer";
 
 export default function Profile() {
   const [first_name, setFirstName] = useState("");
@@ -82,7 +87,12 @@ export default function Profile() {
               </label>
               <p
                 className="text-blue-500 cursor-pointer"
-                onClick={() => navigate("/history")}
+                onClick={() => {
+                  dispatch(setSelectedDepartureFlight(null));
+                  dispatch(setSelectedReturnFlight(null));
+                  dispatch(setStatus(null));
+                  navigate("/history");
+                }}
               >
                 Lihat Semua
               </p>

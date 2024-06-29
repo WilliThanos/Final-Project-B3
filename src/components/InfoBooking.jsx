@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import Kosong from "../assets/empty.png";
 import { IoWarning } from "react-icons/io5";
 import { setRoundTrip } from "../redux/reducers/dataReducer";
+import { setStatus } from "../redux/reducers/paymentReducer";
 
 export default function InfoBooking() {
   const dispatch = useDispatch();
@@ -152,7 +153,8 @@ export default function InfoBooking() {
                   dispatch(setSelectedDepartureFlight(e.schedule));
                   dispatch(setSelectedReturnFlight(e.returnSchedule));
                   dispatch(setBookedPassengers(e.id));
-                  navigate("/payment");
+                  dispatch(setStatus(e?.status));
+                  // navigate("/payment");
                 }}
               >
                 <div className=" p-4 rounded-lg">

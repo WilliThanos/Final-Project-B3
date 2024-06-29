@@ -98,7 +98,7 @@ export const getMethodPayment = () => async (dispatch, getState) => {
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Axios error:", error);
-      alert(error?.message);
+
       return;
     }
     alert(error?.message);
