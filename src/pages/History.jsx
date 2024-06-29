@@ -16,8 +16,8 @@ export default function History() {
       <div className="mt-2">
         <Navbar />
       </div>
-      <div className="mt-24 flex justify-between gap-3 max-sm:flex-col">
-        <div className="w-2/3 max-sm:w-full">
+      <div className="mt-24 flex justify-between gap-3 max-xl:flex-col max-sm:flex-col max-sm:px-2">
+        <div className="w-2/3 max-sm:w-full max-xl:w-full">
           <label className="font-bold text-2xl max-sm:text-xl">
             Riwayat Pembelian Tiket
           </label>
@@ -25,7 +25,7 @@ export default function History() {
             <InfoBooking />
           </div>
         </div>
-        <div className="w-1/3 max-sm:w-full mb-2">
+        <div className="w-1/3 max-sm:w-full mb-2 max-xl:w-full">
           <label className="font-bold text-2xl max-sm:text-xl">
             Detail Pemesanan
           </label>

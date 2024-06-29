@@ -240,20 +240,11 @@ export default function BookingDetail({ index }) {
       <div className="mt-24">
         <CariTiketLain />
       </div>
-      <div className="flex pt-40 gap-8  max-md:mx-2 max-md:gap-3  max-lg:pt-40  max-xl:pt-40 max-xl:flex-col max-xl:mx-2 max-md:pt-32 ">
-        <div className="flex flex-col gap-3 w-full">
-          <div className="">
-            <div className="pb-4 font-bold text-2xl max-lg:text-xl max-sm:text-lg">
-              Detail Pemesanan Tiket
-            </div>
-
-            <div className=" mx-auto w-full bg-white rounded-xl shadow-sm px-6 max-sm:px-4 ">
-              <DetailBooking />
-            </div>
-          </div>
+      <div className=" flex pt-5 gap-8 max-sm:pt-1  max-md:mx-2 max-md:gap-3    max-xl:pt-2 max-xl:flex-col max-xl:mx-2 max-md:pt-32 ">
+        <div className="flex  gap-3 w-full max-xl:flex-col max-sm:flex-col max-sm:gap-1">
           {/* detail penumpang */}
           <div className="">
-            <div className="pb-4 max-sm:pb-2 font-bold text-2xl max-lg:text-xl max-sm:text-lg">
+            <div className="  font-bold text-2xl max-lg:text-xl max-sm:text-lg">
               Detail Penumpang
             </div>
             {passengers.map((passenger, index) => {
@@ -293,20 +284,25 @@ export default function BookingDetail({ index }) {
               }
             })}
           </div>
+          <div className="">
+            <div className="pb-4 font-bold text-2xl max-lg:text-xl max-sm:text-lg">
+              Detail Pemesanan Tiket
+            </div>
+            <div className="dlex flex-col">
+              <div className=" mx-auto w-full bg-white rounded-xl shadow-sm px-6 max-sm:px-4 ">
+                <DetailBooking />
+              </div>
+              <button
+                onClick={handleButtonBooking}
+                className={`rounded-xl bg-[#2A91E5] px-5 mt-4 max-sm:my-2 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow `}
+              >
+                Lanjut ke Pembayaran
+              </button>
+            </div>
+          </div>
         </div>
 
         <div>
-          {/* Detail Pembayaran Component */}
-          <DetailPembayaran />
-          {/* Detail Pembayaran Component */}.
-          <div>
-            <button
-              onClick={handleButtonBooking}
-              className={`rounded-xl bg-[#2A91E5] px-5 mt-8 max-sm:my-2 py-2.5 w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow `}
-            >
-              Lanjut ke Pembayaran
-            </button>
-          </div>
           {showWarning && (
             <div className="flex items-center gap-2 text-red-500 font-normal text-xs mt-2">
               <IoWarning size={20} />
