@@ -49,6 +49,7 @@ function NavbarLogoBiru() {
   const confirmLogout = () => {
     dispatch(logout());
     dispatch(hapus());
+    dispatch(hapusProfile());
     setShowConfirmation(false);
     navigate("/");
   };

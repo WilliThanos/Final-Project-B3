@@ -6,6 +6,7 @@ import { getProfile } from "../redux/action/dataAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { hapus } from "../redux/reducers/historyBookingReducer";
+import { hapusProfile } from "../redux/reducers/profileReducer";
 
 function NavbarLogoPutih() {
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ function NavbarLogoPutih() {
   const confirmLogout = () => {
     dispatch(logout());
     dispatch(hapus());
+    dispatch(hapusProfile());
     setShowConfirmation(false);
     navigate("/");
   };

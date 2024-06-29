@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { setModal } from "../redux/reducers/profileReducer";
 import { setPesan } from "../redux/reducers/paymentReducer";
 import gagal from "../assets/gagal.png";
+import { useNavigate } from "react-router-dom";
 
 export default function ModalPayment() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   function close() {
     dispatch(setModal(false));
@@ -51,7 +53,12 @@ export default function ModalPayment() {
               </button>
               <div className="flex flex-col items-center justify-center ">
                 <img className="w-56 max-sm:w-40" src={gagal} alt="" />
-                <p className="mt-2 text-center text-base">Maaf {pesan}</p>
+                <div>
+                  <p className="mt-2 text-center text-base">Maaf {pesan}</p>
+                  <p className="text-center">
+                    Silahkan pilih metode pembayaran yang lain
+                  </p>
+                </div>
               </div>
             </DialogPanel>
           </div>

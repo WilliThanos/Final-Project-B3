@@ -20,9 +20,13 @@ const profileSlicer = createSlice({
     setModal: (state, action) => {
       state.Modal = action.payload;
     },
+    hapusProfile: (state) => {
+      state.profile = null;
+    },
   },
 });
 
-export const { setProfile, setUpdateProfile, setModal } = profileSlicer.actions;
+export const { setProfile, setUpdateProfile, setModal, hapusProfile } =
+  profileSlicer.actions;
 
 export default profileSlicer.reducer;
