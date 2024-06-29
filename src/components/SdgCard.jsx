@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import sdgpohon from "../assets/sdgpohon.jpg";
 import sdglaut from "../assets/sdglaut.jpg";
 import sdgmonyet from "../assets/sdgmonyet.jpg";
+import amar from "../assets/amar.jpg";
 
 export default function SdgCard() {
   const [backgroundImage, setBackgroundImage] = useState(sdgpohon);
@@ -17,7 +18,7 @@ export default function SdgCard() {
   });
 
   // Daftar gambar dan teks yang akan digunakan
-  const imageList = [sdgpohon, sdglaut, sdgmonyet];
+  const imageList = [sdgpohon, sdglaut, sdgmonyet, amar];
   const textList = [
     {
       title: "Lestarikan Hutan ",
@@ -33,6 +34,10 @@ export default function SdgCard() {
       title: "Selamatkan Satwa Langka",
       description:
         "Ayo Selamatkan satwa langka bersama kami! Kami menyisihkan 0,2% dari keuntungan kami untuk mendukung pelestarian satwa langka, sebagai bagian dari komitmen kami terhadap pelestarian lingkungan.",
+    },
+    {
+      title: "Selamatkan Satwa Langka",
+      description: "Ini salah satu contohnya",
     },
   ];
 
