@@ -14,6 +14,7 @@ import {
 } from "../redux/reducers/ticketReducer";
 import { setStatus } from "../redux/reducers/paymentReducer";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { getAllUser } from "../redux/action/AdminAction";
 
 export default function Profile() {
   const [first_name, setFirstName] = useState("");
@@ -22,6 +23,7 @@ export default function Profile() {
   const [confirmPassword, setconfirmPassword] = useState("");
   const [passwordType, setPasswordType] = useState("password");
   const [confirmPasswordType, setConfirmPasswordType] = useState("password");
+  const [showWarning, setShowWarning] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -60,6 +62,13 @@ export default function Profile() {
     setType(type === "password" ? "text" : "password");
   };
 
+  const handleButtonAdmin = () => {
+    if (data?.role === "admin") {
+      navigate("/admin");
+    }
+    setShowWarning(true);
+  };
+
   return (
     <div className="min-h-screen mx-auto max-w-screen-2xl">
       <div className="mt-2">
@@ -75,13 +84,24 @@ export default function Profile() {
                 src={cekPP === null ? PotoProfile : cekPP}
                 alt=""
               />
-              <div className="flex flex-col gap-7 max-md:gap-3">
+              <div className="flex flex-col gap-2 max-md:gap-3">
                 <p className="text-xl font-medium max-sm:text-base">
                   {data?.email}
                 </p>
                 <p className="text-xl font-medium max-sm:text-sm">
                   {data?.first_name} {data?.last_name}
                 </p>
+                <p
+                  className="text-sm text-blue-500 cursor-pointer"
+                  onClick={handleButtonAdmin}
+                >
+                  Masuk ke dasboard Admin
+                </p>
+                {showWarning && (
+                  <div>
+                    <p>Maaf, anda bukan admin</p>
+                  </div>
+                )}
               </div>
             </div>
             <img className="w-[120px] max-md:hidden" src={Pesawat} alt="" />

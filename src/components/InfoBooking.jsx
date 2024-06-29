@@ -128,7 +128,7 @@ export default function InfoBooking() {
         </div>
       ) : (
         <div>
-          <div className="flex justify-between ">
+          <div className=" flex justify-between sticky top-0 bg-white">
             <p>Urutkan berdasarkan</p>
             <div className="flex justify-end gap-4 mb-4 ">
               {/* FILTER KELAS */}
@@ -165,7 +165,7 @@ export default function InfoBooking() {
               </select>
             </div>
           </div>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 mt-3 ">
             {filteredDataHistory?.map((e) => {
               const hargaTiket =
                 (e?.returnSchedule?.price || 0) + (e?.schedule?.price || 0);
