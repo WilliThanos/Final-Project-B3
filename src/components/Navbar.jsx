@@ -8,9 +8,8 @@ import { useNavigate } from "react-router-dom";
 import { hapus } from "../redux/reducers/historyBookingReducer";
 import { hapusProfile } from "../redux/reducers/profileReducer";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { getNotification } from "../redux/action/dataAction";
-
 
 function NavbarLanding() {
   const dispatch = useDispatch();
@@ -194,6 +193,14 @@ function NavbarLanding() {
                   href="#"
                 >
                   <a> Mengapa</a>
+                  <a> Kami </a>
+                </li>
+                <li
+                  onClick={() => scrollToSection("ourteam")}
+                  className="flex gap-1 cursor-pointer text-[#333333]/60 transition hover:text-white font-semibold hover:shadow rounded-xl hover:bg-gray-400 p-3"
+                  href="#"
+                >
+                  <a> Tentang</a>
                   <a> Kami </a>
                 </li>
               </ul>
@@ -423,6 +430,13 @@ function NavbarLanding() {
                     className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold"
                   >
                     Mengapa Kami
+                  </a>
+                  <a
+                    onClick={() => scrollToSection("ourteam")}
+                    href="#"
+                    className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold"
+                  >
+                    Tentang Kami
                   </a>
                 </div>
               )}
