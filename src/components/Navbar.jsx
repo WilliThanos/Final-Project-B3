@@ -64,7 +64,6 @@ function NavbarLanding() {
   const handleDropdownToggle2 = () => {
     setIsDropdownOpen2(!isDropdownOpen2);
     setIsDropdownOpen3(false);
-    setIsDropdownOpen(false);
   };
   const handleDropdownToggle3 = () => {
     setIsDropdownOpen3(!isDropdownOpen3);

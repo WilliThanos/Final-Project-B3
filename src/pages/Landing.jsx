@@ -102,10 +102,10 @@ export default function Landing() {
               Rasakan Pengalaman Terbaik Anda Dimulai Dari Kami
             </h1>
             <p className="text-white opacity-80 text-center mt-4 max-w-2xl mx-auto">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. Ex
-              reprehenderit impedit atque ratione nam iste ea at expedita
-              excepturi! Placeat rem quos veniam libero nemo eveniet dicta
-              dignissimos fugiat quo.
+              Temukan tiket pesawat terbaik dengan harga terbaik hanya di sini.
+              Nikmati pilihan lengkap dari berbagai maskapai, serta proses
+              booking yang cepat. Mulai petualangan Anda sekarang dan pesan
+              tiket pesawat tanpa repot hanya dengan beberapa klik.
             </p>
             <div className="flex justify-center mt-10">
               <CariTiketLanding />
