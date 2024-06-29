@@ -322,7 +322,7 @@ function NavbarLogoBiru() {
               )}
               {isDropdownOpen3 && (
                 <div className="absolute right-0 ">
-                  <div className=" mt-3 w-56  bg-white border text-sm border-gray-200 rounded-md shadow-lg z-10 max-h-28 overflow-y-auto max-sm:w-40">
+                  <div className=" mt-3 w-72  bg-white border text-sm border-gray-200 rounded-md shadow-lg z-10 max-h-24 overflow-y-auto max-sm:w-40">
                     {sortedNotifications?.map((notif) => (
                       <div key={notif.id} className=" ">
                         <div className="block rounded-md border px-4 py-2 text-[#333333]/60 hover:bg-gray-300 hover:text-[#333333] ">
