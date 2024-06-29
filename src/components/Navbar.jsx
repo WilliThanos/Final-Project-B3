@@ -17,7 +17,7 @@ import {
   setSelectedDepartureFlight,
   setSelectedReturnFlight,
 } from "../redux/reducers/ticketReducer";
-import { hapusDataPayment, setStatus } from "../redux/reducers/paymentReducer";
+import { setStatus } from "../redux/reducers/paymentReducer";
 
 function NavbarLanding() {
   const dispatch = useDispatch();

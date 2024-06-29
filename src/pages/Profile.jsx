@@ -13,12 +13,15 @@ import {
   setSelectedReturnFlight,
 } from "../redux/reducers/ticketReducer";
 import { setStatus } from "../redux/reducers/paymentReducer";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function Profile() {
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setconfirmPassword] = useState("");
+  const [passwordType, setPasswordType] = useState("password");
+  const [confirmPasswordType, setConfirmPasswordType] = useState("password");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -52,6 +55,11 @@ export default function Profile() {
 
   const cekPP = data?.image_url;
   const modal = useSelector((state) => state?.profile?.Modal);
+
+  const lihatPassword = (setType, type) => {
+    setType(type === "password" ? "text" : "password");
+  };
+
   return (
     <div className="min-h-screen mx-auto max-w-screen-2xl">
       <div className="mt-2">
@@ -158,11 +166,11 @@ export default function Profile() {
                   disabled
                 />
               </div>
-              <div className="relative ">
+              <div className="relative">
                 <input
-                  type="password"
+                  type={passwordType}
                   id="floating_password"
-                  className="block px-2.5 pb-2.5 pt-4 w-full text-base text-gray-900 bg-transparent rounded-lg border-2 border-gray-300 appearance-none   dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  className="block px-2.5 pb-2.5 pt-4 w-full text-base text-gray-900 bg-transparent rounded-lg border-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -173,12 +181,18 @@ export default function Profile() {
                 >
                   password
                 </label>
+                <span
+                  onClick={() => lihatPassword(setPasswordType, passwordType)}
+                  className="absolute end-2.5 bottom-3.5 cursor-pointer"
+                >
+                  {passwordType === "password" ? <FaEye /> : <FaEyeSlash />}
+                </span>
               </div>
-              <div className="relative ">
+              <div className="relative">
                 <input
-                  type="password"
+                  type={confirmPasswordType}
                   id="floating_confirmPassword"
-                  className="block px-2.5 pb-2.5 pt-4 w-full text-base text-gray-900 bg-transparent rounded-lg border-2 border-gray-300 appearance-none   dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                  className="block px-2.5 pb-2.5 pt-4 w-full text-base text-gray-900 bg-transparent rounded-lg border-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                   placeholder=" "
                   value={confirmPassword}
                   onChange={(e) => setconfirmPassword(e.target.value)}
@@ -189,6 +203,18 @@ export default function Profile() {
                 >
                   konfirmasi Password
                 </label>
+                <span
+                  onClick={() =>
+                    lihatPassword(setConfirmPasswordType, confirmPasswordType)
+                  }
+                  className="absolute end-2.5 bottom-3.5 cursor-pointer"
+                >
+                  {confirmPasswordType === "password" ? (
+                    <FaEye />
+                  ) : (
+                    <FaEyeSlash />
+                  )}
+                </span>
               </div>
 
               <button

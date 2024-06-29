@@ -29,23 +29,10 @@ const paymentSlicer = createSlice({
     setStatus: (state, action) => {
       state.status = action.payload;
     },
-    hapusDataPayment: (state) => {
-      state.Method = null;
-      state.Metode = "";
-      state.Data = null;
-      state.pesan = null;
-      state.status = null;
-    },
   },
 });
 
-export const {
-  setMethod,
-  setMetode,
-  setData,
-  setPesan,
-  setStatus,
-  hapusDataPayment,
-} = paymentSlicer.actions;
+export const { setMethod, setMetode, setData, setPesan, setStatus } =
+  paymentSlicer.actions;
 
 export default paymentSlicer.reducer;
