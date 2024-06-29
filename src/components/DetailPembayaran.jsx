@@ -89,7 +89,7 @@ export default function DetailPembayaran() {
 
   return (
     <div className="w-[535px] max-xl:w-full">
-      <div className="pb-4 font-bold text-2xl max-lg:text-xl max-sm:text-lg">
+      <div className="pb-4 font-bold text-2xl max-lg:text-xl ">
         Detail Pembayaran
       </div>
       <div className=" mx-auto bg-white rounded-xl shadow-sm px-6 max-sm:px-4 ">
@@ -124,7 +124,7 @@ export default function DetailPembayaran() {
               )}
             </div>
           </div>
-          <div className="border-b border-gray-300 pb-10 "></div>
+          <div className="border-b border-gray-300  "></div>
 
           <div className="flex justify-between p-6 text-lg max-lg:text-base max-sm:text-sm">
             <div className="flex flex-col gap-2">
@@ -147,7 +147,7 @@ export default function DetailPembayaran() {
             </div>
           </div>
 
-          <div className="border-b border-gray-300 pb-10 "></div>
+          <div className="border-b border-gray-300  "></div>
           <div className="flex justify-between items-center py-10 text-lg max-lg:text-base max-sm:text-sm">
             <div className="">
               <div className="">Jumlah Yang Dibayarkan</div>

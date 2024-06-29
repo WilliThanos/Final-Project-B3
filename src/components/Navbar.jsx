@@ -4,8 +4,13 @@ import PotoProfile from "../assets/profile.png";
 import { logout } from "../redux/reducers/authReducer";
 import { getProfile } from "../redux/action/dataAction";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { hapus } from "../redux/reducers/historyBookingReducer";
+import { hapusProfile } from "../redux/reducers/profileReducer";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import { getNotification } from "../redux/action/dataAction";
+
 
 function NavbarLanding() {
   const dispatch = useDispatch();
@@ -57,6 +62,8 @@ function NavbarLanding() {
 
   const confirmLogout = () => {
     dispatch(logout());
+    dispatch(hapus());
+    dispatch(hapusProfile());
     setShowConfirmation(false);
     navigate("/");
   };
