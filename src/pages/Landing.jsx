@@ -282,10 +282,8 @@ export default function Landing() {
         </div>
       </section>
 
-
       <section id="mengapakami">
-        <div  className="bg-white py-32 max-sm:py-10">
-
+        <div className="bg-white py-32 max-sm:py-10">
           <div className="mx-auto max-w-7xl px-6 lg:px-8">
             <div className="mx-auto flex max-w-2xl flex-col items-end justify-between gap-16 lg:mx-0 lg:max-w-none lg:flex-row">
               <div className="w-full lg:max-w-lg lg:flex-auto">
@@ -347,7 +345,7 @@ export default function Landing() {
           </div>
         </div>
       </section>
-      <section className="bg-white">
+      <section id="ourteam" className="bg-white">
         <OurTeam />
       </section>
 

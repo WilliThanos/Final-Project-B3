@@ -173,6 +173,13 @@ function NavbarLogoBiru() {
                   <a className=" ">Mengapa </a>
                   <a className=""> Kami </a>
                 </a>
+                <a
+                  href="/#ourteam"
+                  className="flex gap-1 p-3 cursor-pointer hover:bg-gray-200 hover:text-[#333333] text-[#333333]/60 transition  font-semibold hover:shadow rounded-xl "
+                >
+                  <a className=" ">Tentang </a>
+                  <a className=""> Kami </a>
+                </a>
               </ul>
             </nav>
           </div>
@@ -397,6 +404,12 @@ function NavbarLogoBiru() {
                     className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold"
                   >
                     Mengapa Kami
+                  </a>
+                  <a
+                    href="/#ourteam"
+                    className="block rounded-md  px-4 py-2 text-gray-800/60 hover:bg-gray-300 hover:text-gray-800 font-semibold"
+                  >
+                    Tentang Kami
                   </a>
                 </div>
               )}
