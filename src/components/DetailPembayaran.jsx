@@ -53,7 +53,7 @@ export default function DetailPembayaran() {
       departureFlights?.price * jmlAnak +
       departureFlights?.price * jmlBayi;
 
-  console.log("cekHarga :>> ", cekHarga);
+  // console.log("cekHarga :>> ", cekHarga);
 
   //pajak
   const pajak = (10 / 100) * cekHarga;

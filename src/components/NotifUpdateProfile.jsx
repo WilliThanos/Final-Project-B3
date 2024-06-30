@@ -7,6 +7,7 @@ export default function MyModal() {
 
   function close() {
     dispatch(setModal(false));
+    window.location.reload();
   }
 
   const status = useSelector((state) => state?.profile?.updateProfile);

@@ -15,6 +15,7 @@ import {
 import { setStatus } from "../redux/reducers/paymentReducer";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { getAllUser } from "../redux/action/AdminAction";
+import { RiUserSharedLine } from "react-icons/ri";
 
 export default function Profile() {
   const [first_name, setFirstName] = useState("");
@@ -52,6 +53,7 @@ export default function Profile() {
     };
     dispatch(setUpdateProfile(updatedProfile));
     dispatch(updateProfile());
+
     dispatch(setModal(true));
   };
 
@@ -67,6 +69,9 @@ export default function Profile() {
       navigate("/admin");
     }
     setShowWarning(true);
+    setTimeout(() => {
+      setShowWarning(false);
+    }, 10000);
   };
 
   return (
@@ -91,17 +96,24 @@ export default function Profile() {
                 <p className="text-xl font-medium max-sm:text-sm">
                   {data?.first_name} {data?.last_name}
                 </p>
-                <p
-                  className="text-sm text-blue-500 cursor-pointer"
-                  onClick={handleButtonAdmin}
-                >
-                  Masuk ke dasboard Admin
-                </p>
-                {showWarning && (
-                  <div>
-                    <p>Maaf, anda bukan admin</p>
+                <div className="flex gap-1">
+                  <div
+                    className="flex gap-1 items-center cursor-pointer"
+                    onClick={handleButtonAdmin}
+                  >
+                    <RiUserSharedLine className="text-blue-500" />
+                    <p className="text-sm text-blue-500 cursor-pointer">
+                      Dasboard Admin
+                    </p>
                   </div>
-                )}
+                  {showWarning && (
+                    <div>
+                      <p className="text-red-500 text-sm font-semibold">
+                        Maaf, anda bukan admin
+                      </p>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
             <img className="w-[120px] max-md:hidden" src={Pesawat} alt="" />
@@ -124,7 +136,7 @@ export default function Profile() {
                     navigate("/history");
                   }}
                 >
-                  Lihat Semua
+                  Lihat Detail Tiket
                 </p>
               </div>
               {/* card perjalanan */}

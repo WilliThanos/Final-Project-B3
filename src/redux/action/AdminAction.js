@@ -1,5 +1,5 @@
 import axios from "axios";
-import setData, { setAkun } from "../reducers/adminReducer";
+import setData, { setAkun, setPesanAdmin } from "../reducers/adminReducer";
 
 export const getAllUser = () => async (dispatch, getState) => {
   try {
@@ -16,7 +16,7 @@ export const getAllUser = () => async (dispatch, getState) => {
       config
     );
 
-    console.log("response method redux :>> ", response?.data);
+    // console.log("response method redux :>> ", response?.data);
     dispatch(setAkun(response?.data?.data));
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -28,9 +28,10 @@ export const getAllUser = () => async (dispatch, getState) => {
   }
 };
 
-export const hapusAkun = (idAkun) => async (dispatch, getState) => {
+export const hapusAkun = () => async (dispatch, getState) => {
   try {
-    console.log("CEK ID AKUN :>> ", idAkun);
+    const id = getState().admin?.id;
+    console.log("CEK ID :>> ", id);
     const token = getState().auth?.token;
     console.log("CEK TOKEN :>> ", token);
     const config = {
@@ -41,11 +42,12 @@ export const hapusAkun = (idAkun) => async (dispatch, getState) => {
     };
 
     const response = await axios.delete(
-      `https://expressjs-develop-b4d1.up.railway.app/api/v1/users/${idAkun}`,
+      `https://expressjs-develop-b4d1.up.railway.app/api/v1/users/${id}`,
       config
     );
 
-    console.log("response hapus redux :>> ", response?.data);
+    // console.log("response hapus redux :>> ", response?.data);
+    dispatch(setPesanAdmin(response?.data?.message));
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Axios error:", error.response?.data || error.message);

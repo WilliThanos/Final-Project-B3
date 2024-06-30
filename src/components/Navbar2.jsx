@@ -92,8 +92,8 @@ function NavbarLogoBiru() {
     }
   };
 
-  console.log("cekState :>> ", cekState);
-  console.log("token :>> ", token);
+  // console.log("cekState :>> ", cekState);
+  // console.log("token :>> ", token);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -114,8 +114,8 @@ function NavbarLogoBiru() {
 
   //const hasNewNotifications = sortedNotifications?.some((notif) => notif.isNew);
 
-  console.log("sortedNotifications:", sortedNotifications);
-  console.log("hasNewNotifications:", hasNewNotifications);
+  // console.log("sortedNotifications:", sortedNotifications);
+  // console.log("hasNewNotifications:", hasNewNotifications);
 
   return (
     <div className="fixed top-0 left-0 right-0 z-50 mx-auto max-w-screen-2xl my-4 bg-white rounded-xl shadow-lg max-md:mx-2">

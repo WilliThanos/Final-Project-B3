@@ -60,7 +60,7 @@ export const getBooking = () => async (dispatch, getState) => {
       }
     );
 
-    console.log("response Booking :>> ", response);
+    // console.log("response Booking :>> ", response);
     dispatch(setBookedPassengers(response.data));
   } catch (error) {
     if (axios.isAxiosError(error)) {

@@ -5,8 +5,11 @@ import Pesawat from "../assets/pesawat.png";
 import { getProfile } from "../redux/action/dataAction";
 import PotoProfile from "../assets/profile.png";
 import { getAllUser, hapusAkun } from "../redux/action/AdminAction";
-import { hapusProfile } from "../redux/reducers/profileReducer";
+import { hapusProfile, setModal } from "../redux/reducers/profileReducer";
 import { useNavigate } from "react-router-dom";
+import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
+import { setId, setPesanAdmin } from "../redux/reducers/adminReducer";
+import { RiUserSharedLine } from "react-icons/ri";
 
 export default function Admin() {
   const dispatch = useDispatch();
@@ -39,9 +42,27 @@ export default function Admin() {
     }
   }, [searchQuery, dataAkun]);
 
-  const handleButtonHapus = (idAkun) => {
-    dispatch(hapusAkun(idAkun));
+  const handleButtonHapus = (id) => {
+    dispatch(setPesanAdmin("Apakah anda yakin ingin menghapus akun ini?"));
+    dispatch(setId(id));
+    dispatch(setModal(true));
   };
+
+  const handleButtonHappusKonfirmasi = () => {
+    dispatch(hapusAkun());
+    dispatch(setModal(true));
+  };
+
+  const modal = useSelector((state) => state?.profile?.Modal);
+  const pesan = useSelector((state) => state?.admin?.pesan);
+
+  function close() {
+    dispatch(setModal(false));
+    dispatch(setPesanAdmin(""));
+    window.location.reload();
+  }
+
+  const cekState = useSelector((state) => state);
 
   return (
     <div className="min-h-screen mx-auto max-w-screen-2xl">
@@ -55,21 +76,24 @@ export default function Admin() {
                 src={cekPP === null ? PotoProfile : cekPP}
                 alt=""
               />
-              <div className="flex flex-col gap-1 ">
+              <div className="flex flex-col gap-1 cursor-pointer ">
                 <p className="text-xl font-medium max-sm:text-base">
                   {data?.email}
                 </p>
                 <p className="text-xl font-medium max-sm:text-sm">
                   {data?.first_name} {data?.last_name}
                 </p>
-                <p
+                <div
                   onClick={() => {
                     navigate("/profile");
                   }}
-                  className="text-sm text-blue-500 cursor-pointer"
+                  className="flex gap-2 cursor-pointer items-center"
                 >
-                  Kembali ke halaman user
-                </p>
+                  <RiUserSharedLine className="text-blue-500" />
+                  <p className="text-sm text-blue-500 cursor-pointer">
+                    Kembali ke halaman user
+                  </p>
+                </div>
               </div>
             </div>
             <img className="w-24 max-md:hidden" src={Pesawat} alt="" />
@@ -151,10 +175,12 @@ export default function Admin() {
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {e?.email}
                         </td>
-                        <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                          {e?.is_verified === true
-                            ? "Sudah Verivikasi"
-                            : "belum verivikasi"}
+                        <td className="whitespace-nowrap px-3 py-4 text-sm ">
+                          {e?.is_verified === true ? (
+                            <p className="text-green-500">Sudah Verivikasi</p>
+                          ) : (
+                            <p className="text-red-500">Belum Verivikasi</p>
+                          )}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                           {e?.role}
@@ -162,7 +188,7 @@ export default function Admin() {
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                           <button
                             href="#"
-                            className="text-white bg-red-500 px-3 py-2 rounded-lg hover:text-indigo-900"
+                            className="text-white hover:bg-red-700 bg-red-500 px-3 py-2 rounded-lg "
                             onClick={() => handleButtonHapus(e?.id)}
                           >
                             Hapus
@@ -171,6 +197,16 @@ export default function Admin() {
                         </td>
                       </tr>
                     ))}
+                    {dataFilter?.length === 0 && (
+                      <tr>
+                        <td
+                          colSpan={5}
+                          className="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                        >
+                          Data Akun Tidak Ditemukan
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -178,6 +214,66 @@ export default function Admin() {
           </div>
         </div>
       </div>
+      <>
+        <Dialog
+          open={modal}
+          as="div"
+          className="relative z-10 focus:outline-none"
+          onClose={close}
+          __demoMode
+        >
+          <div className="fixed inset-0 z-10 w-screen overflow-y-auto backdrop-blur-md bg-black/30">
+            <div className="flex min-h-full items-center justify-center p-4">
+              <DialogPanel
+                transition
+                className="flex flex-col justify-center w-full max-w-md rounded-xl bg-white p-3 backdrop-blur-2xl duration-300 ease-out data-[closed]:transform-[scale(95%)] data-[closed]:opacity-0"
+              >
+                <button
+                  className="inline-flex justify-end gap-2 rounded-md "
+                  onClick={close}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18 18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+                <div className="flex flex-col items-center justify-center ">
+                  <p className="mt-2 text-center text-base">{pesan} </p>
+                  <div className="flex gap-2 mt-4">
+                    {pesan ===
+                      "Apakah anda yakin ingin menghapus akun ini?" && (
+                      <div className="flex gap-2">
+                        <button
+                          onClick={close}
+                          className="text-green-500 hover:border-green-700 border-2 border-green-500 rounded-md px-2 py-1"
+                        >
+                          Batal
+                        </button>
+                        <button
+                          onClick={() => handleButtonHappusKonfirmasi()}
+                          className="text-white hover:bg-red-700 bg-red-500 rounded-md px-2 py-1"
+                        >
+                          Happus
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </DialogPanel>
+            </div>
+          </div>
+        </Dialog>
+      </>
     </div>
   );
 }
