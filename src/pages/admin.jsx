@@ -177,9 +177,9 @@ export default function Admin() {
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm ">
                           {e?.is_verified === true ? (
-                            <p className="text-green-500">Sudah Verivikasi</p>
+                            <p className="text-green-500">Sudah Verifikasi</p>
                           ) : (
-                            <p className="text-red-500">Belum Verivikasi</p>
+                            <p className="text-red-500">Belum Verifikasi</p>
                           )}
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
