@@ -23,7 +23,8 @@ import {
   getAllAirports,
   getDepartureAirport,
   getArrivalAirport,
-  getSearchTicket,
+  getSearchTicketReturn,
+  getSearchTicketDeparture,
 } from "../redux/action/dataAction";
 import { useNavigate } from "react-router-dom";
 import {
@@ -105,7 +106,9 @@ export default function CariTiketLanding() {
   );
 
   useEffect(() => {
-    dispatch(getSearchTicket());
+    dispatch(getSearchTicketDeparture());
+
+    dispatch(getSearchTicketReturn());
   }, []);
 
   useEffect(() => {
@@ -1433,8 +1436,9 @@ export default function CariTiketLanding() {
               navigate("/search");
               dispatch(setSelectedDepartureFlight(null));
               dispatch(setSelectedReturnFlight(null));
+              dispatch(getSearchTicketDeparture());
 
-              dispatch(getSearchTicket());
+              dispatch(getSearchTicketReturn());
               {
                 setIsDropdownOpen(false);
               }

@@ -15,11 +15,15 @@ import {
 import { FaCircleCheck } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
 import { Navigate, useNavigate } from "react-router-dom";
-import { getSearchTicket } from "../redux/action/dataAction";
+import {
+  getSearchTicketReturn,
+  getSearchTicketDeparture,
+} from "../redux/action/dataAction";
 import sdgpohon from "../assets/sdgpohon.jpg";
 import sdglaut from "../assets/sdglaut.jpg";
 import SdgCard from "../components/SdgCard";
 import Footer from "../components/Footer";
+import { setPageDeparture, setPageReturn } from "../redux/reducers/dataReducer";
 
 export default function Search() {
   const dispatch = useDispatch();
@@ -46,6 +50,8 @@ export default function Search() {
   );
   const filterClass = useSelector((state) => state?.filter?.filterClass);
   const sortHarga = useSelector((state) => state?.filter?.sortHarga);
+  const pageDeparture = useSelector((state) => state?.data?.pageDeparture);
+  const pageReturn = useSelector((state) => state?.data?.pageReturn);
 
   const filteredAndSortedDepartureFlights = departureFlights
     ?.filter((flight) => {
@@ -140,7 +146,8 @@ export default function Search() {
   };
 
   useEffect(() => {
-    dispatch(getSearchTicket());
+    dispatch(getSearchTicketReturn());
+    dispatch(getSearchTicketDeparture());
   }, []);
 
   return (
@@ -158,8 +165,8 @@ export default function Search() {
           <div className=" flex ">
             <Filter />
           </div>
-          <div className=" bg-white rounded-xl shadow-sm p-6 px-10 max-md:text-sm max-md:px-5">
-            <div>
+          <div className=" bg-white  rounded-xl shadow-sm p-6 px-10 max-md:text-sm max-md:px-5">
+            <div className="">
               {/* DEPARTURE FLIGHTS */}
               <div className="bg-[#D9EDFF] font-bold text-lg text-[#2A91E5] p-1 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
                 Tiket Keberangkatan
@@ -624,6 +631,66 @@ export default function Search() {
                   Tiket Tidak Ditemukan{" "}
                 </div>
               )}
+              <div className=" ">
+                {/* Pagination */}
+                {!selectedDepartureFlight && (
+                  <div className="flex justify-center items-center gap-1 mt-4">
+                    <div
+                      onClick={() => {
+                        if (pageDeparture > 1) {
+                          dispatch(setPageDeparture(pageDeparture - 1));
+                          dispatch(getSearchTicketDeparture());
+                        }
+                      }}
+                      className="cursor-pointer inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180 hover:bg-gray-300 hover:text-gray-700"
+                    >
+                      <span className="sr-only">Prev Page</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-3 w-3"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+
+                    <div>
+                      <div className="p-4 rounded border border-gray-100 bg-white text-center text-xs font-medium text-gray-900 [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none">
+                        {pageDeparture}
+                      </div>
+                    </div>
+
+                    <div
+                      onClick={() => {
+                        if (pageDeparture < 6) {
+                          dispatch(setPageDeparture(pageDeparture + 1));
+                          dispatch(getSearchTicketDeparture());
+                        }
+                      }}
+                      className="cursor-pointer inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180 hover:bg-gray-300 hover:text-gray-700"
+                    >
+                      <span className="sr-only">Next Page</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-3 w-3"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                )}
+              </div>
               {/* RETURN FLIGHTS */}
               {roundTrip ? (
                 <div>
@@ -1102,6 +1169,66 @@ export default function Search() {
                       Tiket Tidak Ditemukan{" "}
                     </div>
                   )}
+                  <div className=" ">
+                    {/* Pagination */}
+                    {!selectedReturnFlight && (
+                      <div className="flex justify-center items-center gap-1 mt-4">
+                        <div
+                          onClick={() => {
+                            if (pageReturn > 1) {
+                              dispatch(setPageReturn(pageReturn - 1));
+                              dispatch(getSearchTicketReturn());
+                            }
+                          }}
+                          className="cursor-pointer inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180 hover:bg-gray-300 hover:text-gray-700"
+                        >
+                          <span className="sr-only">Prev Page</span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-3 w-3"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+
+                        <div>
+                          <div className="p-4 rounded border border-gray-100 bg-white text-center text-xs font-medium text-gray-900 [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none">
+                            {pageReturn}
+                          </div>
+                        </div>
+
+                        <div
+                          onClick={() => {
+                            if (pageReturn < 6) {
+                              dispatch(setPageReturn(pageReturn + 1));
+                              dispatch(getSearchTicketReturn());
+                            }
+                          }}
+                          className="cursor-pointer inline-flex size-8 items-center justify-center rounded border border-gray-100 bg-white text-gray-900 rtl:rotate-180 hover:bg-gray-300 hover:text-gray-700"
+                        >
+                          <span className="sr-only">Next Page</span>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-3 w-3"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               ) : null}
             </div>

@@ -17,7 +17,10 @@ import { LiaCircleSolid } from "react-icons/lia";
 import DetailPenumpangAnak from "../components/DetailPenumpangAnak";
 import DetailPenumpangBayi from "../components/DetailPenumpangBayi";
 import DetailPenumpangDewasa from "../components/DetailPenumpangDewasa";
-import { getSearchTicket } from "../redux/action/dataAction";
+import {
+  getSearchTicketReturn,
+  getSearchTicketDeparture,
+} from "../redux/action/dataAction";
 import { useNavigate } from "react-router-dom";
 import DetailBooking from "../components/DetailBooking";
 import { getBooking } from "../redux/action/bookingAction";
@@ -210,7 +213,8 @@ export default function BookingDetail({ index }) {
   };
 
   useEffect(() => {
-    dispatch(getSearchTicket());
+    dispatch(getSearchTicketReturn());
+    dispatch(getSearchTicketDeparture());
   }, []);
 
   useEffect(() => {
