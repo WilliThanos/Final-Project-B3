@@ -56,6 +56,7 @@ export default function Payment() {
         if (result?.error) {
           dispatch(setModal(true));
         } else {
+          dispatch(setMetode(null));
           dispatch(setKondisi(true));
           navigate("/history");
         }
