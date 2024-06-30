@@ -6,7 +6,11 @@ import "react-datepicker/dist/react-datepicker.css";
 import NavbarLogoBiru from "../components/Navbar2";
 import { getMethodPayment } from "../redux/action/bookingAction";
 import DetailBooking from "../components/DetailBooking";
-import { setMetode, setPesan } from "../redux/reducers/paymentReducer";
+import {
+  setKondisi,
+  setMetode,
+  setPesan,
+} from "../redux/reducers/paymentReducer";
 import { payment } from "../redux/action/paymentAction";
 import PaymentMethodCard from "../components/MetodePembayaran";
 import { setModal } from "../redux/reducers/profileReducer";
@@ -51,6 +55,9 @@ export default function Payment() {
       .then((result) => {
         if (result?.error) {
           dispatch(setModal(true));
+        } else {
+          dispatch(setKondisi(true));
+          navigate("/history");
         }
       })
       .catch(() => {

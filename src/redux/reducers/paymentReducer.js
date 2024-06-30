@@ -6,6 +6,7 @@ const initialState = {
   Data: null,
   pesan: null,
   status: null,
+  kondisi: false,
 };
 
 const paymentSlicer = createSlice({
@@ -29,10 +30,19 @@ const paymentSlicer = createSlice({
     setStatus: (state, action) => {
       state.status = action.payload;
     },
+    setKondisi: (state, action) => {
+      state.kondisi = action.payload;
+    },
   },
 });
 
-export const { setMethod, setMetode, setData, setPesan, setStatus } =
-  paymentSlicer.actions;
+export const {
+  setMethod,
+  setMetode,
+  setData,
+  setPesan,
+  setStatus,
+  setKondisi,
+} = paymentSlicer.actions;
 
 export default paymentSlicer.reducer;

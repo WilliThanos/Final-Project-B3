@@ -177,7 +177,7 @@ export default function InfoBooking() {
               return (
                 <div
                   key={e?.id}
-                  className="border bg-white border-gray-300 rounded-xl hover:border-blue-500"
+                  className="border bg-white border-gray-300 rounded-xl hover:border-blue-500 "
                   onClick={() => {
                     if (e?.status === "SELESAI") {
                       setSelectedId(e?.id);
