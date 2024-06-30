@@ -19,6 +19,7 @@ import { getSearchTicket } from "../redux/action/dataAction";
 import sdgpohon from "../assets/sdgpohon.jpg";
 import sdglaut from "../assets/sdglaut.jpg";
 import SdgCard from "../components/SdgCard";
+import Footer from "../components/Footer";
 
 export default function Search() {
   const dispatch = useDispatch();
@@ -143,303 +144,74 @@ export default function Search() {
   }, []);
 
   return (
-    <div className="max-w-screen-2xl mx-auto  ">
-      <NavbarLogoBiru />
-      {/* <div className="mt-24">
+    <div>
+      <div className="max-w-screen-2xl mx-auto  ">
+        <NavbarLogoBiru />
+        {/* <div className="mt-24">
         <NavbarLogoPutih />
       </div> */}
 
-      <div className="mt-24">
-        <CariTiketLain />
-      </div>
-      <div className="flex pt-6 gap-8 max-md:flex-col max-md:mx-2 max-md:gap-3  max-lg:pt-6  max-xl:pt-6">
-        <div className=" flex ">
-          <Filter />
+        <div className="mt-24">
+          <CariTiketLain />
         </div>
-        <div className=" bg-white rounded-xl shadow-sm p-6 px-10 max-md:text-sm max-md:px-5">
-          <div>
-            {/* DEPARTURE FLIGHTS */}
-            <div className="bg-[#D9EDFF] font-bold text-lg text-[#2A91E5] p-1 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
-              Tiket Keberangkatan
-            </div>
-            <div className="bg-[#2A91E5] font-medium text-white p-1 rounded-lg px-64 mt-2 text-center max-md:px-0 max-lg:px-10 max-xl:px-32 ">
-              {departureAirport?.city} ({departureAirport?.iata_code}) -{" "}
-              {arrivalAirport?.city} ({arrivalAirport?.iata_code}) pada{" "}
-              {`${formattedDepartureDate}`}
-            </div>
-            {selectedDepartureFlight && selectedDepartureFlightId ? (
-              <div>
-                <div
-                  key={selectedDepartureFlight?.id}
-                  onClick={() =>
-                    handleDropdownToggle(selectedDepartureFlight?.id)
-                  }
-                  className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg mt-2 cursor-pointer"
-                >
-                  <div className="flex  justify-between items-center cursor-pointer  max-lg:text-sm max-lg:flex-col max-lg:items-start">
-                    <div>
-                      <div className="flex items-center gap-3 max-lg:flex-col max-lg:items-start">
-                        <div className="flex gap-3">
-                          <div className="text-lime-500">
-                            <FaCircleCheck size={25} />
-                          </div>
-                          <div className="hidden text-lg font-bold text-lime-500 max-lg:flex ">
-                            {" "}
-                            Tiket terpilih
-                          </div>
-                        </div>
-
-                        <img
-                          src={`${selectedDepartureFlight?.airline?.icon_url}`}
-                          className="h-7 w-auto rounded"
-                        />
-                        <div className="flex gap-3">
-                          <div>{selectedDepartureFlight?.airline?.name}</div>{" "}
-                          <div>-</div>
-                          <div>
-                            {selectedDepartureFlight?.class
-                              .charAt(0)
-                              .toUpperCase() +
-                              selectedDepartureFlight?.class
-                                .slice(1)
-                                .toLowerCase()}
-                          </div>
-                        </div>
-                      </div>{" "}
-                    </div>
-                    <div className="text-lg font-bold text-lime-500 max-lg:hidden">
-                      {" "}
-                      Tiket terpilih
-                    </div>
-                  </div>
-                  <div className="flex justify-between items-center max-lg:flex-col max-md: max-lg:gap-3">
-                    <div className="flex pt-6 w-3/4">
-                      <div className="flex flex-col text-center">
-                        <div className="flex items-center gap-1">
-                          <div className="font-bold text-base max-md:text-sm">
-                            {selectedDepartureFlight?.departure_airport?.city} (
-                            {
-                              selectedDepartureFlight?.departure_airport
-                                ?.iata_code
-                            }
-                            )
-                          </div>
-                        </div>
-                        <div className="">
-                          {selectedDepartureFlight?.departure_time}
-                        </div>
-                      </div>
-                      <div className="flex flex-col justify-center w-2/4">
-                        <p className="text-center text-gray-400 text-sm">
-                          {calculateTravelTime(
-                            selectedDepartureFlight?.departure_time,
-                            selectedDepartureFlight?.arrival_time
-                          )}
-                        </p>
-                        <div className="flex items-center mx-3">
-                          <div className="mb-3">
-                            <GiAirplaneDeparture />
-                          </div>
-                          <div className="border-t-2 w-full border-gray-400 mx-2 "></div>
-                          <div className="mb-3">
-                            <GiAirplaneArrival />
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex flex-col text-center">
-                        <div className="flex items-center gap-1">
-                          <div className="font-bold text-base  max-md:text-sm">
-                            {selectedDepartureFlight?.arrival_airport?.city} (
-                            {
-                              selectedDepartureFlight?.arrival_airport
-                                ?.iata_code
-                            }
-                            )
-                          </div>
-                        </div>
-                        <div>{selectedDepartureFlight?.arrival_time}</div>
-                      </div>
-                    </div>
-                    <div className="font-bold text-xl text-[#2A91E5]">
-                      Rp{" "}
-                      {selectedDepartureFlight?.price.toLocaleString("id-ID")}
-                      ,00
-                    </div>
-                  </div>
-                  {/* DROPDOWN DETAILS */}
-                  <div
-                    className={` dropdown-content ${
-                      isDropdownOpen[selectedDepartureFlight?.id] ? "open" : ""
-                    }`}
-                  >
-                    <div className="flex n items-center cursor-pointer border-t border-gray-400  mt-4 ">
-                      <div className="font-bold mt-4 ">Detail Tiket</div>
-                    </div>
-                    <div className="flex pt-6 w-4/5">
-                      <div className="flex ">
-                        <div className="flex flex-col justify-center ">
-                          <div className="text-center text-gray-500 text-sm ">
-                            {calculateTravelTime(
-                              selectedDepartureFlight?.departure_time,
-                              selectedDepartureFlight?.arrival_time
-                            )}
-                          </div>
-                        </div>
-                        <div className="flex flex-col items-center">
-                          <LiaCircleSolid size={20} />
-                          <div className="border-r  border-gray-500 h-64 "></div>
-                          <LiaCircleSolid size={20} />
-                        </div>
-                      </div>
-                      <div className="flex  justify-between  pl-3 w-full max-lg: gap-10 ">
-                        <div className="flex flex-col justify-between  ">
-                          <div className="flex flex-col ">
-                            <div className="flex items-center gap-2">
-                              <div className="font-bold text-lg">
-                                {selectedDepartureFlight?.departure_time}
-                              </div>
-                              <div className="font-semibold text-base">
-                                {
-                                  selectedDepartureFlight?.departure_airport
-                                    ?.city
-                                }
-                              </div>
-                            </div>
-                            <div className="font-semibold text-base">
-                              {`${formattedDepartureDate}`}
-                            </div>
-                          </div>
-                          <div className="flex flex-col gap- text-gray-500 text-sm max-sm:hidden">
-                            <div className="">Maskapai : </div>
-                            <div className="">Kelas :</div>
-                            <div className="">Nomor Penerbangan :</div>
-                            <div className="mt-2">Bagasi :</div>
-                            <div className="">Bagasi Kabin :</div>
-                          </div>
-                          <div className="hidden max-sm:flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
-                            <div className="">
-                              Maskapai :{" "}
-                              {selectedDepartureFlight?.airline?.name}
-                            </div>
-                            <div className="">
-                              Kelas :{" "}
-                              {(selectedDepartureFlight?.class)
-                                .charAt(0)
-                                .toUpperCase() +
-                                (selectedDepartureFlight?.class)
-                                  .slice(1)
-                                  .toLowerCase()}
-                            </div>
-                            <div className="">
-                              Nomor Penerbangan :{" "}
-                              {selectedDepartureFlight?.flight_number}
-                            </div>
-                            <div className="mt-2 ">
-                              Bagasi : {selectedDepartureFlight?.free_baggage}{" "}
-                              kg
-                            </div>
-                            <div className="">
-                              Bagasi Kabin :{" "}
-                              {selectedDepartureFlight?.cabin_baggage} kg
-                            </div>
-                          </div>
-                          <div className="flex flex-col ">
-                            <div className="flex items-center gap-2">
-                              <div className="font-bold text-lg">
-                                {" "}
-                                {selectedDepartureFlight?.arrival_time}
-                              </div>
-                              <div className="font-semibold text-base">
-                                {selectedDepartureFlight?.arrival_airport?.city}
-                              </div>
-                            </div>
-                            <div className="font-semibold text-base">
-                              {`${formattedDepartureDate}`}
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col justify-between max-sm:hidden ">
-                          <div className="flex flex-col">
-                            <div className="font-bold text-lg">
-                              {
-                                selectedDepartureFlight?.departure_airport
-                                  ?.name_airport
-                              }
-                            </div>
-                          </div>
-
-                          <div className="flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
-                            <div className="max-lg:pt-11">
-                              {selectedDepartureFlight?.airline?.name}
-                            </div>
-                            <div className="">
-                              {(selectedDepartureFlight?.class)
-                                .charAt(0)
-                                .toUpperCase() +
-                                (selectedDepartureFlight?.class)
-                                  .slice(1)
-                                  .toLowerCase()}
-                            </div>
-                            <div className="">
-                              {selectedDepartureFlight?.flight_number}
-                            </div>
-                            <div className="mt-2 max-lg:pt-4">
-                              {selectedDepartureFlight?.free_baggage} kg
-                            </div>
-                            <div className="">
-                              {selectedDepartureFlight?.cabin_baggage} kg
-                            </div>
-                          </div>
-                          <div className="flex flex-col ">
-                            <div className="font-bold text-lg">
-                              {
-                                selectedDepartureFlight?.arrival_airport
-                                  ?.name_airport
-                              }
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* END DROPDOWN DETAILS */}
-                </div>
-                <div
-                  onClick={() => dispatch(setSelectedDepartureFlight(null))}
-                  className="bg-[#2A91E5] flex items-center justify-center gap-2 hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer"
-                >
-                  Pilih Tiket Lain
-                  <FaRegEdit />
-                </div>
+        <div className="flex pt-6 gap-8 max-md:flex-col max-md:mx-2 max-md:gap-3  max-lg:pt-6  max-xl:pt-6">
+          <div className=" flex ">
+            <Filter />
+          </div>
+          <div className=" bg-white rounded-xl shadow-sm p-6 px-10 max-md:text-sm max-md:px-5">
+            <div>
+              {/* DEPARTURE FLIGHTS */}
+              <div className="bg-[#D9EDFF] font-bold text-lg text-[#2A91E5] p-1 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
+                Tiket Keberangkatan
               </div>
-            ) : filteredAndSortedDepartureFlights &&
-              filteredAndSortedDepartureFlights.length > 0 ? (
-              filteredAndSortedDepartureFlights?.map((flight) => (
-                <div key={flight?.id}>
+              <div className="bg-[#2A91E5] font-medium text-white p-1 rounded-lg px-64 mt-2 text-center max-md:px-0 max-lg:px-10 max-xl:px-32 ">
+                {departureAirport?.city} ({departureAirport?.iata_code}) -{" "}
+                {arrivalAirport?.city} ({arrivalAirport?.iata_code}) pada{" "}
+                {`${formattedDepartureDate}`}
+              </div>
+              {selectedDepartureFlight && selectedDepartureFlightId ? (
+                <div>
                   <div
-                    key={flight?.id}
-                    onClick={() => handleDropdownToggle(flight?.id)}
+                    key={selectedDepartureFlight?.id}
+                    onClick={() =>
+                      handleDropdownToggle(selectedDepartureFlight?.id)
+                    }
                     className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg mt-2 cursor-pointer"
                   >
                     <div className="flex  justify-between items-center cursor-pointer  max-lg:text-sm max-lg:flex-col max-lg:items-start">
                       <div>
                         <div className="flex items-center gap-3 max-lg:flex-col max-lg:items-start">
+                          <div className="flex gap-3">
+                            <div className="text-lime-500">
+                              <FaCircleCheck size={25} />
+                            </div>
+                            <div className="hidden text-lg font-bold text-lime-500 max-lg:flex ">
+                              {" "}
+                              Tiket terpilih
+                            </div>
+                          </div>
+
                           <img
-                            src={`${flight?.airline?.icon_url}`}
+                            src={`${selectedDepartureFlight?.airline?.icon_url}`}
                             className="h-7 w-auto rounded"
                           />
                           <div className="flex gap-3">
-                            <div>{flight?.airline?.name}</div> <div>-</div>
+                            <div>{selectedDepartureFlight?.airline?.name}</div>{" "}
+                            <div>-</div>
                             <div>
-                              {(flight?.class).charAt(0).toUpperCase() +
-                                (flight?.class).slice(1).toLowerCase()}
+                              {selectedDepartureFlight?.class
+                                .charAt(0)
+                                .toUpperCase() +
+                                selectedDepartureFlight?.class
+                                  .slice(1)
+                                  .toLowerCase()}
                             </div>
                           </div>
                         </div>{" "}
                       </div>
-                      <div className="text-orange-500  max-md:text-sm">
-                        {flight.seat_available} kursi tersisa
+                      <div className="text-lg font-bold text-lime-500 max-lg:hidden">
+                        {" "}
+                        Tiket terpilih
                       </div>
                     </div>
                     <div className="flex justify-between items-center max-lg:flex-col max-md: max-lg:gap-3">
@@ -447,17 +219,24 @@ export default function Search() {
                         <div className="flex flex-col text-center">
                           <div className="flex items-center gap-1">
                             <div className="font-bold text-base max-md:text-sm">
-                              {flight?.departure_airport?.city} (
-                              {flight?.departure_airport?.iata_code})
+                              {selectedDepartureFlight?.departure_airport?.city}{" "}
+                              (
+                              {
+                                selectedDepartureFlight?.departure_airport
+                                  ?.iata_code
+                              }
+                              )
                             </div>
                           </div>
-                          <div className="">{flight?.departure_time}</div>
+                          <div className="">
+                            {selectedDepartureFlight?.departure_time}
+                          </div>
                         </div>
                         <div className="flex flex-col justify-center w-2/4">
                           <p className="text-center text-gray-400 text-sm">
                             {calculateTravelTime(
-                              flight?.departure_time,
-                              flight?.arrival_time
+                              selectedDepartureFlight?.departure_time,
+                              selectedDepartureFlight?.arrival_time
                             )}
                           </p>
                           <div className="flex items-center mx-3">
@@ -473,21 +252,29 @@ export default function Search() {
                         <div className="flex flex-col text-center">
                           <div className="flex items-center gap-1">
                             <div className="font-bold text-base  max-md:text-sm">
-                              {flight?.arrival_airport?.city} (
-                              {flight?.arrival_airport?.iata_code})
+                              {selectedDepartureFlight?.arrival_airport?.city} (
+                              {
+                                selectedDepartureFlight?.arrival_airport
+                                  ?.iata_code
+                              }
+                              )
                             </div>
                           </div>
-                          <div>{flight?.arrival_time}</div>
+                          <div>{selectedDepartureFlight?.arrival_time}</div>
                         </div>
                       </div>
                       <div className="font-bold text-xl text-[#2A91E5]">
-                        Rp {flight?.price.toLocaleString("id-ID")},00
+                        Rp{" "}
+                        {selectedDepartureFlight?.price.toLocaleString("id-ID")}
+                        ,00
                       </div>
                     </div>
                     {/* DROPDOWN DETAILS */}
                     <div
                       className={` dropdown-content ${
-                        isDropdownOpen[flight?.id] ? "open" : ""
+                        isDropdownOpen[selectedDepartureFlight?.id]
+                          ? "open"
+                          : ""
                       }`}
                     >
                       <div className="flex n items-center cursor-pointer border-t border-gray-400  mt-4 ">
@@ -498,8 +285,8 @@ export default function Search() {
                           <div className="flex flex-col justify-center ">
                             <div className="text-center text-gray-500 text-sm ">
                               {calculateTravelTime(
-                                flight?.departure_time,
-                                flight?.arrival_time
+                                selectedDepartureFlight?.departure_time,
+                                selectedDepartureFlight?.arrival_time
                               )}
                             </div>
                           </div>
@@ -514,10 +301,13 @@ export default function Search() {
                             <div className="flex flex-col ">
                               <div className="flex items-center gap-2">
                                 <div className="font-bold text-lg">
-                                  {flight?.departure_time}
+                                  {selectedDepartureFlight?.departure_time}
                                 </div>
                                 <div className="font-semibold text-base">
-                                  {flight?.departure_airport?.city}
+                                  {
+                                    selectedDepartureFlight?.departure_airport
+                                      ?.city
+                                  }
                                 </div>
                               </div>
                               <div className="font-semibold text-base">
@@ -533,31 +323,42 @@ export default function Search() {
                             </div>
                             <div className="hidden max-sm:flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
                               <div className="">
-                                Maskapai : {flight?.airline?.name}
+                                Maskapai :{" "}
+                                {selectedDepartureFlight?.airline?.name}
                               </div>
                               <div className="">
                                 Kelas :{" "}
-                                {(flight?.class).charAt(0).toUpperCase() +
-                                  (flight?.class).slice(1).toLowerCase()}
+                                {(selectedDepartureFlight?.class)
+                                  .charAt(0)
+                                  .toUpperCase() +
+                                  (selectedDepartureFlight?.class)
+                                    .slice(1)
+                                    .toLowerCase()}
                               </div>
                               <div className="">
-                                Nomor Penerbangan : {flight?.flight_number}
+                                Nomor Penerbangan :{" "}
+                                {selectedDepartureFlight?.flight_number}
                               </div>
                               <div className="mt-2 ">
-                                Bagasi : {flight?.free_baggage} kg
+                                Bagasi : {selectedDepartureFlight?.free_baggage}{" "}
+                                kg
                               </div>
                               <div className="">
-                                Bagasi Kabin : {flight?.cabin_baggage} kg
+                                Bagasi Kabin :{" "}
+                                {selectedDepartureFlight?.cabin_baggage} kg
                               </div>
                             </div>
                             <div className="flex flex-col ">
                               <div className="flex items-center gap-2">
                                 <div className="font-bold text-lg">
                                   {" "}
-                                  {flight?.arrival_time}
+                                  {selectedDepartureFlight?.arrival_time}
                                 </div>
                                 <div className="font-semibold text-base">
-                                  {flight?.arrival_airport?.city}
+                                  {
+                                    selectedDepartureFlight?.arrival_airport
+                                      ?.city
+                                  }
                                 </div>
                               </div>
                               <div className="font-semibold text-base">
@@ -569,27 +370,41 @@ export default function Search() {
                           <div className="flex flex-col justify-between max-sm:hidden ">
                             <div className="flex flex-col">
                               <div className="font-bold text-lg">
-                                {flight?.departure_airport?.name_airport}
+                                {
+                                  selectedDepartureFlight?.departure_airport
+                                    ?.name_airport
+                                }
                               </div>
                             </div>
 
                             <div className="flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
                               <div className="max-lg:pt-11">
-                                {flight?.airline?.name}
+                                {selectedDepartureFlight?.airline?.name}
                               </div>
                               <div className="">
-                                {(flight?.class).charAt(0).toUpperCase() +
-                                  (flight?.class).slice(1).toLowerCase()}
+                                {(selectedDepartureFlight?.class)
+                                  .charAt(0)
+                                  .toUpperCase() +
+                                  (selectedDepartureFlight?.class)
+                                    .slice(1)
+                                    .toLowerCase()}
                               </div>
-                              <div className="">{flight?.flight_number}</div>
+                              <div className="">
+                                {selectedDepartureFlight?.flight_number}
+                              </div>
                               <div className="mt-2 max-lg:pt-4">
-                                {flight?.free_baggage} kg
+                                {selectedDepartureFlight?.free_baggage} kg
                               </div>
-                              <div className="">{flight?.cabin_baggage} kg</div>
+                              <div className="">
+                                {selectedDepartureFlight?.cabin_baggage} kg
+                              </div>
                             </div>
                             <div className="flex flex-col ">
                               <div className="font-bold text-lg">
-                                {flight?.arrival_airport?.name_airport}
+                                {
+                                  selectedDepartureFlight?.arrival_airport
+                                    ?.name_airport
+                                }
                               </div>
                             </div>
                           </div>
@@ -599,75 +414,40 @@ export default function Search() {
                     {/* END DROPDOWN DETAILS */}
                   </div>
                   <div
-                    onClick={() => {
-                      dispatch(setSelectedDepartureFlight(flight));
-                      dispatch(setSelectedDepartureFlightId(flight.id));
-                    }}
-                    className="bg-[#2A91E5] hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer"
+                    onClick={() => dispatch(setSelectedDepartureFlight(null))}
+                    className="bg-[#2A91E5] flex items-center justify-center gap-2 hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer"
                   >
-                    Pilih Tiket
+                    Pilih Tiket Lain
+                    <FaRegEdit />
                   </div>
                 </div>
-              ))
-            ) : (
-              <div className="bg-white font-medium text-red-500 p-1 mt-2 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
-                Tiket Tidak Ditemukan{" "}
-              </div>
-            )}
-            {/* RETURN FLIGHTS */}
-            {roundTrip ? (
-              <div>
-                <div className="bg-[#D9EDFF] font-bold text-lg mt-2 text-[#2A91E5] p-1 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
-                  Tiket Kembali
-                </div>
-                <div className="bg-[#2A91E5] font-medium text-white p-1 rounded-lg px-64 mt-2 text-center max-md:px-0 max-lg:px-10 max-xl:px-32 ">
-                  {arrivalAirport?.city} ({arrivalAirport?.iata_code}) -{" "}
-                  {departureAirport?.city} ({departureAirport?.iata_code}) pada{" "}
-                  {`${formattedReturnDate}`}
-                </div>
-                {selectedReturnFlight ? (
-                  <div>
+              ) : filteredAndSortedDepartureFlights &&
+                filteredAndSortedDepartureFlights.length > 0 ? (
+                filteredAndSortedDepartureFlights?.map((flight) => (
+                  <div key={flight?.id}>
                     <div
-                      key={selectedReturnFlight?.id}
-                      onClick={() =>
-                        handleDropdownToggle(selectedReturnFlight?.id)
-                      }
+                      key={flight?.id}
+                      onClick={() => handleDropdownToggle(flight?.id)}
                       className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg mt-2 cursor-pointer"
                     >
                       <div className="flex  justify-between items-center cursor-pointer  max-lg:text-sm max-lg:flex-col max-lg:items-start">
                         <div>
                           <div className="flex items-center gap-3 max-lg:flex-col max-lg:items-start">
-                            <div className="flex gap-3">
-                              <div className="text-lime-500">
-                                <FaCircleCheck size={25} />
-                              </div>
-                              <div className="hidden text-lg font-bold text-lime-500 max-lg:flex">
-                                {" "}
-                                Tiket terpilih
-                              </div>
-                            </div>
-
                             <img
-                              src={`${selectedReturnFlight?.airline?.icon_url}`}
+                              src={`${flight?.airline?.icon_url}`}
                               className="h-7 w-auto rounded"
                             />
                             <div className="flex gap-3">
-                              <div>{selectedReturnFlight?.airline?.name}</div>{" "}
-                              <div>-</div>
+                              <div>{flight?.airline?.name}</div> <div>-</div>
                               <div>
-                                {selectedReturnFlight?.class
-                                  .charAt(0)
-                                  .toUpperCase() +
-                                  selectedReturnFlight?.class
-                                    .slice(1)
-                                    .toLowerCase()}
+                                {(flight?.class).charAt(0).toUpperCase() +
+                                  (flight?.class).slice(1).toLowerCase()}
                               </div>
                             </div>
                           </div>{" "}
                         </div>
-                        <div className="text-lg font-bold text-lime-500 max-lg:hidden">
-                          {" "}
-                          Tiket terpilih
+                        <div className="text-orange-500  max-md:text-sm">
+                          {flight.seat_available} kursi tersisa
                         </div>
                       </div>
                       <div className="flex justify-between items-center max-lg:flex-col max-md: max-lg:gap-3">
@@ -675,24 +455,17 @@ export default function Search() {
                           <div className="flex flex-col text-center">
                             <div className="flex items-center gap-1">
                               <div className="font-bold text-base max-md:text-sm">
-                                {selectedReturnFlight?.departure_airport?.city}{" "}
-                                (
-                                {
-                                  selectedReturnFlight?.departure_airport
-                                    ?.iata_code
-                                }
-                                )
+                                {flight?.departure_airport?.city} (
+                                {flight?.departure_airport?.iata_code})
                               </div>
                             </div>
-                            <div className="">
-                              {selectedReturnFlight?.departure_time}
-                            </div>
+                            <div className="">{flight?.departure_time}</div>
                           </div>
                           <div className="flex flex-col justify-center w-2/4">
                             <p className="text-center text-gray-400 text-sm">
                               {calculateTravelTime(
-                                selectedReturnFlight?.departure_time,
-                                selectedReturnFlight?.arrival_time
+                                flight?.departure_time,
+                                flight?.arrival_time
                               )}
                             </p>
                             <div className="flex items-center mx-3">
@@ -708,27 +481,21 @@ export default function Search() {
                           <div className="flex flex-col text-center">
                             <div className="flex items-center gap-1">
                               <div className="font-bold text-base  max-md:text-sm">
-                                {selectedReturnFlight?.arrival_airport?.city} (
-                                {
-                                  selectedReturnFlight?.arrival_airport
-                                    ?.iata_code
-                                }
-                                )
+                                {flight?.arrival_airport?.city} (
+                                {flight?.arrival_airport?.iata_code})
                               </div>
                             </div>
-                            <div>{selectedReturnFlight?.arrival_time}</div>
+                            <div>{flight?.arrival_time}</div>
                           </div>
                         </div>
                         <div className="font-bold text-xl text-[#2A91E5]">
-                          Rp{" "}
-                          {selectedReturnFlight?.price.toLocaleString("id-ID")}
-                          ,00
+                          Rp {flight?.price.toLocaleString("id-ID")},00
                         </div>
                       </div>
                       {/* DROPDOWN DETAILS */}
                       <div
                         className={` dropdown-content ${
-                          isDropdownOpen[selectedReturnFlight?.id] ? "open" : ""
+                          isDropdownOpen[flight?.id] ? "open" : ""
                         }`}
                       >
                         <div className="flex n items-center cursor-pointer border-t border-gray-400  mt-4 ">
@@ -739,8 +506,8 @@ export default function Search() {
                             <div className="flex flex-col justify-center ">
                               <div className="text-center text-gray-500 text-sm ">
                                 {calculateTravelTime(
-                                  selectedReturnFlight?.departure_time,
-                                  selectedReturnFlight?.arrival_time
+                                  flight?.departure_time,
+                                  flight?.arrival_time
                                 )}
                               </div>
                             </div>
@@ -755,13 +522,10 @@ export default function Search() {
                               <div className="flex flex-col ">
                                 <div className="flex items-center gap-2">
                                   <div className="font-bold text-lg">
-                                    {selectedReturnFlight?.departure_time}
+                                    {flight?.departure_time}
                                   </div>
                                   <div className="font-semibold text-base">
-                                    {
-                                      selectedReturnFlight?.departure_airport
-                                        ?.city
-                                    }
+                                    {flight?.departure_airport?.city}
                                   </div>
                                 </div>
                                 <div className="font-semibold text-base">
@@ -777,42 +541,31 @@ export default function Search() {
                               </div>
                               <div className="hidden max-sm:flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
                                 <div className="">
-                                  Maskapai :{" "}
-                                  {selectedReturnFlight?.airline?.name}
+                                  Maskapai : {flight?.airline?.name}
                                 </div>
                                 <div className="">
                                   Kelas :{" "}
-                                  {(selectedReturnFlight?.class)
-                                    .charAt(0)
-                                    .toUpperCase() +
-                                    (selectedReturnFlight?.class)
-                                      .slice(1)
-                                      .toLowerCase()}
+                                  {(flight?.class).charAt(0).toUpperCase() +
+                                    (flight?.class).slice(1).toLowerCase()}
                                 </div>
                                 <div className="">
-                                  Nomor Penerbangan :{" "}
-                                  {selectedReturnFlight?.flight_number}
+                                  Nomor Penerbangan : {flight?.flight_number}
                                 </div>
                                 <div className="mt-2 ">
-                                  Bagasi : {selectedReturnFlight?.free_baggage}{" "}
-                                  kg
+                                  Bagasi : {flight?.free_baggage} kg
                                 </div>
                                 <div className="">
-                                  Bagasi Kabin :{" "}
-                                  {selectedReturnFlight?.cabin_baggage} kg
+                                  Bagasi Kabin : {flight?.cabin_baggage} kg
                                 </div>
                               </div>
                               <div className="flex flex-col ">
                                 <div className="flex items-center gap-2">
                                   <div className="font-bold text-lg">
                                     {" "}
-                                    {selectedReturnFlight?.arrival_time}
+                                    {flight?.arrival_time}
                                   </div>
                                   <div className="font-semibold text-base">
-                                    {
-                                      selectedReturnFlight?.arrival_airport
-                                        ?.city
-                                    }
+                                    {flight?.arrival_airport?.city}
                                   </div>
                                 </div>
                                 <div className="font-semibold text-base">
@@ -824,41 +577,29 @@ export default function Search() {
                             <div className="flex flex-col justify-between max-sm:hidden ">
                               <div className="flex flex-col">
                                 <div className="font-bold text-lg">
-                                  {
-                                    selectedReturnFlight?.departure_airport
-                                      ?.name_airport
-                                  }
+                                  {flight?.departure_airport?.name_airport}
                                 </div>
                               </div>
 
                               <div className="flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
                                 <div className="max-lg:pt-11">
-                                  {selectedReturnFlight?.airline?.name}
+                                  {flight?.airline?.name}
                                 </div>
                                 <div className="">
-                                  {(selectedReturnFlight?.class)
-                                    .charAt(0)
-                                    .toUpperCase() +
-                                    (selectedReturnFlight?.class)
-                                      .slice(1)
-                                      .toLowerCase()}
+                                  {(flight?.class).charAt(0).toUpperCase() +
+                                    (flight?.class).slice(1).toLowerCase()}
                                 </div>
-                                <div className="">
-                                  {selectedReturnFlight?.flight_number}
-                                </div>
+                                <div className="">{flight?.flight_number}</div>
                                 <div className="mt-2 max-lg:pt-4">
-                                  {selectedReturnFlight?.free_baggage} kg
+                                  {flight?.free_baggage} kg
                                 </div>
                                 <div className="">
-                                  {selectedReturnFlight?.cabin_baggage} kg
+                                  {flight?.cabin_baggage} kg
                                 </div>
                               </div>
                               <div className="flex flex-col ">
                                 <div className="font-bold text-lg">
-                                  {
-                                    selectedReturnFlight?.arrival_airport
-                                      ?.name_airport
-                                  }
+                                  {flight?.arrival_airport?.name_airport}
                                 </div>
                               </div>
                             </div>
@@ -868,40 +609,75 @@ export default function Search() {
                       {/* END DROPDOWN DETAILS */}
                     </div>
                     <div
-                      onClick={() => dispatch(setSelectedReturnFlight(null))}
-                      className="bg-[#2A91E5] flex items-center justify-center gap-2 hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer"
+                      onClick={() => {
+                        dispatch(setSelectedDepartureFlight(flight));
+                        dispatch(setSelectedDepartureFlightId(flight.id));
+                      }}
+                      className="bg-[#2A91E5] hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer"
                     >
-                      Pilih Tiket Lain
-                      <FaRegEdit />
+                      Pilih Tiket
                     </div>
                   </div>
-                ) : filteredAndSortedReturnFlights &&
-                  filteredAndSortedReturnFlights.length > 0 ? (
-                  filteredAndSortedReturnFlights.map((flight) => (
-                    <div key={flight?.id}>
+                ))
+              ) : (
+                <div className="bg-white font-medium text-red-500 p-1 mt-2 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
+                  Tiket Tidak Ditemukan{" "}
+                </div>
+              )}
+              {/* RETURN FLIGHTS */}
+              {roundTrip ? (
+                <div>
+                  <div className="bg-[#D9EDFF] font-bold text-lg mt-2 text-[#2A91E5] p-1 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
+                    Tiket Kembali
+                  </div>
+                  <div className="bg-[#2A91E5] font-medium text-white p-1 rounded-lg px-64 mt-2 text-center max-md:px-0 max-lg:px-10 max-xl:px-32 ">
+                    {arrivalAirport?.city} ({arrivalAirport?.iata_code}) -{" "}
+                    {departureAirport?.city} ({departureAirport?.iata_code})
+                    pada {`${formattedReturnDate}`}
+                  </div>
+                  {selectedReturnFlight ? (
+                    <div>
                       <div
-                        key={flight?.id}
-                        onClick={() => handleDropdownToggle(flight?.id)}
+                        key={selectedReturnFlight?.id}
+                        onClick={() =>
+                          handleDropdownToggle(selectedReturnFlight?.id)
+                        }
                         className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg mt-2 cursor-pointer"
                       >
                         <div className="flex  justify-between items-center cursor-pointer  max-lg:text-sm max-lg:flex-col max-lg:items-start">
                           <div>
                             <div className="flex items-center gap-3 max-lg:flex-col max-lg:items-start">
+                              <div className="flex gap-3">
+                                <div className="text-lime-500">
+                                  <FaCircleCheck size={25} />
+                                </div>
+                                <div className="hidden text-lg font-bold text-lime-500 max-lg:flex">
+                                  {" "}
+                                  Tiket terpilih
+                                </div>
+                              </div>
+
                               <img
-                                src={`${flight?.airline?.icon_url}`}
+                                src={`${selectedReturnFlight?.airline?.icon_url}`}
                                 className="h-7 w-auto rounded"
                               />
                               <div className="flex gap-3">
-                                <div>{flight?.airline?.name}</div> <div>-</div>
+                                <div>{selectedReturnFlight?.airline?.name}</div>{" "}
+                                <div>-</div>
                                 <div>
-                                  {(flight?.class).charAt(0).toUpperCase() +
-                                    (flight?.class).slice(1).toLowerCase()}
+                                  {selectedReturnFlight?.class
+                                    .charAt(0)
+                                    .toUpperCase() +
+                                    selectedReturnFlight?.class
+                                      .slice(1)
+                                      .toLowerCase()}
                                 </div>
                               </div>
                             </div>{" "}
                           </div>
-                          <div className="text-orange-500  max-md:text-sm">
-                            {flight.seat_available} kursi tersisa
+                          <div className="text-lg font-bold text-lime-500 max-lg:hidden">
+                            {" "}
+                            Tiket terpilih
                           </div>
                         </div>
                         <div className="flex justify-between items-center max-lg:flex-col max-md: max-lg:gap-3">
@@ -909,17 +685,27 @@ export default function Search() {
                             <div className="flex flex-col text-center">
                               <div className="flex items-center gap-1">
                                 <div className="font-bold text-base max-md:text-sm">
-                                  {flight?.departure_airport?.city} (
-                                  {flight?.departure_airport?.iata_code})
+                                  {
+                                    selectedReturnFlight?.departure_airport
+                                      ?.city
+                                  }{" "}
+                                  (
+                                  {
+                                    selectedReturnFlight?.departure_airport
+                                      ?.iata_code
+                                  }
+                                  )
                                 </div>
                               </div>
-                              <div className="">{flight?.departure_time}</div>
+                              <div className="">
+                                {selectedReturnFlight?.departure_time}
+                              </div>
                             </div>
                             <div className="flex flex-col justify-center w-2/4">
                               <p className="text-center text-gray-400 text-sm">
                                 {calculateTravelTime(
-                                  flight?.departure_time,
-                                  flight?.arrival_time
+                                  selectedReturnFlight?.departure_time,
+                                  selectedReturnFlight?.arrival_time
                                 )}
                               </p>
                               <div className="flex items-center mx-3">
@@ -935,21 +721,32 @@ export default function Search() {
                             <div className="flex flex-col text-center">
                               <div className="flex items-center gap-1">
                                 <div className="font-bold text-base  max-md:text-sm">
-                                  {flight?.arrival_airport?.city} (
-                                  {flight?.arrival_airport?.iata_code})
+                                  {selectedReturnFlight?.arrival_airport?.city}{" "}
+                                  (
+                                  {
+                                    selectedReturnFlight?.arrival_airport
+                                      ?.iata_code
+                                  }
+                                  )
                                 </div>
                               </div>
-                              <div>{flight?.arrival_time}</div>
+                              <div>{selectedReturnFlight?.arrival_time}</div>
                             </div>
                           </div>
                           <div className="font-bold text-xl text-[#2A91E5]">
-                            Rp {flight?.price.toLocaleString("id-ID")},00
+                            Rp{" "}
+                            {selectedReturnFlight?.price.toLocaleString(
+                              "id-ID"
+                            )}
+                            ,00
                           </div>
                         </div>
                         {/* DROPDOWN DETAILS */}
                         <div
                           className={` dropdown-content ${
-                            isDropdownOpen[flight?.id] ? "open" : ""
+                            isDropdownOpen[selectedReturnFlight?.id]
+                              ? "open"
+                              : ""
                           }`}
                         >
                           <div className="flex n items-center cursor-pointer border-t border-gray-400  mt-4 ">
@@ -960,8 +757,8 @@ export default function Search() {
                               <div className="flex flex-col justify-center ">
                                 <div className="text-center text-gray-500 text-sm ">
                                   {calculateTravelTime(
-                                    flight?.departure_time,
-                                    flight?.arrival_time
+                                    selectedReturnFlight?.departure_time,
+                                    selectedReturnFlight?.arrival_time
                                   )}
                                 </div>
                               </div>
@@ -976,10 +773,13 @@ export default function Search() {
                                 <div className="flex flex-col ">
                                   <div className="flex items-center gap-2">
                                     <div className="font-bold text-lg">
-                                      {flight?.departure_time}
+                                      {selectedReturnFlight?.departure_time}
                                     </div>
                                     <div className="font-semibold text-base">
-                                      {flight?.departure_airport?.city}
+                                      {
+                                        selectedReturnFlight?.departure_airport
+                                          ?.city
+                                      }
                                     </div>
                                   </div>
                                   <div className="font-semibold text-base">
@@ -995,31 +795,42 @@ export default function Search() {
                                 </div>
                                 <div className="hidden max-sm:flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
                                   <div className="">
-                                    Maskapai : {flight?.airline?.name}
+                                    Maskapai :{" "}
+                                    {selectedReturnFlight?.airline?.name}
                                   </div>
                                   <div className="">
                                     Kelas :{" "}
-                                    {(flight?.class).charAt(0).toUpperCase() +
-                                      (flight?.class).slice(1).toLowerCase()}
+                                    {(selectedReturnFlight?.class)
+                                      .charAt(0)
+                                      .toUpperCase() +
+                                      (selectedReturnFlight?.class)
+                                        .slice(1)
+                                        .toLowerCase()}
                                   </div>
                                   <div className="">
-                                    Nomor Penerbangan : {flight?.flight_number}
+                                    Nomor Penerbangan :{" "}
+                                    {selectedReturnFlight?.flight_number}
                                   </div>
                                   <div className="mt-2 ">
-                                    Bagasi : {flight?.free_baggage} kg
+                                    Bagasi :{" "}
+                                    {selectedReturnFlight?.free_baggage} kg
                                   </div>
                                   <div className="">
-                                    Bagasi Kabin : {flight?.cabin_baggage} kg
+                                    Bagasi Kabin :{" "}
+                                    {selectedReturnFlight?.cabin_baggage} kg
                                   </div>
                                 </div>
                                 <div className="flex flex-col ">
                                   <div className="flex items-center gap-2">
                                     <div className="font-bold text-lg">
                                       {" "}
-                                      {flight?.arrival_time}
+                                      {selectedReturnFlight?.arrival_time}
                                     </div>
                                     <div className="font-semibold text-base">
-                                      {flight?.arrival_airport?.city}
+                                      {
+                                        selectedReturnFlight?.arrival_airport
+                                          ?.city
+                                      }
                                     </div>
                                   </div>
                                   <div className="font-semibold text-base">
@@ -1031,31 +842,41 @@ export default function Search() {
                               <div className="flex flex-col justify-between max-sm:hidden ">
                                 <div className="flex flex-col">
                                   <div className="font-bold text-lg">
-                                    {flight?.departure_airport?.name_airport}
+                                    {
+                                      selectedReturnFlight?.departure_airport
+                                        ?.name_airport
+                                    }
                                   </div>
                                 </div>
 
                                 <div className="flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
                                   <div className="max-lg:pt-11">
-                                    {flight?.airline?.name}
+                                    {selectedReturnFlight?.airline?.name}
                                   </div>
                                   <div className="">
-                                    {(flight?.class).charAt(0).toUpperCase() +
-                                      (flight?.class).slice(1).toLowerCase()}
+                                    {(selectedReturnFlight?.class)
+                                      .charAt(0)
+                                      .toUpperCase() +
+                                      (selectedReturnFlight?.class)
+                                        .slice(1)
+                                        .toLowerCase()}
                                   </div>
                                   <div className="">
-                                    {flight?.flight_number}
+                                    {selectedReturnFlight?.flight_number}
                                   </div>
                                   <div className="mt-2 max-lg:pt-4">
-                                    {flight?.free_baggage} kg
+                                    {selectedReturnFlight?.free_baggage} kg
                                   </div>
                                   <div className="">
-                                    {flight?.cabin_baggage} kg
+                                    {selectedReturnFlight?.cabin_baggage} kg
                                   </div>
                                 </div>
                                 <div className="flex flex-col ">
                                   <div className="font-bold text-lg">
-                                    {flight?.arrival_airport?.name_airport}
+                                    {
+                                      selectedReturnFlight?.arrival_airport
+                                        ?.name_airport
+                                    }
                                   </div>
                                 </div>
                               </div>
@@ -1065,40 +886,247 @@ export default function Search() {
                         {/* END DROPDOWN DETAILS */}
                       </div>
                       <div
-                        onClick={() => {
-                          dispatch(setSelectedReturnFlight(flight));
-                          dispatch(setSelectedReturnFlightId(flight.id));
-                        }}
-                        className="bg-[#2A91E5] hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer"
+                        onClick={() => dispatch(setSelectedReturnFlight(null))}
+                        className="bg-[#2A91E5] flex items-center justify-center gap-2 hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer"
                       >
-                        Pilih Tiket
+                        Pilih Tiket Lain
+                        <FaRegEdit />
                       </div>
                     </div>
-                  ))
-                ) : (
-                  <div className="bg-white font-medium text-red-500 p-1 mt-2 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
-                    Tiket Tidak Ditemukan{" "}
-                  </div>
-                )}
-              </div>
-            ) : null}
-          </div>
+                  ) : filteredAndSortedReturnFlights &&
+                    filteredAndSortedReturnFlights.length > 0 ? (
+                    filteredAndSortedReturnFlights.map((flight) => (
+                      <div key={flight?.id}>
+                        <div
+                          key={flight?.id}
+                          onClick={() => handleDropdownToggle(flight?.id)}
+                          className="bg-white border-x border-t border-gray-300 font-medium text-black p-6 rounded-t-lg mt-2 cursor-pointer"
+                        >
+                          <div className="flex  justify-between items-center cursor-pointer  max-lg:text-sm max-lg:flex-col max-lg:items-start">
+                            <div>
+                              <div className="flex items-center gap-3 max-lg:flex-col max-lg:items-start">
+                                <img
+                                  src={`${flight?.airline?.icon_url}`}
+                                  className="h-7 w-auto rounded"
+                                />
+                                <div className="flex gap-3">
+                                  <div>{flight?.airline?.name}</div>{" "}
+                                  <div>-</div>
+                                  <div>
+                                    {(flight?.class).charAt(0).toUpperCase() +
+                                      (flight?.class).slice(1).toLowerCase()}
+                                  </div>
+                                </div>
+                              </div>{" "}
+                            </div>
+                            <div className="text-orange-500  max-md:text-sm">
+                              {flight.seat_available} kursi tersisa
+                            </div>
+                          </div>
+                          <div className="flex justify-between items-center max-lg:flex-col max-md: max-lg:gap-3">
+                            <div className="flex pt-6 w-3/4">
+                              <div className="flex flex-col text-center">
+                                <div className="flex items-center gap-1">
+                                  <div className="font-bold text-base max-md:text-sm">
+                                    {flight?.departure_airport?.city} (
+                                    {flight?.departure_airport?.iata_code})
+                                  </div>
+                                </div>
+                                <div className="">{flight?.departure_time}</div>
+                              </div>
+                              <div className="flex flex-col justify-center w-2/4">
+                                <p className="text-center text-gray-400 text-sm">
+                                  {calculateTravelTime(
+                                    flight?.departure_time,
+                                    flight?.arrival_time
+                                  )}
+                                </p>
+                                <div className="flex items-center mx-3">
+                                  <div className="mb-3">
+                                    <GiAirplaneDeparture />
+                                  </div>
+                                  <div className="border-t-2 w-full border-gray-400 mx-2 "></div>
+                                  <div className="mb-3">
+                                    <GiAirplaneArrival />
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="flex flex-col text-center">
+                                <div className="flex items-center gap-1">
+                                  <div className="font-bold text-base  max-md:text-sm">
+                                    {flight?.arrival_airport?.city} (
+                                    {flight?.arrival_airport?.iata_code})
+                                  </div>
+                                </div>
+                                <div>{flight?.arrival_time}</div>
+                              </div>
+                            </div>
+                            <div className="font-bold text-xl text-[#2A91E5]">
+                              Rp {flight?.price.toLocaleString("id-ID")},00
+                            </div>
+                          </div>
+                          {/* DROPDOWN DETAILS */}
+                          <div
+                            className={` dropdown-content ${
+                              isDropdownOpen[flight?.id] ? "open" : ""
+                            }`}
+                          >
+                            <div className="flex n items-center cursor-pointer border-t border-gray-400  mt-4 ">
+                              <div className="font-bold mt-4 ">
+                                Detail Tiket
+                              </div>
+                            </div>
+                            <div className="flex pt-6 w-4/5">
+                              <div className="flex ">
+                                <div className="flex flex-col justify-center ">
+                                  <div className="text-center text-gray-500 text-sm ">
+                                    {calculateTravelTime(
+                                      flight?.departure_time,
+                                      flight?.arrival_time
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="flex flex-col items-center">
+                                  <LiaCircleSolid size={20} />
+                                  <div className="border-r  border-gray-500 h-64 "></div>
+                                  <LiaCircleSolid size={20} />
+                                </div>
+                              </div>
+                              <div className="flex  justify-between  pl-3 w-full max-lg: gap-10 ">
+                                <div className="flex flex-col justify-between  ">
+                                  <div className="flex flex-col ">
+                                    <div className="flex items-center gap-2">
+                                      <div className="font-bold text-lg">
+                                        {flight?.departure_time}
+                                      </div>
+                                      <div className="font-semibold text-base">
+                                        {flight?.departure_airport?.city}
+                                      </div>
+                                    </div>
+                                    <div className="font-semibold text-base">
+                                      {`${formattedDepartureDate}`}
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-col gap- text-gray-500 text-sm max-sm:hidden">
+                                    <div className="">Maskapai : </div>
+                                    <div className="">Kelas :</div>
+                                    <div className="">Nomor Penerbangan :</div>
+                                    <div className="mt-2">Bagasi :</div>
+                                    <div className="">Bagasi Kabin :</div>
+                                  </div>
+                                  <div className="hidden max-sm:flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
+                                    <div className="">
+                                      Maskapai : {flight?.airline?.name}
+                                    </div>
+                                    <div className="">
+                                      Kelas :{" "}
+                                      {(flight?.class).charAt(0).toUpperCase() +
+                                        (flight?.class).slice(1).toLowerCase()}
+                                    </div>
+                                    <div className="">
+                                      Nomor Penerbangan :{" "}
+                                      {flight?.flight_number}
+                                    </div>
+                                    <div className="mt-2 ">
+                                      Bagasi : {flight?.free_baggage} kg
+                                    </div>
+                                    <div className="">
+                                      Bagasi Kabin : {flight?.cabin_baggage} kg
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-col ">
+                                    <div className="flex items-center gap-2">
+                                      <div className="font-bold text-lg">
+                                        {" "}
+                                        {flight?.arrival_time}
+                                      </div>
+                                      <div className="font-semibold text-base">
+                                        {flight?.arrival_airport?.city}
+                                      </div>
+                                    </div>
+                                    <div className="font-semibold text-base">
+                                      {`${formattedDepartureDate}`}
+                                    </div>
+                                  </div>
+                                </div>
 
-          {((!roundTrip && selectedDepartureFlight) ||
-            (roundTrip && selectedDepartureFlight && selectedReturnFlight)) && (
-            <div
-              onClick={() => navigate("/booking-detail")}
-              className="bg-lime-500 mt-2 hover:bg-lime-600 hover:shadow hover:text-gray-200 border border-gray-300 font-medium text-white p-2 rounded-lg text-center cursor-pointer"
-            >
-              Pesan Tiket{" "}
+                                <div className="flex flex-col justify-between max-sm:hidden ">
+                                  <div className="flex flex-col">
+                                    <div className="font-bold text-lg">
+                                      {flight?.departure_airport?.name_airport}
+                                    </div>
+                                  </div>
+
+                                  <div className="flex flex-col gap- text-gray-500 text-sm max-lg:py-5 ">
+                                    <div className="max-lg:pt-11">
+                                      {flight?.airline?.name}
+                                    </div>
+                                    <div className="">
+                                      {(flight?.class).charAt(0).toUpperCase() +
+                                        (flight?.class).slice(1).toLowerCase()}
+                                    </div>
+                                    <div className="">
+                                      {flight?.flight_number}
+                                    </div>
+                                    <div className="mt-2 max-lg:pt-4">
+                                      {flight?.free_baggage} kg
+                                    </div>
+                                    <div className="">
+                                      {flight?.cabin_baggage} kg
+                                    </div>
+                                  </div>
+                                  <div className="flex flex-col ">
+                                    <div className="font-bold text-lg">
+                                      {flight?.arrival_airport?.name_airport}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          {/* END DROPDOWN DETAILS */}
+                        </div>
+                        <div
+                          onClick={() => {
+                            dispatch(setSelectedReturnFlight(flight));
+                            dispatch(setSelectedReturnFlightId(flight.id));
+                          }}
+                          className="bg-[#2A91E5] hover:bg-sky-700 hover:shadow hover:text-gray-200 border-x border-b border-gray-300 font-medium text-white p-2 rounded-b-lg mt-0 text-center cursor-pointer"
+                        >
+                          Pilih Tiket
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="bg-white font-medium text-red-500 p-1 mt-2 rounded-lg px-72 text-center border  max-md:px-0 max-lg:px-10 max-xl:px-32">
+                      Tiket Tidak Ditemukan{" "}
+                    </div>
+                  )}
+                </div>
+              ) : null}
             </div>
-          )}
+
+            {((!roundTrip && selectedDepartureFlight) ||
+              (roundTrip &&
+                selectedDepartureFlight &&
+                selectedReturnFlight)) && (
+              <div
+                onClick={() => navigate("/booking-detail")}
+                className="bg-lime-500 mt-2 hover:bg-lime-600 hover:shadow hover:text-gray-200 border border-gray-300 font-medium text-white p-2 rounded-lg text-center cursor-pointer"
+              >
+                Pesan Tiket{" "}
+              </div>
+            )}
+          </div>
+          <div>
+            {/* SDG CARD */}
+            <SdgCard />
+            {/* SDG CARD */}
+          </div>
         </div>
-        <div>
-          {/* SDG CARD */}
-          <SdgCard />
-          {/* SDG CARD */}
-        </div>
+      </div>
+      <div className="pt-56">
+        <Footer />
       </div>
     </div>
   );

@@ -62,7 +62,6 @@ export default function DetailPenumpangDewasa({
   };
   useEffect(() => {
     handleInputChange(index, "kategori", "Dewasa");
-    handleInputChange(index, "jenisKelamin", "Pria");
   }, [handleInputChange, index]);
 
   return (
