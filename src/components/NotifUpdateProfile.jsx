@@ -1,13 +1,14 @@
 import { Button, Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { setModal } from "../redux/reducers/profileReducer";
+import { getProfile } from "../redux/action/dataAction";
 
 export default function MyModal() {
   const dispatch = useDispatch();
 
   function close() {
     dispatch(setModal(false));
-    window.location.reload();
+    dispatch(getProfile());
   }
 
   const status = useSelector((state) => state?.profile?.updateProfile);

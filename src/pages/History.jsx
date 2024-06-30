@@ -15,7 +15,7 @@ export default function History() {
     Navigate("/payment");
   };
   const state = useSelector((state) => state);
-  console.log("state :>> ", state);
+  // console.log("state :>> ", state);
 
   const status = useSelector((state) => state?.payment?.status);
   const kondisi = useSelector((state) => state?.payment?.kondisi);
