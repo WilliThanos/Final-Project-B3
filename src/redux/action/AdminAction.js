@@ -31,9 +31,9 @@ export const getAllUser = () => async (dispatch, getState) => {
 export const hapusAkun = () => async (dispatch, getState) => {
   try {
     const id = getState().admin?.id;
-    console.log("CEK ID :>> ", id);
+    // console.log("CEK ID :>> ", id);
     const token = getState().auth?.token;
-    console.log("CEK TOKEN :>> ", token);
+    // console.log("CEK TOKEN :>> ", token);
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,

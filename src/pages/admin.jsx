@@ -59,7 +59,7 @@ export default function Admin() {
   function close() {
     dispatch(setModal(false));
     dispatch(setPesanAdmin(""));
-    window.location.reload();
+    dispatch(getAllUser());
   }
 
   const cekState = useSelector((state) => state);
