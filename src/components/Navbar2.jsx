@@ -19,6 +19,7 @@ function NavbarLogoBiru() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isDropdownOpen2, setIsDropdownOpen2] = useState(false);
   const [isDropdownOpen3, setIsDropdownOpen3] = useState(false);
+  const [hasNewNotifications, setHasNewNotifications] = useState(true);
 
   const [showConfirmation, setShowConfirmation] = useState(false);
   const token = useSelector((state) => state?.auth?.token);
@@ -111,7 +112,7 @@ function NavbarLogoBiru() {
     (a, b) => new Date(b.date) - new Date(a.date)
   );
 
-  const hasNewNotifications = sortedNotifications?.some((notif) => notif.isNew);
+  //const hasNewNotifications = sortedNotifications?.some((notif) => notif.isNew);
 
   console.log("sortedNotifications:", sortedNotifications);
   console.log("hasNewNotifications:", hasNewNotifications);
@@ -308,7 +309,7 @@ function NavbarLogoBiru() {
             )}
             <div className="relative">
               {token && (
-                <>
+                <div onClick={() => setHasNewNotifications(false)}>
                   {hasNewNotifications ? (
                     <MdNotificationImportant
                       onClick={handleDropdownToggle3}
@@ -324,7 +325,7 @@ function NavbarLogoBiru() {
                       className="cursor-pointer"
                     />
                   )}
-                </>
+                </div>
               )}
               {isDropdownOpen3 && (
                 <div className="absolute right-0 ">
