@@ -25,7 +25,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import CariTiketLanding from "../components/CariTiketLanding";
 import { AiOutlineSearch } from "react-icons/ai";
-import BangOwi from "../assets/BangOwi.jpeg";
+import BangOwi from "../assets/BangOwi.png";
 import beachVid from "../assets/beachVid.mp4";
 import OurTeam from "../components/ourTeam.jsx";
 import { getNotification } from "../redux/action/dataAction";
@@ -92,6 +92,7 @@ export default function Landing() {
           autoPlay
           loop
           muted
+          style={{playbackRate: 0.5}}
         />
         <div className="absolute w-full h-full top-0 left-0 bg-gray-900/10"></div>
         <NavbarLanding />
@@ -122,9 +123,7 @@ export default function Landing() {
             </h2>
 
             <p className="mx-auto mt-4 max-w-md text-gray-500">
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Itaque
-              praesentium cumque iure dicta incidunt est ipsam, officia dolor
-              fugit natus?
+            Berangkatlah menuju petualangan baru tanpa menguras dompet. Hanya di InfoTiket.in, kami memberikan Anda tiket pesawat terbaik untuk setiap tujuan, lengkap dengan penawaran eksklusif dan kemudahan pemesanan. Jangan tunggu lagi, jelajahi dunia bersama kami dan ciptakan kenangan tak terlupakan!
             </p>
           </header>
 
@@ -139,7 +138,7 @@ export default function Landing() {
 
                 <div className="absolute inset-0 flex flex-col items-start justify-end p-6">
                   <h3 className="text-xl font-medium text-white">
-                    Pesona Jakarta Raya
+                    Mantan Ibukota Indonesia, Jakarta
                   </h3>
                 </div>
               </a>
@@ -164,14 +163,14 @@ export default function Landing() {
             <li>
               <a href="#" className="group relative block">
                 <img
-                  src="https://media.tenor.com/WXaUiPSDqHcAAAAM/sigit-rendang-sigit-acumalaka.gif"
+                  src="https://www.indonesia.travel/content/dam/indtravelrevamp/en/destinations/java/di-yogyakarta/image11.jpg"
                   alt=""
                   className="aspect-square w-full object-cover transition duration-500 group-hover:opacity-90"
                 />
 
                 <div className="absolute inset-0 flex flex-col items-start justify-end p-6">
                   <h3 className="text-xl font-medium text-white">
-                    Madura Kota Seni
+                    Candi Borobudur Magelang
                   </h3>
                 </div>
               </a>
@@ -180,14 +179,14 @@ export default function Landing() {
             <li>
               <a href="#" className="group relative block">
                 <img
-                  src="https://images.unsplash.com/photo-1624623278313-a930126a11c3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
+                  src="https://ik.imagekit.io/tvlk/blog/2020/08/Pantai-Nirwana-shutterstock_1219990507.jpeg?tr=dpr-2,w-675"
                   alt=""
                   className="aspect-square w-full object-cover transition duration-500 group-hover:opacity-90"
                 />
 
                 <div className="absolute inset-0 flex flex-col items-start justify-end p-6">
                   <h3 className="text-xl font-medium text-white">
-                    Winter Jumpers
+                    Padang Dengan Makanan dan Wisata Menarik
                   </h3>
                 </div>
               </a>
@@ -195,14 +194,14 @@ export default function Landing() {
             <li>
               <a href="#" className="group relative block">
                 <img
-                  src="https://images.unsplash.com/photo-1618898909019-010e4e234c55?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80"
+                  src="https://v1.indonesia.travel/content/dam/indtravelrevamp/id-id/ide-liburan/7-destinasi-wisata-di-pulau-papua-yang-indahnya-tiada-dua/danau%20sentani.jpg"
                   alt=""
                   className="aspect-square w-full object-cover transition duration-500 group-hover:opacity-90"
                 />
 
                 <div className="absolute inset-0 flex flex-col items-start justify-end p-6">
                   <h3 className="text-xl font-medium text-white">
-                    Casual Trainers
+                    Pesona Alam Papua yang Tersembunyi
                   </h3>
                 </div>
               </a>

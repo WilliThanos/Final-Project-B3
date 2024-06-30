@@ -1,140 +1,122 @@
-import React, { useState } from "react";
+import React from "react";
 import deo from "../assets/deo.jpg";
 import wili from "../assets/wili.jpg";
 import niko from "../assets/niko.jpg";
 import amar from "../assets/amar.jpg";
 import { AiFillInstagram } from "react-icons/ai";
+import { FaLinkedinIn } from "react-icons/fa";
+import PropTypes from "prop-types";
 
 const people = [
   {
     name: "Nikodemus Hendrojoyo Suryokuncoro",
-    role: "Frond End Developer",
+    role: "Front End Developer",
     imageUrl: niko,
-    instagram: "https://www.instagram.com/nikohs__/ ",
-    linkedinUrl:
-      "https://www.linkedin.com/in/nikodemus-suryokuncoro-aab5722a3/",
+    instagram: "https://www.instagram.com/nikohs__/",
+    linkedinUrl: "https://www.linkedin.com/in/nikodemus-suryokuncoro-aab5722a3/",
+    bio: "Every Man Will Not Be Great, But Every Great Man will Have 4 Wives",
   },
   {
     name: "Deo Septry Wengi",
-    role: "Frond End Developer",
+    role: "Front End Developer",
     imageUrl: deo,
-    instagram:
-      "https://www.instagram.com/d_septryy?igsh=MXV2bGh1MXExNjh4NQ%3D%3D&utm_source=qr ",
+    instagram: "https://www.instagram.com/d_septryy?igsh=MXV2bGh1MXExNjh4NQ%3D%3D&utm_source=qr",
     linkedinUrl: "https://www.linkedin.com/in/deo-septry-9a3b132b1/",
+    bio: "Mangan, Turu, Ngoding, Mokel, Repeat.",
   },
-
   {
     name: "William Rayhan Harsono",
-    role: "Frond End Developer",
+    role: "Front End Developer",
     imageUrl: wili,
     instagram: "https://instagram.com/willi.ry",
     linkedinUrl: "https://linkedin.com/in/williamrayhan",
+    bio: "A MAN MAKE HIS OWN LUCK!",
   },
   {
     name: "Muhammad Ammar Izzudin",
     role: "Back End Developer",
     imageUrl: amar,
-    instagram:
-      "https://news.detik.com/berita/d-2444584/aneh-dan-bejat-remaja-di-tasik-mengaku-perkosa-300-ayam ",
+    instagram: "https://news.detik.com/berita/d-2444584/aneh-dan-bejat-remaja-di-tasik-mengaku-perkosa-300-ayam",
     linkedinUrl: "https://www.linkedin.com/in/deo-septry-9a3b132b1/",
+    bio: "Jagalah Satwa dan Alam Semesta",
   },
   {
     name: "Regis Syawaludin Rifaldi",
     role: "Back End Developer",
-    imageUrl: amar,
-    instagram: "https://www.instagram.com/regissyawaludinrifaldi/ ",
+    imageUrl: "https://media.licdn.com/dms/image/D5603AQEN15h8tlpC0A/profile-displayphoto-shrink_200_200/0/1693289871232?e=2147483647&v=beta&t=RGfJ-5ZC5W_UeDI-rWeZZcxutRdQ7EY6Awz67RA7vQM",
+    instagram: "https://www.instagram.com/regissyawaludinrifaldi/",
     linkedinUrl: "https://www.linkedin.com/in/regissyawaludinrifaldi/",
+    bio: "Ensuring smooth and efficient server-side operations.",
   },
   {
     name: "Rengga Dwi Pribadii",
     role: "Back End Developer",
-    imageUrl: amar,
-    instagram:
-      "https://www.instagram.com/rengga_dwiphew?igsh=M3FtOXY2Ync2Y2d0 ",
+    imageUrl: "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQQtA0QY4ctimQS7Ztse3ZUFxRsSRiUr4h5nTYg62ARBxo7ojia",
+    instagram: "https://www.instagram.com/rengga_dwiphew?igsh=M3FtOXY2Ync2Y2d0",
     linkedinUrl: "https://www.linkedin.com/in/rengga-dwi-4690431a2",
+    bio: "Laptop Patah Bukan Penghalangku.",
   },
 ];
 
-export default function OurTeam() {
-  return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl max-sm:text-2xl font-bold">
-          Kelompok Infotiket.in MSIB Batch 6 Binar Akademi
-        </h1>
-        <p className="text-gray-600 mt-4 text-base">
-          Kami berkomitmen untuk merevolusi cara Anda memesan dan mengelola
-          tiket perjalanan. Dengan semangat inovasi dan fokus pada pengalaman
-          pengguna yang luar biasa, kelompok profesional kami yang beragam
-          bekerja sama erat untuk menghadirkan solusi terdepan. Kami bersatu
-          dengan visi bersama untuk membuat perencanaan perjalanan menjadi lebih
-          lancar, efisien, dan menyenangkan bagi semua orang.
-        </p>
-      </div>
-
-      <div className="bg-white">
-        <div className=" max-w-7xl mx-auto py-5 px-4 text-center sm:px-6 lg:px-8 lg:py-10">
-          <div className="space-y-12">
-            <ul
-              role="list"
-              className="mx-auto space-y-16 sm:grid sm:grid-cols-2 sm:gap-16 sm:space-y-0 lg:grid-cols-3 lg:max-w-5xl"
-            >
-              {people.map((person) => (
-                <li key={person.name}>
-                  <div className="space-y-6">
-                    <img
-                      className="mx-auto h-40 w-40 rounded-full xl:w-56 xl:h-56"
-                      src={person.imageUrl}
-                      alt=""
-                    />
-                    <div className="space-y-2">
-                      <div className="text-lg max-sm:text-base leading-6 font-medium space-y-1">
-                        <h3>{person.name}</h3>
-                        <p className="text-blue-500">{person.role}</p>
-                      </div>
-                      <ul
-                        role="list"
-                        className="flex justify-center items-center space-x-5"
-                      >
-                        <li>
-                          <a
-                            href={person.instagram}
-                            className="text-gray-400 hover:text-gray-500"
-                          >
-                            <span className="sr-only">Instagram</span>
-
-                            <AiFillInstagram className="w-6 h-6" />
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href={person.linkedinUrl}
-                            className="text-gray-400 hover:text-gray-500 "
-                          >
-                            <span className="sr-only">LinkedIn</span>
-                            <svg
-                              className="w-5 h-5"
-                              aria-hidden="true"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                          </a>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+const TeamMemberItem = ({ member }) => (
+  <div className="bg-white shadow-2xl rounded-full hover:-translate-y-1 duration-500 h-full p-6 lg:p-8 border">
+    <img
+      src={member.imageUrl}
+      alt={member.name}
+      className="max-w-full h-auto rounded-full border-4 p-1 shadow-2xl mx-auto"
+      width="120"
+    />
+    <div className="mt-6">
+      <h4 className="text-2xl font-medium mb-1 text-black">{member.name}</h4>
+      <p className="mb-4 text-sm text-black">{member.role}</p>
+      <p className="opacity-50">{member.bio}</p>
+      <div className="mt-6">
+        <a
+          href={member.instagram}
+          className="inline-block opacity-60 transition duration-300 hover:translate-y-1 hover:opacity-100 mr-4 text-black"
+        >
+          <AiFillInstagram className="w-6 h-6" />
+        </a>
+        <a
+          href={member.linkedinUrl}
+          className="inline-block opacity-60 transition duration-300 hover:translate-y-1 hover:opacity-100 text-black"
+        >
+          <FaLinkedinIn className="w-6 h-6" />
+        </a>
       </div>
     </div>
+  </div>
+);
+
+TeamMemberItem.propTypes = {
+  member: PropTypes.object.isRequired,
+};
+
+const OurTeam = () => {
+  return (
+    <section className="py-14 md:py-24 bg-white text-zinc-900">
+      <div className="container px-4 mx-auto">
+        <div className="flex justify-center mb-6 md:mb-12">
+          <div className="max-w-lg text-center">
+            <h2 className="text-3xl leading-none font-bold md:text-[45px] mb-4 text-black">
+              Kelompok Infotiket.in MSIB Batch 6 Binar Akademi
+            </h2>
+            <p>
+              Kami berkomitmen untuk merevolusi cara Anda memesan dan mengelola tiket perjalanan. Dengan semangat inovasi dan fokus pada pengalaman pengguna yang luar biasa, kelompok profesional kami yang beragam bekerja sama erat untuk menghadirkan solusi terdepan. Kami bersatu dengan visi bersama untuk membuat perencanaan perjalanan menjadi lebih lancar, efisien, dan menyenangkan bagi semua orang.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center pt-6">
+          {people.map((member, i) => (
+            <div key={i}>
+              <TeamMemberItem member={member} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
-}
+};
+
+export default OurTeam;
