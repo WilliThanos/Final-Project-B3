@@ -43,7 +43,7 @@ export const updateProfile = () => async (dispatch, getState) => {
     };
 
     const response = await axios.request(config);
-    window.location.reload();
+
     dispatch(setUpdateProfile(response?.data));
   } catch (error) {
     if (axios.isAxiosError(error)) {

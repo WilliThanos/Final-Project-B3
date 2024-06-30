@@ -31,7 +31,7 @@ export default function InfoBooking() {
   }, [dispatch]);
 
   const dataHistory = useSelector((state) => state?.history?.historyPemesanan);
-  console.log("dataHistory :>> ", dataHistory);
+  // console.log("dataHistory :>> ", dataHistory);
 
   const calculateTravelTime = (departure, arrival) => {
     if (!departure || !arrival) {
@@ -128,7 +128,7 @@ export default function InfoBooking() {
         </div>
       ) : (
         <div>
-          <div className=" flex justify-between sticky top-0 bg-white">
+          <div className=" flex justify-between sticky top-0 bg-white border-b-2">
             <p>Urutkan berdasarkan</p>
             <div className="flex justify-end gap-4 mb-4 ">
               {/* FILTER KELAS */}
@@ -173,7 +173,7 @@ export default function InfoBooking() {
               const pajak = (10 / 100) * hargaTiket;
               const totalHarga =
                 (hargaTiket || 0) + (pajak || 0) + (biayaAdmin || 0);
-              console.log("cek ID", e?.id);
+              // console.log("cek ID", e?.id);
               return (
                 <div
                   key={e?.id}
@@ -387,6 +387,15 @@ export default function InfoBooking() {
                 </div>
               );
             })}
+            {filteredDataHistory.length === 0 && (
+              <div className="flex flex-col items-center">
+                <img className="w-60 max-sm:w-40" src={Kosong} alt="" />
+                <p className="text-center ">
+                  mmm sepertinya tiket anda masih kosong, silahkan cari tiket
+                  lain
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}

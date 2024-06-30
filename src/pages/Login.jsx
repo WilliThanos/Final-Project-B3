@@ -82,7 +82,6 @@ export default function Login() {
   };
 
   const handleGoogleLogin = () => {
-    e.prevent.default();
     window.open(`${baseApiURL}/v1/auth/google`, "_self");
   };
 

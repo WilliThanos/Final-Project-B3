@@ -88,7 +88,7 @@ export default function DetailBooking() {
   const hargaTiketDewasa =
     ((departureFlights?.price || 0) + (returnFlights?.price || 0)) * jmlDewasa;
 
-  console.log("hargaTiketDewasa :>> ", hargaTiketDewasa);
+  // console.log("hargaTiketDewasa :>> ", hargaTiketDewasa);
   const hargaTiketAnak =
     ((departureFlights?.price || 0) + (returnFlights?.price || 0)) * jmlAnak;
   const hargaTiketBayi =
