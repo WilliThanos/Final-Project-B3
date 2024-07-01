@@ -13,14 +13,16 @@ const people = [
     role: "Front End Developer",
     imageUrl: niko,
     instagram: "https://www.instagram.com/nikohs__/",
-    linkedinUrl: "https://www.linkedin.com/in/nikodemus-suryokuncoro-aab5722a3/",
+    linkedinUrl:
+      "https://www.linkedin.com/in/nikodemus-suryokuncoro-aab5722a3/",
     bio: "Every Man Will Not Be Great, But Every Great Man will Have 4 Wives",
   },
   {
     name: "Deo Septry Wengi",
     role: "Front End Developer",
     imageUrl: deo,
-    instagram: "https://www.instagram.com/d_septryy?igsh=MXV2bGh1MXExNjh4NQ%3D%3D&utm_source=qr",
+    instagram:
+      "https://www.instagram.com/d_septryy?igsh=MXV2bGh1MXExNjh4NQ%3D%3D&utm_source=qr",
     linkedinUrl: "https://www.linkedin.com/in/deo-septry-9a3b132b1/",
     bio: "Mangan, Turu, Ngoding, Mokel, Repeat.",
   },
@@ -36,14 +38,16 @@ const people = [
     name: "Muhammad Ammar Izzudin",
     role: "Back End Developer",
     imageUrl: amar,
-    instagram: "https://news.detik.com/berita/d-2444584/aneh-dan-bejat-remaja-di-tasik-mengaku-perkosa-300-ayam",
+    instagram:
+      "https://news.detik.com/berita/d-2444584/aneh-dan-bejat-remaja-di-tasik-mengaku-perkosa-300-ayam",
     linkedinUrl: "https://www.linkedin.com/in/deo-septry-9a3b132b1/",
     bio: "Jagalah Satwa dan Alam Semesta",
   },
   {
     name: "Regis Syawaludin Rifaldi",
     role: "Back End Developer",
-    imageUrl: "https://media.licdn.com/dms/image/D5603AQEN15h8tlpC0A/profile-displayphoto-shrink_200_200/0/1693289871232?e=2147483647&v=beta&t=RGfJ-5ZC5W_UeDI-rWeZZcxutRdQ7EY6Awz67RA7vQM",
+    imageUrl:
+      "https://media.licdn.com/dms/image/D5603AQEN15h8tlpC0A/profile-displayphoto-shrink_200_200/0/1693289871232?e=2147483647&v=beta&t=RGfJ-5ZC5W_UeDI-rWeZZcxutRdQ7EY6Awz67RA7vQM",
     instagram: "https://www.instagram.com/regissyawaludinrifaldi/",
     linkedinUrl: "https://www.linkedin.com/in/regissyawaludinrifaldi/",
     bio: "Ensuring smooth and efficient server-side operations.",
@@ -51,7 +55,8 @@ const people = [
   {
     name: "Rengga Dwi Pribadii",
     role: "Back End Developer",
-    imageUrl: "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQQtA0QY4ctimQS7Ztse3ZUFxRsSRiUr4h5nTYg62ARBxo7ojia",
+    imageUrl:
+      "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcQQtA0QY4ctimQS7Ztse3ZUFxRsSRiUr4h5nTYg62ARBxo7ojia",
     instagram: "https://www.instagram.com/rengga_dwiphew?igsh=M3FtOXY2Ync2Y2d0",
     linkedinUrl: "https://www.linkedin.com/in/rengga-dwi-4690431a2",
     bio: "Laptop Patah Bukan Penghalangku.",
@@ -59,7 +64,7 @@ const people = [
 ];
 
 const TeamMemberItem = ({ member }) => (
-  <div className="bg-white shadow-2xl rounded-full hover:-translate-y-1 duration-500 h-full p-6 lg:p-8 border">
+  <div className="bg-white shadow-2xl rounded-full hover:-translate-y-1 duration-500 max-w-72 h-full min-h-56 min-w-60 p-6 lg:p-8 border">
     <img
       src={member.imageUrl}
       alt={member.name}
@@ -102,14 +107,20 @@ const OurTeam = () => {
               Kelompok Infotiket.in MSIB Batch 6 Binar Akademi
             </h2>
             <p>
-              Kami berkomitmen untuk merevolusi cara Anda memesan dan mengelola tiket perjalanan. Dengan semangat inovasi dan fokus pada pengalaman pengguna yang luar biasa, kelompok profesional kami yang beragam bekerja sama erat untuk menghadirkan solusi terdepan. Kami bersatu dengan visi bersama untuk membuat perencanaan perjalanan menjadi lebih lancar, efisien, dan menyenangkan bagi semua orang.
+              Kami berkomitmen untuk merevolusi cara Anda memesan dan mengelola
+              tiket perjalanan. Dengan semangat inovasi dan fokus pada
+              pengalaman pengguna yang luar biasa, kelompok profesional kami
+              yang beragam bekerja sama erat untuk menghadirkan solusi terdepan.
+              Kami bersatu dengan visi bersama untuk membuat perencanaan
+              perjalanan menjadi lebih lancar, efisien, dan menyenangkan bagi
+              semua orang.
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center pt-6">
+        <div className=" grid grid-cols-1 md:grid-cols-3 gap-6 text-center pt-6 mx-28 ">
           {people.map((member, i) => (
-            <div key={i}>
+            <div className=" flex justify-center" key={i}>
               <TeamMemberItem member={member} />
             </div>
           ))}
