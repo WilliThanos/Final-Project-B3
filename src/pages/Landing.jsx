@@ -92,7 +92,7 @@ export default function Landing() {
           autoPlay
           loop
           muted
-          style={{playbackRate: 0.5}}
+          style={{ playbackRate: 0.5 }}
         />
         <div className="absolute w-full h-full top-0 left-0 bg-gray-900/10"></div>
         <NavbarLanding />
@@ -123,7 +123,11 @@ export default function Landing() {
             </h2>
 
             <p className="mx-auto mt-4 max-w-md text-gray-500">
-            Berangkatlah menuju petualangan baru tanpa menguras dompet. Hanya di InfoTiket.in, kami memberikan Anda tiket pesawat terbaik untuk setiap tujuan, lengkap dengan penawaran eksklusif dan kemudahan pemesanan. Jangan tunggu lagi, jelajahi dunia bersama kami dan ciptakan kenangan tak terlupakan!
+              Berangkatlah menuju petualangan baru tanpa menguras dompet. Hanya
+              di InfoTiket.in, kami memberikan Anda tiket pesawat terbaik untuk
+              setiap tujuan, lengkap dengan penawaran eksklusif dan kemudahan
+              pemesanan. Jangan tunggu lagi, jelajahi dunia bersama kami dan
+              ciptakan kenangan tak terlupakan!
             </p>
           </header>
 

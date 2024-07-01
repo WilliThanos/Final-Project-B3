@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { GiAirplaneDeparture, GiAirplaneArrival } from "react-icons/gi";
 import { SlCalender } from "react-icons/sl";
 import { IoWarning } from "react-icons/io5";
-
+import CustomDateHeader from "./CustomDateHeader";
 import { id } from "date-fns/locale";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -296,6 +296,9 @@ export default function CariTiketLanding() {
                     className="cursor-pointer text-[#0C68BE]"
                     ref={departureDateRef}
                     placeholderText="Pilih tanggal keberangkatan"
+                    renderCustomHeader={(props) => (
+                      <CustomDateHeader {...props} />
+                    )}
                   />
                 </div>
                 {isSameDate && (
@@ -364,6 +367,9 @@ export default function CariTiketLanding() {
                     ref={returnDateRef}
                     disabled={!roundTrip}
                     placeholderText="Pilih tanggal kembali"
+                    renderCustomHeader={(props) => (
+                      <CustomDateHeader {...props} />
+                    )}
                   />
                 </div>
                 {isReturnDateBeforeDeparture && (
@@ -1137,6 +1143,7 @@ export default function CariTiketLanding() {
                 className="cursor-pointer text-[#0C68BE]"
                 ref={departureDateRef}
                 placeholderText="Pilih tanggal keberangkatan"
+                renderCustomHeader={(props) => <CustomDateHeader {...props} />}
               />
             </div>
             <div>
@@ -1203,6 +1210,9 @@ export default function CariTiketLanding() {
                   ref={returnDateRef}
                   disabled={!roundTrip}
                   placeholderText="Pilih tanggal kembali"
+                  renderCustomHeader={(props) => (
+                    <CustomDateHeader {...props} />
+                  )}
                 />
               </div>
 
@@ -1275,6 +1285,9 @@ export default function CariTiketLanding() {
                     className="cursor-pointer text-[#0C68BE]"
                     ref={departureDateRef}
                     placeholderText="Pilih tanggal keberangkatan"
+                    renderCustomHeader={(props) => (
+                      <CustomDateHeader {...props} />
+                    )}
                   />
                 </div>
                 {isSameDate && (
@@ -1336,6 +1349,9 @@ export default function CariTiketLanding() {
                       ref={returnDateRef}
                       disabled={!roundTrip}
                       placeholderText="Pilih tanggal kembali"
+                      renderCustomHeader={(props) => (
+                        <CustomDateHeader {...props} />
+                      )}
                     />
                   </div>
                 </div>
