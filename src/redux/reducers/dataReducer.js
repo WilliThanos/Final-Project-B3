@@ -14,6 +14,8 @@ const initialState = {
   jumlahAnak: 0,
   jumlahBayi: 0,
   allAirport: [],
+  pageDeparture: 1,
+  pageReturn: 1,
 };
 
 const dataSlicer = createSlice({
@@ -59,6 +61,12 @@ const dataSlicer = createSlice({
     setArrivalAirportId: (state, action) => {
       state.arrivalAirportId = action.payload;
     },
+    setPageReturn: (state, action) => {
+      state.pageReturn = action.payload;
+    },
+    setPageDeparture: (state, action) => {
+      state.pageDeparture = action.payload;
+    },
   },
 });
 
@@ -76,6 +84,9 @@ export const {
   setAllAirport,
   setDepartureAirportId,
   setArrivalAirportId,
+  setPageDeparture,
+
+  setPageReturn,
 } = dataSlicer.actions;
 
 export default dataSlicer.reducer;

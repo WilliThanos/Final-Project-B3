@@ -132,13 +132,14 @@ export const getArrivalAirport = () => async (dispatch, getState) => {
   }
 };
 
-export const getSearchTicket = () => async (dispatch, getState) => {
+export const getSearchTicketReturn = () => async (dispatch, getState) => {
   try {
     const departureAirportCode = getState().data?.departureAirport?.iata_code;
     const arrivalAirportCode = getState().data?.arrivalAirport?.iata_code;
     const departureDate = getState().data?.departureDate;
     const returnDate = getState().data?.returnDate;
     const ticketClass = getState().data?.class;
+    const page = getState().data?.pageReturn;
 
     const passengerClass =
       ticketClass !== null ? ticketClass.toUpperCase() : null;
@@ -189,14 +190,82 @@ export const getSearchTicket = () => async (dispatch, getState) => {
     const searchingReturnDate = parseAndFormatDate(formattedReturnDate);
 
     const response = await axios.get(
-      `https://expressjs-develop-b4d1.up.railway.app/api/v1/flights?departureAirport=${departureAirportCode}&arrivalAirport=${arrivalAirportCode}&departureDate=${searchingDepartureDate}&returnDate=${searchingReturnDate}&flightClass=${passengerClass}`
+      `https://expressjs-develop-b4d1.up.railway.app/api/v1/flights?departureAirport=${departureAirportCode}&arrivalAirport=${arrivalAirportCode}&departureDate=${searchingDepartureDate}&returnDate=${searchingReturnDate}&flightClass=${passengerClass}&page=${page}&limit=10`
     );
-    dispatch(setDepartureFlights(response?.data?.departureFlights));
     dispatch(setReturnFlights(response?.data?.returnFlights));
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      dispatch(setDepartureFlights(null));
       dispatch(setReturnFlights(null));
+      return;
+    }
+    alert(error.message);
+  }
+};
+
+export const getSearchTicketDeparture = () => async (dispatch, getState) => {
+  try {
+    const departureAirportCode = getState().data?.departureAirport?.iata_code;
+    const arrivalAirportCode = getState().data?.arrivalAirport?.iata_code;
+    const departureDate = getState().data?.departureDate;
+    const returnDate = getState().data?.returnDate;
+    const ticketClass = getState().data?.class;
+    const page = getState().data?.pageDeparture;
+
+    const passengerClass =
+      ticketClass !== null ? ticketClass.toUpperCase() : null;
+
+    const formattedDepartureDate = new Intl.DateTimeFormat("id-ID", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }).format(new Date(departureDate));
+
+    const formattedReturnDate = new Intl.DateTimeFormat("id-ID", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }).format(new Date(returnDate));
+
+    function parseAndFormatDate(dateStr) {
+      // Create a mapping for Indonesian months
+      const monthMap = {
+        Januari: "01",
+        Februari: "02",
+        Maret: "03",
+        April: "04",
+        Mei: "05",
+        Juni: "06",
+        Juli: "07",
+        Agustus: "08",
+        September: "09",
+        Oktober: "10",
+        November: "11",
+        Desember: "12",
+      };
+
+      // Split the input date string
+      const [dayName, day, monthName, year] = dateStr.split(" ");
+
+      const month = monthMap[monthName];
+
+      const dayFormatted = day.length === 1 ? `0${day}` : day;
+
+      return `${year}-${month}-${dayFormatted}`;
+    }
+
+    const searchingDepartureDate = parseAndFormatDate(formattedDepartureDate);
+
+    const searchingReturnDate = parseAndFormatDate(formattedReturnDate);
+
+    const response = await axios.get(
+      `https://expressjs-develop-b4d1.up.railway.app/api/v1/flights?departureAirport=${departureAirportCode}&arrivalAirport=${arrivalAirportCode}&departureDate=${searchingDepartureDate}&returnDate=${searchingReturnDate}&flightClass=${passengerClass}&page=${page}&limit=10`
+    );
+    dispatch(setDepartureFlights(response?.data?.departureFlights));
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      dispatch(setDepartureFlights(null));
       return;
     }
     alert(error.message);
