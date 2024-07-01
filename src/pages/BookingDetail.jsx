@@ -17,7 +17,10 @@ import { LiaCircleSolid } from "react-icons/lia";
 import DetailPenumpangAnak from "../components/DetailPenumpangAnak";
 import DetailPenumpangBayi from "../components/DetailPenumpangBayi";
 import DetailPenumpangDewasa from "../components/DetailPenumpangDewasa";
-import { getSearchTicket } from "../redux/action/dataAction";
+import {
+  getSearchTicketReturn,
+  getSearchTicketDeparture,
+} from "../redux/action/dataAction";
 import { useNavigate } from "react-router-dom";
 import DetailBooking from "../components/DetailBooking";
 import { getBooking } from "../redux/action/bookingAction";
@@ -140,13 +143,23 @@ export default function BookingDetail({ index }) {
         !passenger.nik ||
         !passenger.nomorHP
       ) {
-        return false; // Return false if tanggalLahir is null
+        return false;
+      }
+
+      // Check if NIK is 16 digits and numeric
+      if (!/^\d{16}$/.test(passenger.nik)) {
+        return false;
+      }
+
+      // Check if nomorHP is numeric
+      if (!/^\d+$/.test(passenger.nomorHP)) {
+        return false;
       }
 
       const age = calculateAge(passenger.tanggalLahir);
 
       if (age < 2 || age > 12) {
-        return false; // Tidak sesuai kategori
+        return false;
       }
     }
 
@@ -168,19 +181,28 @@ export default function BookingDetail({ index }) {
         !passenger.nik ||
         !passenger.nomorHP
       ) {
-        return false; // Return false if tanggalLahir is null
+        return false;
+      }
+
+      // Check if NIK is 16 digits and numeric
+      if (!/^\d{16}$/.test(passenger.nik)) {
+        return false;
+      }
+
+      // Check if nomorHP is numeric
+      if (!/^\d+$/.test(passenger.nomorHP)) {
+        return false;
       }
 
       const age = calculateAge(passenger.tanggalLahir);
 
       if (age >= 2) {
-        return false; // Tidak sesuai kategori
+        return false;
       }
     }
 
     return true; // Semua penumpang bayi valid
   };
-
   // Fungsi validasi untuk dewasa
   const validateAgeDewasa = () => {
     const dewasaPassengers = passengers.filter(
@@ -196,21 +218,32 @@ export default function BookingDetail({ index }) {
         !passenger.nik ||
         !passenger.nomorHP
       ) {
-        return false; // Return false if tanggalLahir is null
+        return false;
+      }
+
+      // Check if NIK is 16 digits and numeric
+      if (!/^\d{16}$/.test(passenger.nik)) {
+        return false;
+      }
+
+      // Check if nomorHP is numeric
+      if (!/^\d+$/.test(passenger.nomorHP)) {
+        return false;
       }
 
       const age = calculateAge(passenger.tanggalLahir);
 
       if (age < 12 || age > 100) {
-        return false; // Tidak sesuai kategori
+        return false;
       }
     }
 
-    return true; // Semua penumpang dewasa valid
+    return true; // All adult passengers are valid
   };
 
   useEffect(() => {
-    dispatch(getSearchTicket());
+    dispatch(getSearchTicketReturn());
+    dispatch(getSearchTicketDeparture());
   }, []);
 
   useEffect(() => {
@@ -288,7 +321,7 @@ export default function BookingDetail({ index }) {
             <div className="pb-4 font-bold text-2xl max-lg:text-xl max-sm:text-lg">
               Detail Pemesanan Tiket
             </div>
-            <div className="dlex flex-col">
+            <div className="flex flex-col">
               <div className=" mx-auto w-full bg-white rounded-xl shadow-sm px-6 max-sm:px-4 ">
                 <DetailBooking />
               </div>
@@ -298,17 +331,16 @@ export default function BookingDetail({ index }) {
               >
                 Lanjut ke Pembayaran
               </button>
+              <div>
+                {showWarning && (
+                  <div className="flex items-center gap-2 text-red-500 font-normal text-xs mt-2">
+                    <IoWarning size={20} />
+                    <div>Mohon isi data pemesanan</div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
-        </div>
-
-        <div>
-          {showWarning && (
-            <div className="flex items-center gap-2 text-red-500 font-normal text-xs mt-2">
-              <IoWarning size={20} />
-              <div>Mohon isi data pemesanan</div>
-            </div>
-          )}
         </div>
       </div>
     </form>

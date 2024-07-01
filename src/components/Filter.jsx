@@ -48,7 +48,7 @@ export default function Filter() {
   };
 
   return (
-    <div className="w-64 h-52 mx-auto bg-white rounded-xl shadow-sm p-4 max-md:h-auto  max-md:border max-md:text-sm max-md:border-gray-300 max-md:p-2 max-md:w-44 max-md:mx-0">
+    <div className="w-64 h-auto mx-auto bg-white rounded-xl shadow-sm p-4 max-md:border max-md:text-sm max-md:border-gray-300 max-md:p-2 max-md:w-44 max-md:mx-0 max-h-52 overflow-y-auto">
       <div className="space-y-2 ">
         <div
           onClick={handleDropdownToggle}
@@ -57,8 +57,8 @@ export default function Filter() {
           Filter
         </div>
         {isDropdownOpen || !isMaxMd ? (
-          <>
-            <details className="group overflow-hidden rounded border-b border-gray-300 ">
+          <div className="">
+            <details className="rounded border-b border-gray-300 ">
               <summary className="flex cursor-pointer items-center justify-between gap-2 bg-white py-4 text-gray-900 transition">
                 <span className="max-md:text-sm "> Kelas </span>
 
@@ -81,7 +81,7 @@ export default function Filter() {
               </summary>
 
               <div className="border-t border-gray-300 bg-white">
-                <ul className="flex flex-col space-y-1 border-t border-gray-300 p-4">
+                <ul className="flex flex-col space-y-1 border-t border-gray-300 p-6">
                   <li>
                     <label
                       htmlFor=""
@@ -200,7 +200,7 @@ export default function Filter() {
                 </div>
               </div>
             </details>
-          </>
+          </div>
         ) : null}
       </div>
     </div>
