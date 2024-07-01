@@ -162,7 +162,7 @@ export default function Search() {
           <CariTiketLain />
         </div>
         <div className="flex pt-6 gap-8 max-md:flex-col max-md:mx-2 max-md:gap-3  max-lg:pt-6  max-xl:pt-6">
-          <div className=" flex ">
+          <div className="flex ">
             <Filter />
           </div>
           <div className=" bg-white  rounded-xl shadow-sm p-6 px-10 max-md:text-sm max-md:px-5">
@@ -660,7 +660,7 @@ export default function Search() {
                     </div>
 
                     <div>
-                      <div className="p-4 rounded border border-gray-100 bg-white text-center text-xs font-medium text-gray-900 [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none">
+                      <div className="p-2 rounded  bg-white text-center text-xs font-medium text-gray-900 [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none">
                         {pageDeparture}
                       </div>
                     </div>
@@ -1198,7 +1198,7 @@ export default function Search() {
                         </div>
 
                         <div>
-                          <div className="p-4 rounded border border-gray-100 bg-white text-center text-xs font-medium text-gray-900 [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none">
+                          <div className="p-2 rounded  bg-white text-center text-xs font-medium text-gray-900 [-moz-appearance:_textfield] [&::-webkit-inner-spin-button]:m-0 [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:m-0 [&::-webkit-outer-spin-button]:appearance-none">
                             {pageReturn}
                           </div>
                         </div>
