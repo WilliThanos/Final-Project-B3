@@ -5,6 +5,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { id } from "date-fns/locale";
 import { IoWarning } from "react-icons/io5";
+import CustomDateHeader from "./CustomDateHeader";
 
 export default function DetailPenumpangAnak({
   passenger,
@@ -13,6 +14,8 @@ export default function DetailPenumpangAnak({
   handleDateChange,
 }) {
   const [passengerAge, setPassengerAge] = useState(null);
+  const [nikError, setNikError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
 
   useEffect(() => {
     // Calculate passenger's age
@@ -64,6 +67,33 @@ export default function DetailPenumpangAnak({
   useEffect(() => {
     handleInputChange(index, "kategori", "Anak");
   }, [handleInputChange, index]);
+
+  const handleNikChange = (e) => {
+    const value = e.target.value;
+    const numericValue = value.replace(/\D/g, "");
+
+    if (numericValue.length <= 16) {
+      handleInputChange(index, "nik", numericValue);
+      if (numericValue.length !== 16) {
+        setNikError("NIK harus 16 digit");
+      } else {
+        setNikError("");
+      }
+    }
+  };
+
+  const handlePhoneChange = (e) => {
+    const value = e.target.value;
+    const numericValue = value.replace(/\D/g, "");
+
+    handleInputChange(index, "nomorHP", numericValue);
+
+    if (!/^\d{10,15}$/.test(numericValue)) {
+      setPhoneError("Nomor HP harus berisi antara 10 hingga 15 digit");
+    } else {
+      setPhoneError("");
+    }
+  };
 
   return (
     <div className="mx-auto w-full bg-white rounded-xl shadow-sm px-6 max-sm:px-4 my-4">
@@ -128,7 +158,7 @@ export default function DetailPenumpangAnak({
             )}
           </div>
 
-          <div className="flex flex-col gap-2 w-full">
+          <div className="flex flex-col gap-2 ">
             <div className="text-xs">Nama Depan</div>
             <input
               type="text"
@@ -137,11 +167,11 @@ export default function DetailPenumpangAnak({
               onChange={(e) =>
                 handleInputChange(index, "namaDepan", e.target.value)
               }
-              className="flex font-medium text-sm items-center px-2 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10"
+              className="flex font-medium text-sm items-center px-2 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-14 w-40 max-md:h-12"
               placeholder="Nama Depan"
             />
           </div>
-          <div className="flex flex-col gap-2 w-full">
+          <div className="flex flex-col gap-2 ">
             <div className="text-xs">Nama Belakang</div>
             <input
               type="text"
@@ -150,20 +180,21 @@ export default function DetailPenumpangAnak({
               onChange={(e) =>
                 handleInputChange(index, "namaBelakang", e.target.value)
               }
-              className="flex font-medium text-sm items-center px-2 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10"
+              className="flex font-medium text-sm items-center px-2 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-14 w-40 max-md:h-12"
               placeholder="Nama Belakang"
             />
           </div>
-          <div className="flex flex-col gap-2 w-full">
+          <div className="flex flex-col gap-2 ">
             <div className="text-xs">Tanggal Lahir</div>
-            <div className="flex justify-between items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 h-14 w-auto max-md:h-12">
+            <div className="flex justify-between items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 h-14 w-56 max-md:h-12">
               <DatePicker
                 selected={passenger.tanggalLahir}
                 onChange={(date) => handleDateChange(date, index)}
                 dateFormat="EEE, d MMM yyyy"
-                locale={id}
+                locale="id"
                 placeholderText="Tanggal Lahir"
-                className="cursor-pointer font-medium text-sm w-full p-1"
+                className="cursor-pointer font-medium text-sm p-"
+                renderCustomHeader={(props) => <CustomDateHeader {...props} />}
               />
               <SlCalender size={20} className="cursor-pointer" />
             </div>
@@ -180,30 +211,42 @@ export default function DetailPenumpangAnak({
         <div className="font-semibold text-lg max-md:text-base">
           Detail Kontak
         </div>
-        <div className="flex items-center gap-4 pt-4">
+        <div className="flex  gap-4 pt-4">
           <div className="flex flex-col gap-2 w-full">
             <div className="text-xs">NIK</div>
             <input
               type="text"
               required
               value={passenger.nik}
-              onChange={(e) => handleInputChange(index, "nik", e.target.value)}
+              onChange={handleNikChange}
               className="flex justify-between text-sm items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10"
               placeholder="NIK"
             />
+            {nikError && (
+              <div className="flex gap-2 text-xs text-red-500">
+                {" "}
+                <IoWarning size={20} />
+                {nikError}
+              </div>
+            )}
           </div>
           <div className="flex flex-col gap-2 w-full">
-            <div className="text-xs">No. Handphone</div>
+            <div className="text-xs">Nomor HP</div>
             <input
               type="text"
               required
               value={passenger.nomorHP}
-              onChange={(e) =>
-                handleInputChange(index, "nomorHP", e.target.value)
-              }
+              onChange={handlePhoneChange}
               className="flex justify-between text-sm items-center gap-2 px-4 rounded border-2 border-gray-300 focus:border-sky-500 focus:outline-none h-12 w-full max-md:h-10"
               placeholder="+62 8123456789"
             />
+            {phoneError && (
+              <div className="flex gap-2 text-xs text-red-500">
+                {" "}
+                <IoWarning size={20} />
+                {phoneError}
+              </div>
+            )}
           </div>
         </div>
       </div>
