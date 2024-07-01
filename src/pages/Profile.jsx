@@ -252,7 +252,7 @@ export default function Profile() {
                 </div>
 
                 <button
-                  className="bg-[#2A91E5] rounded-3xl py-2 text-white font-semibold focus:bg-[#094D85]"
+                  className="bg-[#2A91E5] rounded-xl w-full py-2 text-white font-semibold focus:bg-[#094D85]"
                   type="submit"
                 >
                   Konfirmasi

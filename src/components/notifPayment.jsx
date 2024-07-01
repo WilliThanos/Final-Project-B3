@@ -1,7 +1,7 @@
 import { Dialog, DialogPanel, DialogTitle } from "@headlessui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { setModal } from "../redux/reducers/profileReducer";
-import { setPesan } from "../redux/reducers/paymentReducer";
+import { setMetode, setPesan } from "../redux/reducers/paymentReducer";
 import gagal from "../assets/gagal.png";
 import { useNavigate } from "react-router-dom";
 
@@ -12,6 +12,7 @@ export default function ModalPayment() {
   function close() {
     dispatch(setModal(false));
     dispatch(setPesan(null));
+    dispatch(setMetode(null));
   }
 
   const modal = useSelector((state) => state?.profile?.Modal);
