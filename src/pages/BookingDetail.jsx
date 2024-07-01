@@ -327,7 +327,7 @@ export default function BookingDetail({ index }) {
               </div>
               <button
                 onClick={handleButtonBooking}
-                className={`rounded-xl bg-[#2A91E5] px-5 mt-4 max-sm:my-2 py-2.5 w-72 self-center max-lg:w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow `}
+                className={`rounded-xl bg-[#2A91E5] px-5 mt-4 max-sm:my-2 py-2.5 w-72 self-center max-xl:w-full font-medium text-white hover:bg-sky-700 hover:text-gray-200 hover:shadow `}
               >
                 Lanjut ke Pembayaran
               </button>
