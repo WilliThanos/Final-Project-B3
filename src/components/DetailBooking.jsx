@@ -90,9 +90,13 @@ export default function DetailBooking() {
 
   // console.log("hargaTiketDewasa :>> ", hargaTiketDewasa);
   const hargaTiketAnak =
-    ((departureFlights?.price || 0) + (returnFlights?.price || 0)) * jmlAnak;
+    ((departureFlights?.price || 0) + (returnFlights?.price || 0)) *
+    jmlAnak *
+    0.75;
   const hargaTiketBayi =
-    ((departureFlights?.price || 0) + (returnFlights?.price || 0)) * jmlBayi;
+    ((departureFlights?.price || 0) + (returnFlights?.price || 0)) *
+    jmlBayi *
+    0.5;
 
   const totalHargaTiket =
     (hargaTiketDewasa || 0) + (hargaTiketAnak || 0) + (hargaTiketBayi || 0);
@@ -103,8 +107,8 @@ export default function DetailBooking() {
   const cekHarga = cekPulangPergi
     ? totalHargaTiket
     : departureFlights?.price * jmlDewasa +
-      departureFlights?.price * jmlAnak +
-      departureFlights?.price * jmlBayi;
+      departureFlights?.price * jmlAnak * 0.75 +
+      departureFlights?.price * jmlBayi * 0.5;
 
   //pajak
   const pajak = (10 / 100) * cekHarga;
@@ -510,6 +514,38 @@ export default function DetailBooking() {
                 <div></div>
               )}
             </div>
+            {/* HARGA */}
+            <div className="flex justify-between p-6 text-lg max-lg:text-base max-sm:text-sm">
+              <div className="flex flex-col gap-2">
+                {jmlDewasa > 0 && <div>{jmlDewasa} Dewasa</div>}
+                {jmlAnak > 0 && <div>{jmlAnak} Anak</div>}
+                {jmlBayi > 0 && <div>{jmlBayi} Bayi</div>}
+              </div>
+              <div className="flex flex-col gap-2 ">
+                {jmlDewasa > 0 && (
+                  <div className="font-semibold">
+                    {cekPulangPergi
+                      ? formatRupiah(hargaTiketDewasa)
+                      : formatRupiah(departureFlights?.price * jmlDewasa)}
+                  </div>
+                )}
+                {jmlAnak > 0 && (
+                  <div className="font-semibold">
+                    {cekPulangPergi
+                      ? formatRupiah(hargaTiketAnak)
+                      : formatRupiah(departureFlights?.price * jmlAnak * 0.75)}
+                  </div>
+                )}
+                {jmlBayi > 0 && (
+                  <div className="font-semibold">
+                    {cekPulangPergi
+                      ? formatRupiah(hargaTiketBayi)
+                      : formatRupiah(departureFlights?.price * jmlBayi * 0.5)}
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className="border-b border-gray-300  "></div>
             <div className="flex justify-between p-6 text-lg max-lg:text-base max-sm:text-sm">
               <div className="flex flex-col gap-2">
                 <div className="">Harga Tiket</div>
@@ -522,8 +558,8 @@ export default function DetailBooking() {
                     ? formatRupiah(totalHargaTiket)
                     : formatRupiah(
                         departureFlights?.price * jmlDewasa +
-                          departureFlights?.price * jmlAnak +
-                          departureFlights?.price * jmlBayi
+                          departureFlights?.price * jmlAnak * 0.75 +
+                          departureFlights?.price * jmlBayi * 0.5
                       )}
                 </div>
                 <div className="font-semibold">{formatRupiah(biayaAdmin)}</div>
