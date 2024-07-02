@@ -186,13 +186,13 @@ export default function Filter() {
                   <div className="flex flex-col justify-between gap-4">
                     <button
                       onClick={() => dispatch(setSortHarga("asc"))}
-                      className="rounded-xl bg-white border border-gray-500 px-4 py-1 text-gray-700 text-sm hover:bg-gray-200 max-md:text-xs "
+                      className="rounded-xl bg-white border border-gray-500 px-4 py-1 text-gray-700 text-sm hover:bg-gray-200 focus:bg-gray-300 max-md:text-xs "
                     >
                       Urutkan Dari Harga Termurah{" "}
                     </button>
                     <button
                       onClick={() => dispatch(setSortHarga("desc"))}
-                      className="rounded-xl bg-white border border-gray-500 px-4 py-1 text-gray-700 text-sm hover:bg-gray-200 max-md:text-xs"
+                      className="rounded-xl bg-white border border-gray-500 px-4 py-1 text-gray-700 text-sm hover:bg-gray-200 focus:bg-gray-300 max-md:text-xs"
                     >
                       Urutkan Dari Harga Termahal{" "}
                     </button>
