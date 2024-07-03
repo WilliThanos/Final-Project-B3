@@ -105,7 +105,7 @@ export default function Login() {
               <img className="mx-auto h-16 w-auto" src={logo} alt="Logo" />
               <a
                 onClick={handleGoogleLogin}
-                className="shadow-2xl mt-11 flex w-full items-center justify-center gap-3 rounded-md px-3 py-1.5 text-black bg-gradient-to-r focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hover:from-white hover:to-blue-200"
+                className="cursor-pointer shadow-2xl mt-11 flex w-full items-center justify-center gap-3 rounded-md px-3 py-1.5 text-black bg-gradient-to-r focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 hover:from-white hover:to-blue-200"
               >
                 <svg
                   className="h-5 w-5"

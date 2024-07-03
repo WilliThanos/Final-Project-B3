@@ -92,7 +92,7 @@ export default function Landing() {
           autoPlay
           loop
           muted
-          style={{playbackRate: 0.5}}
+          style={{ playbackRate: 0.5 }}
         />
         <div className="absolute w-full h-full top-0 left-0 bg-gray-900/10"></div>
         <NavbarLanding />
@@ -123,7 +123,11 @@ export default function Landing() {
             </h2>
 
             <p className="mx-auto mt-4 max-w-md text-gray-500">
-            Berangkatlah menuju petualangan baru tanpa menguras dompet. Hanya di InfoTiket.in, kami memberikan Anda tiket pesawat terbaik untuk setiap tujuan, lengkap dengan penawaran eksklusif dan kemudahan pemesanan. Jangan tunggu lagi, jelajahi dunia bersama kami dan ciptakan kenangan tak terlupakan!
+              Berangkatlah menuju petualangan baru tanpa menguras dompet. Hanya
+              di InfoTiket.in, kami memberikan Anda tiket pesawat terbaik untuk
+              setiap tujuan, lengkap dengan penawaran eksklusif dan kemudahan
+              pemesanan. Jangan tunggu lagi, jelajahi dunia bersama kami dan
+              ciptakan kenangan tak terlupakan!
             </p>
           </header>
 
@@ -131,7 +135,7 @@ export default function Landing() {
             <li className="bg-gray-900/30">
               <a href="#" className="group relative block">
                 <img
-                  src="https://travelingwithami.wordpress.com/wp-content/uploads/2012/10/sudirman-night-2.jpg"
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bf/Busway_in_Bundaran_HI.jpg/1200px-Busway_in_Bundaran_HI.jpg"
                   alt=""
                   className="aspect-square w-full object-cover transition duration-500 group-hover:opacity-90"
                 />
@@ -306,7 +310,7 @@ export default function Landing() {
                 <img
                   src={BangOwi}
                   alt=""
-                  className="mx-10 shadow-xl mt-16 aspect-[6/5] w-full rounded-2xl bg-gray-50 object-cover lg:aspect-auto lg:h-[34.5rem]"
+                  className="mx-5 shadow-xl mt-16 aspect-[6/5] w-full rounded-2xl bg-gray-50 object-cover lg:aspect-auto lg:h-[34.5rem]"
                 />
               </div>
               <div className="w-full lg:max-w-xl lg:flex-auto">
