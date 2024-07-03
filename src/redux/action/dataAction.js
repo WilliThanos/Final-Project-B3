@@ -21,7 +21,7 @@ import { logout } from "../reducers/authReducer";
 export const updateProfile = () => async (dispatch, getState) => {
   try {
     const state = getState();
-    const { first_name, last_name, password, confirmPassword } =
+    const { first_name, last_name, password, confirmPassword, file } =
       state.profile.updateProfile;
     const token = state.auth.token;
 
@@ -30,6 +30,8 @@ export const updateProfile = () => async (dispatch, getState) => {
     data.append("last_name", last_name);
     data.append("password", password);
     data.append("confirmPassword", confirmPassword);
+    data.append("gambar_url", file);
+
 
     const config = {
       method: "put",

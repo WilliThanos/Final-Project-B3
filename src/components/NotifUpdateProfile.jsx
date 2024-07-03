@@ -55,7 +55,7 @@ export default function MyModal() {
                 className="text-base/7 font-medium"
               ></DialogTitle>
               <p className="mt-2 text-center text-base">
-                {pesan === "Tolong inputkan nama depan dan belakang anda" ? (
+                {pesan === "Tolong masukkan data yang diperlukan" ? (
                   <p>{pesan}</p>
                 ) : (
                   <p>{status?.message}</p>
