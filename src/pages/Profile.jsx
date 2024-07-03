@@ -22,6 +22,8 @@ export default function Profile() {
   const [last_name, setLastName] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setconfirmPassword] = useState("");
+  const [imgLink, setImgLink] = useState("");
+  const [file, setFile] = useState(null);
   const [passwordType, setPasswordType] = useState("password");
   const [confirmPasswordType, setConfirmPasswordType] = useState("password");
   const [showWarning, setShowWarning] = useState(false);
@@ -38,10 +40,13 @@ export default function Profile() {
   //fungsi handle update data
   const handleUpdateProfile = (e) => {
     e.preventDefault();
-    if (first_name.trim() === "" || last_name.trim() === "") {
-      dispatch(
-        setUpdateProfile("Tolong inputkan nama depan dan belakang anda")
-      );
+    if (
+      first_name.trim() === "" ||
+      last_name.trim() === "" ||
+      password.trim() === "" ||
+      confirmPassword.trim() === ""
+    ) {
+      dispatch(setUpdateProfile("Tolong masukkan data yang diperlukan"));
       dispatch(setModal(true));
       return;
     }
@@ -50,6 +55,7 @@ export default function Profile() {
       last_name,
       password,
       confirmPassword,
+      file,
     };
     dispatch(setUpdateProfile(updatedProfile));
     dispatch(updateProfile());
@@ -73,6 +79,21 @@ export default function Profile() {
       setShowWarning(false);
     }, 10000);
   };
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    setFile(selectedFile);
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImgLink(reader.result);
+    };
+    if (selectedFile) {
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+
+  console.log("data file >, ", file);
 
   return (
     <div className="min-h-screen mx-auto max-w-screen-2xl">
@@ -146,7 +167,7 @@ export default function Profile() {
             </div>
 
             {/* INPUT UBAH PROFIL */}
-            <div className="bg-white max-h-96 max-xl:w-full rounded-2xl px-5 py-3 shadow-sm w-1/3 max-md:w-full">
+            <div className="bg-white h-96 max-xl:w-full rounded-2xl px-5 py-3 shadow-sm w-1/3 max-md:w-full">
               <label className=" font-bold text-2xl max-sm:text-xl">
                 Ubah Profil Anda
               </label>
@@ -249,6 +270,30 @@ export default function Profile() {
                       <FaEyeSlash />
                     )}
                   </span>
+                </div>
+                <div className="relative ">
+                  <input
+                    type="file"
+                    className="block px-2.5 pb-2.5 pt-4 w-full text-base text-gray-900 bg-transparent rounded-lg border-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    placeholder=" Masukkan File Gambar "
+                  />
+                  <label
+                    htmlFor="floating_first_name"
+                    className="mx-2 absolute text-base text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white px-2 peer-focus:px-2 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4"
+                  >
+                    Masukkan File Gambar
+                  </label>
+                  {imgLink && (
+                    <div className="mt-4 flex justify-center">
+                      <img
+                        src={imgLink}
+                        alt="Preview"
+                        className="w-28 h-auto  items-center justify-center block px-2 py-2  text-base text-gray-900 bg-white rounded-lg border-2 border-gray-300 appearance-none dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <button
